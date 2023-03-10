@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BagarBasse.DataAccess\BagarBasse.DataAccess.csproj" />
     <ProjectReference Include="..\Client\BagarBasse.Client.csproj" />
     <ProjectReference Include="..\Shared\BagarBasse.Shared.csproj" />
   </ItemGroup>
