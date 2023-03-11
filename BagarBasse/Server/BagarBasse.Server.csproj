@@ -30,4 +30,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\CategoryService\" />
+    <Folder Include="Services\ProductService\" />
+  </ItemGroup>
+
 </Project>

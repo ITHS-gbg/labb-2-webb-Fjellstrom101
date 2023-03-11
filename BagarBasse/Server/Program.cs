@@ -1,6 +1,9 @@
 using BagarBasse.DataAccess;
 using BagarBasse.Server.Data;
+using BagarBasse.Server.Extensions;
 using BagarBasse.Server.Models;
+using BagarBasse.Server.Services.CategoryService;
+using BagarBasse.Server.Services.ProductService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -40,6 +43,17 @@ builder.Services.AddAuthentication()
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+
+//Add Custom Services
+
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -54,6 +68,11 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+// Map Extensions
+app.MapProductApi();
+app.MapCategoryApi();
+
 
 app.UseHttpsRedirection();
 
