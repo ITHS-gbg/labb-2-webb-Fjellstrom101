@@ -1,0 +1,64 @@
+﻿@inject IProductService ProductService
+@using BagarBasse.Client.Services.ProductService
+@using BagarBasse.Shared.Models
+@implements IDisposable
+
+@if (ProductService.Products == null || ProductService.Products.Count == 0)
+{
+    <span>Loading Products...</span>
+}
+else
+{
+    <ul class="list-unstyled">
+        @foreach (var product in ProductService.Products)
+        {
+            <li class="media my-3">
+                <div class="media-img-wrapper me-2">
+                    <a href="/product/@product.Id">
+                        <img src="@product.Image" alt="@product.Title" class="media-img" />
+                    </a>
+                </div>
+                <div class="media-body">
+                    <a href="/product/@product.Id">
+                        <h4 class="mb-0">@product.Title</h4>
+                    </a>
+                    <p>@product.Description</p>
+                    <h5 class="price">
+                        @GetPriceText(product)
+                    </h5>
+                </div>
+            </li>
+        }
+
+    </ul>
+}
+@code {
+
+
+    protected override void OnInitialized()
+    {
+        ProductService.ProductsChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        ProductService.ProductsChanged -= StateHasChanged;
+    }
+
+    private string GetPriceText(Product product)
+    {
+        var variants = product.Variants;
+
+        if (variants.Count == 0)
+        {
+            return string.Empty;
+        }
+        else if (variants.Count == 1)
+        {
+            return $"${variants[0].Price}";
+        }
+
+        return $"Starting at ${variants.Min(v => v.Price)}";
+    }
+
+}

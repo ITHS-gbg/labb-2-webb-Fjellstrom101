@@ -1,0 +1,19 @@
+﻿@page "/products"
+@page "/products/{categoryUrl}"
+@using BagarBasse.Client.Services.ProductService
+@inject IProductService ProductService
+
+<ProductList />
+
+@code {
+
+    [Parameter]
+    public string? CategoryUrl { get; set; } = null;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        await ProductService.GetProductAsync(CategoryUrl);
+    }
+}

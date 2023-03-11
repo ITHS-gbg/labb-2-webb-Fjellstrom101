@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BagarBasse.Client", "Client
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BagarBasse.Shared", "Shared\BagarBasse.Shared.csproj", "{BC7479C0-DEE7-448E-8D05-95D4BE844298}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BagarBasse.DataAccess", "BagarBasse.DataAccess\BagarBasse.DataAccess.csproj", "{7737FF07-8D0C-4D82-BFCA-21068EDE1774}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BagarBasse.DataAccess", "BagarBasse.DataAccess\BagarBasse.DataAccess.csproj", "{7737FF07-8D0C-4D82-BFCA-21068EDE1774}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

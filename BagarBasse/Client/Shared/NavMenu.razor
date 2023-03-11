@@ -1,39 +1,50 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">BagarBasse</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+﻿<header class="sticky-top">
+    <nav class="navbar font-ambit d-flex navbar-expand-md bg-white flex-wrap justify-content-between mb-4 border-bottom">
+        <a class="nav-brand mx-3 d-md-none mx-3" href="index.html">
+            <img src="./images/logo2.webp"
+                 alt="Brand Logo"
+                 width="150"
+                 height="80" />
+        </a>
+        <button class="navbar-toggler mx-3"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbar"
+                aria-controls="navbar"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-    </div>
-</div>
-
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
+        <div id="navbar"
+             class="collapse navbar-collapse justify-content-center">
+            <ul class="navbar-nav fw-semibold align-items-center">
+                <li class="nav-item ms-5">
+                    <a href="" class="nav-link active" aria-current="page">Hem</a>
+                </li>
+                <li class="nav-item">
+                    <a href="products" class="nav-link">Produkter</a>
+                </li>
+                <li class="navbar-brand mx-3 d-none d-md-block">
+                    <a class="nav-brand" href="index.html">
+                        <img src="./images/logo2.webp"
+                             alt="Brand Logo"
+                             width="151"
+                             height="80"/>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">Om oss</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recipes.html" class="nav-link">Recept</a>
+                </li>
+                <li class="nav-item">
+                    <UserButton />
+                </li>
+                <li class="nav-item">
+                    <CartButton />
+                </li>
+            </ul>
         </div>
     </nav>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
+</header>
