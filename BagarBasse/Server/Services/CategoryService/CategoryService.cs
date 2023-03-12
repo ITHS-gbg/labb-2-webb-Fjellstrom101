@@ -22,4 +22,35 @@ public class CategoryService : ICategoryService
             Data = categories
         };
     }
+
+    public async Task<ServiceResponse<Category>> GetCategoryByUrl(string categoryUrl)
+    {
+        var categories = await _dataContext.Categories.FirstOrDefaultAsync(c => c.Url.Equals(categoryUrl));
+
+        if (categories == null)
+        {
+            return new ServiceResponse<Category>()
+            {
+                Success = false,
+                Message = "Category not found"
+            };
+        }
+
+        return new ServiceResponse<Category>()
+        {
+            Data = categories
+        };
+    }
+
+    public async Task<ServiceResponse<List<Category>>> GetCategoriesWithProductsAsync()
+    {
+        var categories = await _dataContext.Categories
+            .Include(c => c.Products)
+            .ThenInclude(p => p.Variants)
+            .ToListAsync();
+        return new ServiceResponse<List<Category>>()
+        {
+            Data = categories
+        };
+    }
 }

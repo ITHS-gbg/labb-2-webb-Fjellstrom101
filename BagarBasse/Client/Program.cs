@@ -1,4 +1,5 @@
 using BagarBasse.Client;
+using BagarBasse.Client.Services.CategoryService;
 using BagarBasse.Client.Services.ProductService;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -13,6 +14,7 @@ builder.Services.AddHttpClient("BagarBasse.ServerAPI", client => client.BaseAddr
 // Supply HttpClient instances that include access tokens when making requests to the server project
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BagarBasse.ServerAPI"));
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 
 builder.Services.AddApiAuthorization();

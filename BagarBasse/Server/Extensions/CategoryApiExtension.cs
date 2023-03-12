@@ -12,6 +12,12 @@ public static class CategoryApiExtension
             return Results.Ok(result);
         });
 
+        webApplication.MapGet("/api/single-category/{categoryUrl}", async (ICategoryService categoryService, string categoryUrl) =>
+        {
+            var result = await categoryService.GetCategoryByUrl(categoryUrl);
+            return Results.Ok(result);
+        });
+
         return webApplication;
     }
 }

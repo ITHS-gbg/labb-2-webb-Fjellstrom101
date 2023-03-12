@@ -1,9 +1,26 @@
 ﻿@page "/products"
 @page "/products/{categoryUrl}"
-@using BagarBasse.Client.Services.ProductService
-@inject IProductService ProductService
+@using BagarBasse.Client.Services.CategoryService
+@inject ICategoryService CategoryService
+@implements IDisposable
 
-<ProductList />
+
+<div class="container-fluid store-container p-0">
+    @if (!string.IsNullOrEmpty(CategoryUrl))
+    {
+        <ProductList CategoryUrl="kakor" CategoryName="Kakor" />
+    }
+    else
+    {
+        if (CategoryService.Categories.Count > 0)
+        {
+            foreach (var category in CategoryService.Categories)
+            {
+                <ProductList CategoryUrl="@category.Url" CategoryName="@category.Name"  CategoryCss="@category.BackgroundCssClass"/>
+            }
+        }
+    }
+</div>
 
 @code {
 
@@ -12,8 +29,15 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        await base.OnParametersSetAsync();
-
-        await ProductService.GetProductAsync(CategoryUrl);
+        if (string.IsNullOrEmpty(CategoryUrl))
+            CategoryService.ProductsChanged += StateHasChanged;
+            await CategoryService.GetCategories();
     }
+
+    public void Dispose()
+    {
+        if (string.IsNullOrEmpty(CategoryUrl))
+            CategoryService.ProductsChanged -= StateHasChanged;
+    }
+
 }

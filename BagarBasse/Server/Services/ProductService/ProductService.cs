@@ -20,6 +20,7 @@ public class ProductService : IProductService
             Data = await _context.Products
                 .Include(p => p.Variants)
                 .ThenInclude(p => p.ProductType)
+                .OrderBy(p => p.CategoryId)
                 .ToListAsync()
         };
 
@@ -53,6 +54,17 @@ public class ProductService : IProductService
         {
             Data = await _context.Products.Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower()))
                 .Include(p => p.Variants)
+                .ToListAsync()
+        };
+        return result;
+    }
+    public async Task<ServiceResponse<List<Category>>> GetAllProductsOrderedByCategoryAsync() //TODO Flytta? 
+    {
+        var result = new ServiceResponse<List<Category>>()
+        {
+            Data = await _context.Categories
+                .Include(c => c.Products)
+                .ThenInclude(p => p.Variants)
                 .ToListAsync()
         };
         return result;

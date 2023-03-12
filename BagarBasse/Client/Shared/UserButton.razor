@@ -1,9 +1,42 @@
-﻿<a href="/cart" class="nav-link">
-    <div class="user-icon nav-item">
+﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject NavigationManager Navigation
+
+
+<div class="dropdown">
+    <a @onclick="ToggleUserMenu" @onfocusout="HideUserMenu" class="user-icon">
         <i class="bi bi-person"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right @UserMenuCssClass">
+        <AuthorizeView>
+            <Authorized>
+                <a class="dropdown-item" @onclick="BeginLogOut">Logout</a>
+            </Authorized>
+            <NotAuthorized>
+                <a href="authentication/login" class="dropdown-item">Login</a>
+                <a href="authentication/register" class="dropdown-item">Register</a>
+            </NotAuthorized>
+        </AuthorizeView>
+        
     </div>
-</a>
+</div>
 
 @code {
+    private bool _showUserMenu = false;
 
+    private string UserMenuCssClass => _showUserMenu ? "show-user-menu" : "";
+
+    private void ToggleUserMenu()
+    {
+        _showUserMenu = !_showUserMenu;
+    }
+
+    private async Task HideUserMenu()
+    {
+        await Task.Delay(200);
+        _showUserMenu = false;
+    }
+    private void BeginLogOut()
+    {
+        Navigation.NavigateToLogout("authentication/logout");
+    }
 }

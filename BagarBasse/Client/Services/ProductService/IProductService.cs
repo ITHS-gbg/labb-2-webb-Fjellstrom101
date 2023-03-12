@@ -5,10 +5,10 @@ namespace BagarBasse.Client.Services.ProductService;
 
 public interface IProductService
 {
-    event Action ProductsChanged;
     List<Product> Products { get; set; }
 
-    Task GetProductAsync(string categoryUrl = null);
+    Task<ServiceResponse<List<Product>>> GetProductsAsync();
+    Task<ServiceResponse<List<Product>>> GetProductsByCategoryAsync(string categoryUrl = null);
     Task<ServiceResponse<Product>> GetProductAsync(int id);
 
 }

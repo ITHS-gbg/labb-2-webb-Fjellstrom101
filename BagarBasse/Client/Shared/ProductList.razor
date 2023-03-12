@@ -1,49 +1,75 @@
 ﻿@inject IProductService ProductService
 @using BagarBasse.Client.Services.ProductService
 @using BagarBasse.Shared.Models
-@implements IDisposable
+@using System.Reflection.Metadata
 
-@if (ProductService.Products == null || ProductService.Products.Count == 0)
+@if (Products == null || Products.Count == 0)
 {
     <span>Loading Products...</span>
 }
 else
 {
-    <ul class="list-unstyled">
-        @foreach (var product in ProductService.Products)
-        {
-            <li class="media my-3">
-                <div class="media-img-wrapper me-2">
-                    <a href="/product/@product.Id">
-                        <img src="@product.Image" alt="@product.Title" class="media-img" />
-                    </a>
-                </div>
-                <div class="media-body">
-                    <a href="/product/@product.Id">
-                        <h4 class="mb-0">@product.Title</h4>
-                    </a>
-                    <p>@product.Description</p>
-                    <h5 class="price">
-                        @GetPriceText(product)
-                    </h5>
-                </div>
-            </li>
-        }
+    <div class="container-fluid category-container p-2 @CategoryCss">
+        <div class="container store-category my-5">
+            <h1 class="fs-1 font-gatefold-demi text-center pb-5 category-title">
+                @CategoryName
+            </h1>
+            <div class="store-items row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3 align-items-stretch">
 
-    </ul>
+                @foreach (var product in Products)
+                {
+                    <div class="col store-item">
+                        <a href="/product/@product.Id" class="text-reset text-decoration-none">
+                        <div class="card border-0 h-100 align-items-top bg-transparent">
+                            <div
+                                class="card-img-top-wrapper rounded-4 d-inline-block overflow-hidden">
+                                <img
+                                    class="card-img-top rounded-4 store-item-image h-100 w-100"
+                                    width="1194"
+                                    height="800"
+                                    aria-label="Product Image"
+                                    src="@product.Image"
+                                    alt="Card image cap"/>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <h1 class="h5 card-title store-item-title font-gt-alpina">@product.Title</h1>
+                                <p class="card-text store-item-desc flex-grow-1 font-ambit">@product.Description</p>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
 }
+
 @code {
 
+    [Parameter]
+    public string? CategoryUrl { get; set; } = string.Empty;
 
-    protected override void OnInitialized()
+    [Parameter]
+    public string CategoryCss { get; set; } = string.Empty;
+
+    [Parameter]
+    public string CategoryName { get; set; } = string.Empty;
+
+    public List<Product> Products { get; set; } = new List<Product>();
+
+
+    protected override async Task OnParametersSetAsync()
     {
-        ProductService.ProductsChanged += StateHasChanged;
+        var response = await ProductService.GetProductsByCategoryAsync(CategoryUrl);
+
+        if (response != null)
+        {
+            Products = response.Data;
+            StateHasChanged();
+        }
     }
 
-    public void Dispose()
-    {
-        ProductService.ProductsChanged -= StateHasChanged;
-    }
 
     private string GetPriceText(Product product)
     {

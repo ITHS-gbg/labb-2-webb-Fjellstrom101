@@ -1,4 +1,6 @@
-﻿namespace BagarBasse.Shared.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace BagarBasse.Shared.Models;
 
 public class Product
 {
