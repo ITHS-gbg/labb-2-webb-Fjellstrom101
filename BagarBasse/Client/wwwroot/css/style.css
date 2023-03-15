@@ -242,3 +242,9 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
 }
+.search-button {
+
+    position: relative;
+    color: #000;
+    font-size: 22px;
+}

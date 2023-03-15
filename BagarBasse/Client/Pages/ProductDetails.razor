@@ -1,6 +1,8 @@
 ﻿@page "/product/{id:int}"
 @using BagarBasse.Client.Services.ProductService
 @using BagarBasse.Shared.Models
+@using BagarBasse.Client.Services.CartService
+@inject ICartService CartService
 @inject IProductService ProductService
 
 @if (_product == null)
@@ -32,7 +34,7 @@ else
                 @if (GetSelectedVariant().OriginalPrice > GetSelectedVariant().Price)
                 {
                     <h6 class="text-muted original-price">
-                        $@GetSelectedVariant().OriginalPrice
+                        @GetSelectedVariant().OriginalPrice KR
                     </h6>
                 }
                 <h4 class="price">
@@ -82,7 +84,13 @@ else
 
     private async Task AddToCart()
     {
-        
+        var productVariant = GetSelectedVariant();
+        var cartItem = new CartItem
+        {
+            ProductId = productVariant.ProductId,
+            ProductTypeId = productVariant.ProductTypeId
+        };
+        await CartService.AddToCart(cartItem);
     }
 
 }

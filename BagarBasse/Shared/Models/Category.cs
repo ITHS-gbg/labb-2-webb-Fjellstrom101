@@ -12,5 +12,4 @@ public class Category
     public bool Visible { get; set; } = true;
     public bool Deleted { get; set; } = false;
 
-    public List<Product> Products { get; set; }
 }

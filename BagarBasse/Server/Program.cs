@@ -2,6 +2,7 @@ using BagarBasse.DataAccess;
 using BagarBasse.Server.Data;
 using BagarBasse.Server.Extensions;
 using BagarBasse.Server.Models;
+using BagarBasse.Server.Services.CartService;
 using BagarBasse.Server.Services.CategoryService;
 using BagarBasse.Server.Services.ProductService;
 using Microsoft.AspNetCore.Authentication;
@@ -48,6 +49,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 
 
@@ -72,6 +74,7 @@ else
 // Map Extensions
 app.MapProductApi();
 app.MapCategoryApi();
+app.MapCartApi();
 
 
 app.UseHttpsRedirection();

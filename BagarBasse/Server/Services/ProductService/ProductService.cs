@@ -58,15 +58,15 @@ public class ProductService : IProductService
         };
         return result;
     }
-    public async Task<ServiceResponse<List<Category>>> GetAllProductsOrderedByCategoryAsync() //TODO Flytta? 
-    {
-        var result = new ServiceResponse<List<Category>>()
-        {
-            Data = await _context.Categories
-                .Include(c => c.Products)
-                .ThenInclude(p => p.Variants)
-                .ToListAsync()
-        };
-        return result;
-    }
+    //public async Task<ServiceResponse<List<Category>>> GetAllProductsOrderedByCategoryAsync() //TODO Flytta? 
+    //{
+    //    var result = new ServiceResponse<List<Category>>()
+    //    {
+    //        Data = await _context.Categories
+    //            .Include(c => c.Products)
+    //            .ThenInclude(p => p.Variants)
+    //            .ToListAsync()
+    //    };
+    //    return result;
+    //}
 }
