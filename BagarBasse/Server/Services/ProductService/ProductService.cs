@@ -1,5 +1,6 @@
 ﻿using BagarBasse.DataAccess;
 using BagarBasse.Shared;
+using BagarBasse.Shared.DTOs;
 using BagarBasse.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ public class ProductService : IProductService
     {
         _context = context;
     }
+
     public async Task<ServiceResponse<List<Product>>> GetProductsAsync()
     {
         var response = new ServiceResponse<List<Product>>()
@@ -58,15 +60,24 @@ public class ProductService : IProductService
         };
         return result;
     }
-    //public async Task<ServiceResponse<List<Category>>> GetAllProductsOrderedByCategoryAsync() //TODO Flytta? 
-    //{
-    //    var result = new ServiceResponse<List<Category>>()
-    //    {
-    //        Data = await _context.Categories
-    //            .Include(c => c.Products)
-    //            .ThenInclude(p => p.Variants)
-    //            .ToListAsync()
-    //    };
-    //    return result;
-    //}
+
+    public async Task<ServiceResponse<List<Product>>> SearchProducts(string searchText)
+    {
+        var products = await _context.Products
+            .Where(p => p.Title
+                            .ToLower()
+                            .Contains(searchText.ToLower())
+                        || p.Id
+                            .ToString()
+                            .Contains(searchText.ToLower()))
+            .Include(p => p.Variants)
+            .ToListAsync();
+
+        var response = new ServiceResponse<List<Product>>
+        {
+            Data = products
+        };
+
+        return response;
+    }
 }

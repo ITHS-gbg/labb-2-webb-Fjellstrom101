@@ -1,5 +1,5 @@
 ﻿<header class="sticky-top">
-    <nav class="navbar font-ambit d-flex navbar-expand-md bg-white flex-wrap justify-content-between mb-4 border-bottom">
+    <nav class="navbar font-ambit d-flex navbar-expand-md bg-white flex-wrap justify-content-between border-bottom">
         <a class="nav-brand mx-3 d-md-none mx-3" href="index.html">
             <img src="./images/logo2.webp"
                  alt="Brand Logo"
@@ -42,7 +42,11 @@
                     <UserButton />
                 </li>
                 <li class="nav-item">
-                    <SearchButton />
+                    <a class="nav-link" @onclick="ToggleSearchBar" @onfocusout="HideSearchBar">
+                        <div class="search-button nav-item" >
+                            <i class="bi bi-search"></i>
+                        </div>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <CartButton/>
@@ -50,4 +54,24 @@
             </ul>
         </div>
     </nav>
+    <div class="@SearchBarCssClass">
+        <SearchBar />
+    </div>
 </header>
+
+@code
+{
+    private bool _showSearchBar = false;
+
+    private string SearchBarCssClass => _showSearchBar ? "" : "collapse navbar-collapse";
+
+    private void ToggleSearchBar()
+    {
+        _showSearchBar = !_showSearchBar ;
+    }
+    private async Task HideSearchBar()
+    {
+        await Task.Delay(200);
+        _showSearchBar = false;
+    }
+}

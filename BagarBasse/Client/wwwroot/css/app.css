@@ -70,12 +70,17 @@ a, .btn-link {
 .loading-progress {
     position: relative;
     display: block;
-    width: 8rem;
-    height: 8rem;
+    background-image: url(../images/checkout.png);
+    width: 150px;
+    height: 150px;
+    filter: invert(79%) sepia(4%) saturate(1021%) hue-rotate(324deg) brightness(117%) contrast(98%);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
     margin: 20vh auto 1rem auto;
 }
 
-    .loading-progress circle {
+    .loading-progress2 circle {
         fill: none;
         stroke: #e0e0e0;
         stroke-width: 0.6rem;
@@ -83,7 +88,7 @@ a, .btn-link {
         transform: rotate(-90deg);
     }
 
-        .loading-progress circle:last-child {
+        .loading-progress2 circle:last-child {
             stroke: #1b6ec2;
             stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
             transition: stroke-dasharray 0.05s ease-in-out;
@@ -93,9 +98,20 @@ a, .btn-link {
     position: absolute;
     text-align: center;
     font-weight: bold;
-    inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
+    inset: calc(20vh + 56px) 0 auto 0.2rem;
 }
 
     .loading-progress-text:after {
-        content: var(--blazor-load-percentage-text, "Loading");
+        content: var(--blazor-load-percentage-text, "0%");
     }
+
+.loading-progress-top {
+    height: 90%;
+    width: 100%;
+
+}
+.loading-progress-bottom {
+    height: 10%;
+    width: 100%;
+    filter: invert(79%) sepia(4%) saturate(1021%) hue-rotate(324deg) brightness(117%) contrast(98%);
+}

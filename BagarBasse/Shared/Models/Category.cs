@@ -11,5 +11,4 @@ public class Category
 
     public bool Visible { get; set; } = true;
     public bool Deleted { get; set; } = false;
-
 }

@@ -1,5 +1,8 @@
 ﻿@page "/products"
-@page "/products/{categoryUrl}"
+@page "/products/{CategoryUrl}"
+@page "/search"
+@page "/search/{SearchText}"
+
 @using BagarBasse.Client.Services.CategoryService
 @inject ICategoryService CategoryService
 @implements IDisposable
@@ -9,6 +12,10 @@
     @if (!string.IsNullOrEmpty(CategoryUrl))
     {
         <ProductList CategoryUrl="kakor" CategoryName="Kakor" />
+    }
+    else if (!string.IsNullOrEmpty(SearchText))
+    {
+        <ProductList SearchText="@SearchText" />
     }
     else
     {
@@ -26,17 +33,27 @@
 
     [Parameter]
     public string? CategoryUrl { get; set; } = null;
+    [Parameter]
+    public string? SearchText { get; set; } = null;
+
+    [Parameter]
+    public int Page { get; set; } = 1;
+
+
+
 
     protected override async Task OnParametersSetAsync()
     {
-        if (string.IsNullOrEmpty(CategoryUrl))
+        if (string.IsNullOrEmpty(CategoryUrl) && string.IsNullOrEmpty(SearchText))
+        {
             CategoryService.ProductsChanged += StateHasChanged;
             await CategoryService.GetCategories();
+        }
     }
 
     public void Dispose()
     {
-        if (string.IsNullOrEmpty(CategoryUrl))
+        if (string.IsNullOrEmpty(CategoryUrl) && string.IsNullOrEmpty(SearchText))
             CategoryService.ProductsChanged -= StateHasChanged;
     }
 

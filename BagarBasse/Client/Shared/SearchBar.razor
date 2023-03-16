@@ -1,0 +1,24 @@
+﻿@inject NavigationManager NavigationManager
+<nav class=" bg-light border border-bottom p-3" id="searchNavbar">
+
+    <div class="input-group">
+        <input type="search"
+               @bind-value="_searchText"
+               class="form-control"/>
+        <div class="input-group-append">
+            <button class=" border-0 bg-transparent text-black-50 m-auto" @onclick="SearchProducts" >
+                <span class="oi oi-magnifying-glass"></span>
+            </button>
+        </div>
+    </div>
+
+</nav>
+
+@code {
+    private string _searchText = string.Empty;
+
+    public void SearchProducts()
+    {
+        NavigationManager.NavigateTo($"search/{_searchText}");
+    }
+}

@@ -24,6 +24,12 @@ public static class ProductApiExtension
             return Results.Ok(result);
         });
 
+        webApplication.MapGet("/api/search/{searchText}", async (IProductService productService, string searchText) =>
+        {
+            var result = await productService.SearchProducts(searchText);
+            return Results.Ok(result);
+        });
+
         return webApplication;
     }
 }

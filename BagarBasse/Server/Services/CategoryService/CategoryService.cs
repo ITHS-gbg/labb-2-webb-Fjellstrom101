@@ -42,15 +42,4 @@ public class CategoryService : ICategoryService
         };
     }
 
-    //public async Task<ServiceResponse<List<Category>>> GetCategoriesWithProductsAsync()
-    //{
-    //    var categories = await _dataContext.Categories
-    //        .Include(c => c.Products)
-    //        .ThenInclude(p => p.Variants)
-    //        .ToListAsync();
-    //    return new ServiceResponse<List<Category>>()
-    //    {
-    //        Data = categories
-    //    };
-    //}
 }
