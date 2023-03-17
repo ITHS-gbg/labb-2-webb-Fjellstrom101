@@ -70,13 +70,8 @@ a, .btn-link {
 .loading-progress {
     position: relative;
     display: block;
-    background-image: url(../images/checkout.png);
     width: 150px;
     height: 150px;
-    filter: invert(79%) sepia(4%) saturate(1021%) hue-rotate(324deg) brightness(117%) contrast(98%);
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
     margin: 20vh auto 1rem auto;
 }
 
@@ -106,12 +101,20 @@ a, .btn-link {
     }
 
 .loading-progress-top {
-    height: 90%;
+    background-image: url(../images/checkout.png);
+    height: calc(100% - var(--blazor-load-percentage, 0%));
     width: 100%;
-
+    background-position: center top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: invert(98%) sepia(9%) saturate(21%) hue-rotate(78deg) brightness(107%) contrast(92%);
 }
 .loading-progress-bottom {
-    height: 10%;
+    background-image: url(../images/checkout.png);
+    height: var(--blazor-load-percentage, 0%);
     width: 100%;
+    background-position: center bottom;
+    background-size: cover;
+    background-repeat: no-repeat;
     filter: invert(79%) sepia(4%) saturate(1021%) hue-rotate(324deg) brightness(117%) contrast(98%);
 }
