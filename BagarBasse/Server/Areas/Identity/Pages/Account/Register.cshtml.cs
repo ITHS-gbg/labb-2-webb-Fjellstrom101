@@ -101,6 +101,36 @@ namespace BagarBasse.Server.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Förnamn")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Efternamn")]
+            public string LastName { get; set; }
+
+            [Required]
+            [DataType(DataType.PhoneNumber)]
+            [Display(Name = "Telefonnummer")]
+            public string PhoneNumber { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Adress")]
+            public string Address { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Postnummer")]
+            public string PostalCode { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Postort")]
+            public string City { get; set; }
         }
 
 
@@ -117,6 +147,17 @@ namespace BagarBasse.Server.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+                user.PhoneNumber = Input.PhoneNumber;
+                user.Address = Input.Address;
+                user.PostalCode = Input.PostalCode;
+                user.City = Input.City;
+
+
+
+
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

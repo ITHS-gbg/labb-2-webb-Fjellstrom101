@@ -1,43 +1,146 @@
 ﻿@page "/cart"
 @using BagarBasse.Client.Services.CartService
+@using BagarBasse.Client.Services.OrderService
 @using BagarBasse.Shared.DTOs
 @inject ICartService CartService
+@inject IOrderService OrderService
+@implements IDisposable
 
 <PageTitle>Shopping Cart</PageTitle>
-<h3> Shopping Cart</h3>
-@if (_cartProducts == null || _cartProducts.Count == 0)
+@if (_orderPlaced)
 {
-    <span>@_message</span>
-}
-else
-{
-    <div>
-        @foreach (var product in _cartProducts)
-        {
-            <div class="container">
-                <div class="image-wrapper">
-                    <img src="@product.ImageUrl" alt="" class="image" />
-                </div>
-                <div class="name">
-                    <h5><a href="/product/@product.ProductId">@product.Title</a></h5>
-                    <span>@product.ProductType</span><br />
-                    <input type="number" value="@product.Quantity" class="form-control input-quantity" @onchange="((ChangeEventArgs e) => UpdateQuantity(e, product))" />
-                    <button class="btn" @onclick="(()=>RemoveProductFromCart(product.ProductId, product.ProductTypeId))">Delete</button>
-                </div>
-                <div class="cart-product-price">@(product.Price * product.Quantity) kr</div>
-            </div>
-        }
-        <div class="cart-product-price">
-            Totalt: (@_cartProducts.Count): @_cartProducts.Sum(p => p.Price*p.Quantity) kr
+    <div class="container checkout-container">
+        <div class="py-5">
+            <h2 class="display-5 mb-5 text-center font-gatefold-demi">
+                Tack för din order!
+            </h2>
+            <h3 class="mb-5 text-center font-gatefold-demi">
+                Din order är nu skapad.
+            </h3>
+            <h3 class="mb-5 text-center font-gatefold-demi pb-5">
+                En orderbekräftelse har skickats till din angivna e-postadress.
+            </h3>
+            <div class="checkout-cupcake mx-auto my-5"></div>
         </div>
     </div>
 }
+else
+{
+    <div class="container cart-container">
+        <div class="row w-100">
+            <div class="col-lg-12 col-md-12 col-12">
+                <h2 class="display-5 mb-5 text-center font-gatefold-demi">
+                    Kundvagn
+                </h2>
+                <table
+                    class="table table-condensed table-responsive shopping-cart font-ambit">
+                    <thead>
+                    <tr>
+                        <th style="width: 60%">Produkt</th>
+                        <th style="width: 12%">Pris</th>
+                        <th style="width: 10%">Antal</th>
+                        <th style="width: 16%"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="shopping-cart-items">
+
+                    @if (_cartProducts == null || _cartProducts.Count == 0)
+                    {
+                        <span>@_message</span>
+                    }
+                    else
+                    {
+
+                        @foreach (var product in _cartProducts)
+                        {
+
+                            <tr class="shopping-cart-item">
+                                <td data-th="Product">
+                                    <div class="row">
+                                        <div class="col-md-3 text-start">
+                                            <img src="@product.ImageUrl"
+                                                 alt=""
+                                                 class="img-fluid d-none d-md-block rounded mb-2 cart-item-image"/>
+                                        </div>
+                                        <div class="col-md-9 text-start mt-sm-2">
+                                            <p class="h4 cart-item-title font-ambit-regular">@product.Title</p>
+                                            <p class="font-weight-light cart-item-category">
+                                                @product.ProductType
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-th="Price" class="cart-item-price">@(product.Price * product.Quantity) kr</td>
+                                <td data-th="Quantity">
+                                    <input
+                                        type="number"
+                                        class="form-control form-control-lg text-center cart-item-quantity-input"
+                                        value="@product.Quantity"
+                                        @onchange="((ChangeEventArgs e) => UpdateQuantity(e, product))"
+                                        aria-label="Item amount"/>
+                                </td>
+                                <td class="actions" data-th="">
+                                    <div class="text-end">
+                                        <button
+                                            class="btn btn-white border-secondary bg-white btn-md mb-2 delete-cart-item"
+                                            aria-label="Delete cart item"
+                                            @onclick="(() => RemoveProductFromCart(product.ProductId, product.ProductTypeId))">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+
+
+                        }
+                    }
+
+                    </tbody>
+                </table>
+                <div class="float-end text-end font-ambit-regular">
+                    <h1 class="h4">Totalt:</h1>
+                    <h1 class="cart-total-price">@GetTotalPrice() kr</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4 d-flex align-items-center">
+            <div class="col-sm-6 order-md-2 text-end">
+                <AuthorizeView>
+                    <Authorized>
+                        <button
+                            @onclick="PlaceOrder"
+                            class="btn btn-pastel-pink border-0 font-ambit-regular btn-primary mb-4 btn-lg pl-5 pr-5 checkout-button text-dark ">
+                            Placera order
+                        </button>
+                    </Authorized>
+                    <NotAuthorized>
+                        <button
+                            class="btn btn-pastel-pink border-0 font-ambit-regular btn-primary mb-4 btn-lg pl-5 pr-5 checkout-button text-dark">
+                            Logga In
+                        </button>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+            <div
+                class="col-sm-6 font-ambit-regular mb-3 mb-m-1 order-md-1 text-md-start">
+                <a href="authentication/login"
+                   class="btn btn-pastel-yellow border-0 font-ambit-regular btn-primary mb-4 btn-lg pl-5 pr-5 checkout-button text-dark">
+                    Fortsätt handla
+                </a>
+            </div>
+        </div>
+    </div>
+}
+
 @code {
     List<CartProductDto> _cartProducts = null;
     string _message = "Loading cart...";
+    private bool _orderPlaced = false;
 
     protected override async Task OnInitializedAsync()
     {
+        CartService.OnChange += StateHasChanged;
         await LoadCart();
     }
 
@@ -45,7 +148,7 @@ else
     {
         if ((await CartService.GetCartItemsAsync()).Count == 0)
         {
-            _message = "Your cart is empty";
+            _message = "Din kundvagn är tom";
             _cartProducts = new List<CartProductDto>();
         }
         else
@@ -66,8 +169,27 @@ else
         if (product.Quantity < 1)
         {
             product.Quantity = 1;
+            e.Value = 1;
         }
         await CartService.UpdateQuantity(product);
+    }
+
+    private async Task PlaceOrder()
+    {
+        await OrderService.PlaceOrder();
+        _orderPlaced = true;
+    }
+
+    private string GetTotalPrice()
+    {
+
+        return (_cartProducts == null ? 0 : _cartProducts.Sum(p => p.Price * p.Quantity)).ToString();
+
+    }
+
+    public void Dispose()
+    {
+        CartService.OnChange -= StateHasChanged;
     }
 
 }

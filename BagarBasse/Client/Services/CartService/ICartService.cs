@@ -12,4 +12,6 @@ public interface ICartService
     Task RemoveProductFromCart(int productId, int productTypeId);
     Task UpdateQuantity(CartProductDto product);
 
+    Task ClearCart();
+
 }

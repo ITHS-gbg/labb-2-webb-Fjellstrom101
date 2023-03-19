@@ -2,6 +2,7 @@
 using BagarBasse.Shared;
 using System.Net.Http.Json;
 using BagarBasse.Shared.DTOs;
+using System.Net.Http;
 
 namespace BagarBasse.Client.Services.ProductService;
 
@@ -9,9 +10,9 @@ public class ProductService : IProductService
 {
     private readonly HttpClient _http;
 
-    public ProductService(HttpClient http)
+    public ProductService(IHttpClientFactory itHttpClientFactory)
     {
-        _http = http;
+        _http = itHttpClientFactory.CreateClient("BagarBasse.PublicServerAPI"); ;
     }
 
     public List<Product> Products { get; set; } = new List<Product>();

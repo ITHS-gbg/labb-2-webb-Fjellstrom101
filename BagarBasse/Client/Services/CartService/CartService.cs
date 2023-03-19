@@ -3,6 +3,7 @@ using BagarBasse.Shared.Models;
 using BagarBasse.Shared;
 using System.Net.Http.Json;
 using Blazored.LocalStorage;
+using BagarBasse.Client.Pages;
 
 namespace BagarBasse.Client.Services.CartService;
 
@@ -11,10 +12,10 @@ public class CartService : ICartService
     private readonly ILocalStorageService _localStorage;
     private readonly HttpClient _http;
 
-    public CartService(ILocalStorageService localStorage, HttpClient http)
+    public CartService(ILocalStorageService localStorage, IHttpClientFactory itHttpClientFactory)
     {
         _localStorage = localStorage;
-        _http = http;
+        _http = itHttpClientFactory.CreateClient("BagarBasse.PublicServerAPI");
     }
 
     public event Action? OnChange;
@@ -95,5 +96,11 @@ public class CartService : ICartService
             cartItem.Quantity = product.Quantity;
             await _localStorage.SetItemAsync("cart", cart);
         }
+    }
+
+    public async Task ClearCart()
+    {
+        await _localStorage.SetItemAsync("cart", new List<CartItem>());
+        OnChange.Invoke();
     }
 }

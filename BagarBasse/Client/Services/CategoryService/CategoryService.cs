@@ -12,9 +12,9 @@ public class CategoryService  : ICategoryService
     public event Action? ProductsChanged;
     public List<Category> Categories { get; set; } = new List<Category>();
 
-    public CategoryService(HttpClient httpClient)
+    public CategoryService(IHttpClientFactory itHttpClientFactory)
     {
-        _httpClient = httpClient;
+        _httpClient = itHttpClientFactory.CreateClient("BagarBasse.PublicServerAPI");
     }
 
     public async Task GetCategories()

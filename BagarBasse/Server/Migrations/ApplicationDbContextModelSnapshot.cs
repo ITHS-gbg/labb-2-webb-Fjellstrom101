@@ -17,7 +17,7 @@ namespace BagarBasse.Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -30,6 +30,12 @@ namespace BagarBasse.Server.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -40,6 +46,12 @@ namespace BagarBasse.Server.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -63,6 +75,9 @@ namespace BagarBasse.Server.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -257,15 +272,15 @@ namespace BagarBasse.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8cceb5c8-1025-46b9-809c-31b7d4bf43ae",
-                            ConcurrencyStamp = "a55e7538-e376-4f6e-ba86-75dab58f7cc2",
+                            Id = "c1919b9f-34d7-41f1-a350-1657e9b10d82",
+                            ConcurrencyStamp = "83ed4cc8-217b-4dd0-95b3-ea57eb2b0836",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "1aa6c83c-a0be-49af-8c65-f991fafa8280",
-                            ConcurrencyStamp = "9cb10f13-76ba-4e75-ab5a-3d36b669d0bd",
+                            Id = "7982de85-f23f-4d49-a373-510ae7da421a",
+                            ConcurrencyStamp = "2b6529c5-5db7-4e60-9f6d-b1407bb7caf6",
                             Name = "User",
                             NormalizedName = "USER"
                         });

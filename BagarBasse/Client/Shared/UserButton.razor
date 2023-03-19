@@ -7,16 +7,25 @@
         <i class="bi bi-person"></i>
     </a>
     <div class="dropdown-menu dropdown-menu-right @UserMenuCssClass">
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <a href="orders" class="dropdown-item">Adminpanel</a>
+                <hr/>
+            </Authorized>
+        </AuthorizeView>
         <AuthorizeView>
             <Authorized>
-                <a class="dropdown-item" @onclick="BeginLogOut">Logout</a>
+                <a href="orders" class="dropdown-item">Mina Ordrar</a>
+                <a href="Identity/Account/Manage" class="dropdown-item">Ändra Kontouppgifter</a>
+                <hr/>
+                <a class="dropdown-item" @onclick="BeginLogOut">Logga ut</a>
             </Authorized>
             <NotAuthorized>
-                <a href="authentication/login" class="dropdown-item">Login</a>
-                <a href="authentication/register" class="dropdown-item">Register</a>
+                <a href="authentication/login" class="dropdown-item">Logga in</a>
+                <a href="authentication/register" class="dropdown-item">Registrera</a>
             </NotAuthorized>
         </AuthorizeView>
-        
+
     </div>
 </div>
 
