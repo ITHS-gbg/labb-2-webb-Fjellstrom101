@@ -62,13 +62,14 @@ else
     {
         _message = "Loading Products...";
         var result = await ProductService.GetProductAsync(Id);
-        if (!result.Success)
+
+        if (result == null)
         {
-            _message = result.Message;
+            _message = "Produkten hittades inte";
         }
         else
         {
-            _product = result.Data;
+            _product = result;
             if (_product.Variants.Count > 0)
             {
                 currentTypeId = _product.Variants[0].ProductTypeId;

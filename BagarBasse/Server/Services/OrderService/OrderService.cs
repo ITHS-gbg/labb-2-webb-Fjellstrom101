@@ -25,12 +25,12 @@ public class OrderService : IOrderService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<ServiceResponse<bool>> PlaceOrder(List<CartItem> cartItems)
+    public async Task<bool> PlaceOrderAsync(List<CartItem> cartItems)
     {
+        if(cartItems == null || cartItems.Count==0)
+            return false;
 
-        Console.WriteLine();
-
-        var products = (await _cartService.GetCartProductsAsync(cartItems)).Data;
+        var products = (await _cartService.GetCartProductsAsync(cartItems));
         decimal totalPrice = 0;
         products.ForEach(p => totalPrice += p.Price * p.Quantity);
 
@@ -53,15 +53,11 @@ public class OrderService : IOrderService
 
         await _context.SaveChangesAsync();
 
-        return new ServiceResponse<bool>
-        {
-            Data = true
-        };
+        return true;
     }
 
-    public async Task<ServiceResponse<List<OrderOverviewDto>>> GetOrders()
+    public async Task<List<OrderOverviewDto>> GetOrdersAsync()
     {
-        var response = new ServiceResponse<List<OrderOverviewDto>>();
 
         var orders = await _context.Orders
             .Include(o => o.OrderItems)
@@ -83,14 +79,11 @@ public class OrderService : IOrderService
                 o.OrderItems.First().Product.Title,
             ProductImageUrl = o.OrderItems.First().Product.Image
         }));
-        response.Data = orderResponse;
-
-        return response;
+        return orderResponse;
     }
 
-    public async Task<ServiceResponse<OrderDetailsDto>> GetOrderDetails(int orderId)
+    public async Task<OrderDetailsDto> GetOrderDetailsAsync(int orderId)
     {
-        var response = new ServiceResponse<OrderDetailsDto>();
         var order = await _context.Orders
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
@@ -102,9 +95,7 @@ public class OrderService : IOrderService
 
         if (order == null)
         {
-            response.Success = false;
-            response.Message = "Ordern hittades inte";
-            return response;
+            return null;
         }
 
         var orderDetailsDto = new OrderDetailsDto
@@ -124,10 +115,34 @@ public class OrderService : IOrderService
             TotalPrice = o.TotalPrice
         }));
 
-        response.Data = orderDetailsDto;
-
-        return response;
+        return orderDetailsDto;
     }
+
+    public async Task<List<OrderOverviewDto>> GetAdminOrdersAsync()
+    {
+
+        var orders = await _context.Orders
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .OrderByDescending(o => o.OrderDate)
+            .ToListAsync();
+
+        var orderResponse = new List<OrderOverviewDto>();
+
+        orders.ForEach(o => orderResponse.Add(new OrderOverviewDto
+        {
+            Id = o.Id,
+            OrderDate = o.OrderDate,
+            TotalPrice = o.TotalPrice,
+            Product = o.OrderItems.Count > 1 ?
+                $"{o.OrderItems.First().Product.Title} och " +
+                $"{o.OrderItems.Count - 1} andra produkter..." :
+                o.OrderItems.First().Product.Title,
+            ProductImageUrl = o.OrderItems.First().Product.Image
+        }));
+        return orderResponse;
+    }
+
     private Guid GetUserId() => Guid.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
 }

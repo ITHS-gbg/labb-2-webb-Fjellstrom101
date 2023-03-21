@@ -22,19 +22,25 @@ public class OrderService : IOrderService
     public async Task PlaceOrder()
     {
         var result = await _http.PostAsJsonAsync("api/Order", (await _cartService.GetCartItemsAsync()));
-        _cartService.ClearCart();
+        await _cartService.ClearCart();
     }
 
     public async Task<List<OrderOverviewDto>> GetOrders()
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<OrderOverviewDto>>>("api/order");
-        return result.Data;
+        var result = await _http.GetFromJsonAsync<List<OrderOverviewDto>>("api/order");
+        return result;
+    }
+
+    public async Task<List<OrderOverviewDto>> GetAdminOrders()
+    {
+        var result = await _http.GetFromJsonAsync<List<OrderOverviewDto>>("api/order/admin");
+        return result;
     }
 
     public async Task<OrderDetailsDto> GetOrderDetails(int orderId)
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<OrderDetailsDto>>($"api/order/{orderId}");
-        return result.Data;
+        var result = await _http.GetFromJsonAsync<OrderDetailsDto>($"api/order/{orderId}");
+        return result;
     }
 
 }

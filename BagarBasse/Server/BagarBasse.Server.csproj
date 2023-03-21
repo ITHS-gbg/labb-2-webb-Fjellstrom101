@@ -33,6 +33,7 @@
   <ItemGroup>
     <Folder Include="Services\CategoryService\" />
     <Folder Include="Services\CartService\" />
+    <Folder Include="Services\ProductTypeService\" />
     <Folder Include="Services\ProfileService\" />
     <Folder Include="Services\OrderService\" />
     <Folder Include="Services\ProductService\" />

@@ -3,6 +3,7 @@ using BagarBasse.Client.Services.CartService;
 using BagarBasse.Client.Services.CategoryService;
 using BagarBasse.Client.Services.OrderService;
 using BagarBasse.Client.Services.ProductService;
+using BagarBasse.Client.Services.ProductTypeService;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -31,6 +32,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 
 
 builder.Services.AddApiAuthorization()

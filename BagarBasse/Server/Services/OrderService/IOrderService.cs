@@ -6,7 +6,8 @@ namespace BagarBasse.Server.Services.OrderService;
 
 public interface IOrderService
 {
-    Task<ServiceResponse<bool>> PlaceOrder(List<CartItem> products);
-    Task<ServiceResponse<List<OrderOverviewDto>>> GetOrders();
-    Task<ServiceResponse<OrderDetailsDto>> GetOrderDetails(int orderId);
+    Task<bool> PlaceOrderAsync(List<CartItem> products);
+    Task<List<OrderOverviewDto>> GetOrdersAsync();
+    Task<OrderDetailsDto> GetOrderDetailsAsync(int orderId);
+    Task<List<OrderOverviewDto>> GetAdminOrdersAsync();
 }

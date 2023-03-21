@@ -1,0 +1,53 @@
+﻿@page "/admin/orders"
+@using BagarBasse.Client.Services.OrderService
+@using BagarBasse.Shared.DTOs
+@using Microsoft.AspNetCore.Authorization
+
+@inject IOrderService OrderService
+@inject NavigationManager NavigationManager
+
+@attribute [Authorize(Roles = "Admin")]
+
+<h3>Orders</h3>
+@if (AdminOrders == null)
+{
+    <span>Loading products...</span>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Product</th>
+                <th>Variant</th>
+                <th>Price</th>
+                <th>Visible</th>
+            </tr>
+        </thead>
+        <tbody>
+            <Virtualize Items="AdminOrders" Context="order">
+                <tr>
+                    <td>
+                        <img src="@order.ProductImageUrl" alt="" />
+                    </td>
+                    <td>@order.Product</td>
+                    <td>@order.OrderDate</td>
+                    <td>@order.TotalPrice</td>
+                    <td>@order.Product</td>
+                </tr>
+            </Virtualize>
+        </tbody>
+    </table>
+}
+
+@code {
+    public List<OrderOverviewDto>? AdminOrders { get; set; } = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AdminOrders = await OrderService.GetAdminOrders();
+    }
+
+
+}

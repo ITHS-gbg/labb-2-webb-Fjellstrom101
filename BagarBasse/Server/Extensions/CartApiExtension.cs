@@ -8,12 +8,14 @@ public static class CartApiExtension
 {
     public static WebApplication MapCartApi(this WebApplication webApplication)
     {
-        webApplication.MapPost("/api/cart/products", async (ICartService cartService, List<CartItem> cartItems) =>
-        {
-            var result = await cartService.GetCartProductsAsync(cartItems);
-            return Results.Ok(result);
-        });
+        webApplication.MapPost("/api/cart/products", GetCartProductsHandler);
 
         return webApplication;
+    }
+
+    public static async Task<IResult> GetCartProductsHandler(ICartService cartService, List<CartItem> cartItems)
+    {
+        var result = await cartService.GetCartProductsAsync(cartItems);
+        return Results.Ok(result);
     }
 }

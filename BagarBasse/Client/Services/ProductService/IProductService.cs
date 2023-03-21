@@ -7,9 +7,18 @@ public interface IProductService
 {
     List<Product> Products { get; set; }
 
-    Task<ServiceResponse<List<Product>>> GetProductsAsync();
-    Task<ServiceResponse<List<Product>>> GetProductsByCategoryAsync(string categoryUrl = null);
-    Task<ServiceResponse<Product>> GetProductAsync(int id);
-    Task<ServiceResponse<List<Product>>> SearchProducts(string searchText);
+    List<Product> AdminProducts { get; set; }
+
+    Task<List<Product>> GetProductsAsync();
+
+    Task<List<Product>> GetAdminProductsAsync();
+    Task<List<Product>> GetProductsByCategoryAsync(string categoryUrl = null);
+    Task<Product> GetProductAsync(int id);
+
+    Task<List<Product>> SearchProductsAsync(string searchText);
+
+    Task<Product> CreateProductAsync(Product product);
+    Task<Product> UpdateProductAsync(Product product);
+    Task DeleteProductAsync(Product product);
 
 }

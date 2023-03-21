@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace BagarBasse.Shared.Models;
 
@@ -12,6 +13,12 @@ public class Product
     public Category? Category { get; set; }
     public int CategoryId { get; set; }
     public List<ProductVariant> Variants { get; set; } = new List<ProductVariant>();
+    public bool Visible { get; set; } = true;
     public bool Deleted { get; set; } = false;
-    public bool IsNew { get; set; }
+
+
+    [NotMapped]
+    public bool Editing { get; set; } = false;
+    [NotMapped]
+    public bool IsNew { get; set; } = false;
 }

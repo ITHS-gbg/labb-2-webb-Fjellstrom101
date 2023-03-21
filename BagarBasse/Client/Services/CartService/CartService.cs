@@ -58,8 +58,8 @@ public class CartService : ICartService
     {
         var cartItems = await _localStorage.GetItemAsync<List<CartItem>>("cart");
         var response = await _http.PostAsJsonAsync("api/cart/products", cartItems);
-        var cartProducs = await response.Content.ReadFromJsonAsync<ServiceResponse<List<CartProductDto>>>();
-        return cartProducs.Data;
+        var cartProducs = await response.Content.ReadFromJsonAsync<List<CartProductDto>>();
+        return cartProducs;
     }
 
     public async Task RemoveProductFromCart(int productId, int productTypeId)

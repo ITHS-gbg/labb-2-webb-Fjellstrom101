@@ -5,6 +5,11 @@ namespace BagarBasse.Server.Services.CategoryService;
 
 public interface ICategoryService
 {
-    Task<ServiceResponse<List<Category>>> GetCategoriesAsync();
-    Task<ServiceResponse<Category>> GetCategoryByUrl(string categoryUrl);
+    Task<List<Category>> GetCategoriesAsync();
+    Task<Category> GetCategoryByUrlAsync(string categoryUrl);
+
+    Task<List<Category>> GetAdminCategoriesAsync();
+    Task<List<Category>> AddCategoryAsync(Category category);
+    Task<List<Category>> UpdateCategoryAsync(Category category);
+    Task<List<Category>> DeleteCategoryAsync(int id);
 }

@@ -9,6 +9,7 @@ using BagarBasse.Server.Services.CartService;
 using BagarBasse.Server.Services.CategoryService;
 using BagarBasse.Server.Services.OrderService;
 using BagarBasse.Server.Services.ProductService;
+using BagarBasse.Server.Services.ProductTypeService;
 using BagarBasse.Server.Services.ProfileService;
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -64,17 +65,12 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.UseProductTypeApi();
 
 builder.Services.AddTransient<IProfileService, ProfileService>();
 
 builder.Services.Configure<IdentityOptions>(options =>
     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier);
-
-
-//builder.Services.AddAuthorizationBuilder()
-//    .AddPolicy("user", policy =>
-//        policy
-//            .RequireRole("user"));
 
 
 
@@ -108,6 +104,7 @@ app.MapProductApi();
 app.MapCategoryApi();
 app.MapCartApi();
 app.MapOrderApi();
+app.MapProductTypeApi();
 
 
 app.UseHttpsRedirection();

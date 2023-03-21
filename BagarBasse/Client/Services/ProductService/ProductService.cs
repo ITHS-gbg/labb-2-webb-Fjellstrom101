@@ -8,38 +8,65 @@ namespace BagarBasse.Client.Services.ProductService;
 
 public class ProductService : IProductService
 {
+    private readonly HttpClient _publicHttp;
     private readonly HttpClient _http;
 
     public ProductService(IHttpClientFactory itHttpClientFactory)
     {
-        _http = itHttpClientFactory.CreateClient("BagarBasse.PublicServerAPI"); ;
+        _publicHttp = itHttpClientFactory.CreateClient("BagarBasse.PublicServerAPI");
+        _http = itHttpClientFactory.CreateClient("BagarBasse.ServerAPI");
     }
 
     public List<Product> Products { get; set; } = new List<Product>();
-    public async Task<ServiceResponse<List<Product>>> GetProductsAsync()
+    public List<Product> AdminProducts { get; set; } = new List<Product>();
+
+    public async Task<List<Product>> GetProductsAsync()
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product");
+        var result = await _publicHttp.GetFromJsonAsync<List<Product>>("api/product");
         return result;
     }
 
-
-    public async Task<ServiceResponse<List<Product>>> GetProductsByCategoryAsync(string categoryUrl = null)
+    public async Task<List<Product>> GetAdminProductsAsync()
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/category/{categoryUrl}");
+        var result = await _http.GetFromJsonAsync<List<Product>>("api/product/admin");
         return result;
     }
 
-    public async Task<ServiceResponse<Product>> GetProductAsync(int id)
+    public async Task<List<Product>> GetProductsByCategoryAsync(string categoryUrl = null)
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<Product>>($"api/product/{id}");
+        var result = await _publicHttp.GetFromJsonAsync<List<Product>>($"api/category/{categoryUrl}");
+        return result;
+    }
+
+    public async Task<Product> GetProductAsync(int id)
+    {
+        var result = await _publicHttp.GetFromJsonAsync<Product>($"api/product/{id}");
         return result;
 
     }
 
-    public async Task<ServiceResponse<List<Product>>> SearchProducts(string searchText)
+    public async Task<List<Product>> SearchProductsAsync(string searchText)
     {
-        var result = await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/search/{searchText}");
+        var result = await _publicHttp.GetFromJsonAsync<List<Product>>($"api/search/{searchText}");
         return result;
 
+    }
+
+    public async Task<Product> CreateProductAsync(Product product)
+    {
+        var result = await _http.PostAsJsonAsync("api/product", product);
+        var newProduct = await result.Content.ReadFromJsonAsync<Product>();
+        return newProduct;
+    }
+
+    public async Task<Product> UpdateProductAsync(Product product)
+    {
+        var result = await _http.PutAsJsonAsync("api/product", product);
+        return await result.Content.ReadFromJsonAsync<Product>();
+    }
+
+    public async Task DeleteProductAsync(Product product)
+    {
+        var result = await _http.DeleteAsync($"api/product/{product.Id}");
     }
 }

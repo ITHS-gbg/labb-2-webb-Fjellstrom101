@@ -6,5 +6,5 @@ namespace BagarBasse.Server.Services.CartService;
 
 public interface ICartService
 {
-    Task<ServiceResponse<List<CartProductDto>>> GetCartProductsAsync(List<CartItem> cartItems);
+    Task<List<CartProductDto>> GetCartProductsAsync(List<CartItem> cartItems);
 }

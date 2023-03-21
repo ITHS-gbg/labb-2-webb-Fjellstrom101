@@ -14,15 +14,14 @@ public class CartService : ICartService
     {
         _context = context;
     }
-    public async Task<ServiceResponse<List<CartProductDto>>> GetCartProductsAsync(List<CartItem> cartItems)
+    public async Task<List<CartProductDto>> GetCartProductsAsync(List<CartItem> cartItems)
     {
-        var response = new ServiceResponse<List<CartProductDto>>
-        {
-            Data = new List<CartProductDto>()
-        };
+        var response = new List<CartProductDto>();
+
         foreach (var item in cartItems)
         {
             var product = await _context.Products.Where(p => p.Id == item.ProductId).FirstOrDefaultAsync();
+
             if (product == null)
             {
                 continue;
@@ -32,6 +31,7 @@ public class CartService : ICartService
                 .Where(v => v.ProductId == item.ProductId && v.ProductTypeId == item.ProductTypeId)
                 .Include(v => v.ProductType)
                 .FirstOrDefaultAsync();
+
             if (productVariant == null)
             {
                 continue;
@@ -47,8 +47,10 @@ public class CartService : ICartService
                 ProductType = productVariant.ProductType.Name,
                 Quantity = item.Quantity,
             };
-            response.Data.Add(cartProduct);
+
+            response.Add(cartProduct);
         }
+
         return response;
     }
 }

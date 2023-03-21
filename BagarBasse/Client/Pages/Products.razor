@@ -46,7 +46,7 @@
     {
         if (string.IsNullOrEmpty(CategoryUrl) && string.IsNullOrEmpty(SearchText))
         {
-            CategoryService.ProductsChanged += StateHasChanged;
+            CategoryService.OnChange += StateHasChanged;
             await CategoryService.GetCategories();
         }
     }
@@ -54,7 +54,7 @@
     public void Dispose()
     {
         if (string.IsNullOrEmpty(CategoryUrl) && string.IsNullOrEmpty(SearchText))
-            CategoryService.ProductsChanged -= StateHasChanged;
+            CategoryService.OnChange -= StateHasChanged;
     }
 
 }
