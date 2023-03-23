@@ -16,33 +16,13 @@ public static class OrderApiExtensions
         //app.MapGet("/api/order", GetOrdersHandler);
         app.MediateGet<GetOrdersRequest>("/api/order");
 
-        app.MapGet("/api/order/admin", GetAdminOrdersHandler);
-
-        app.MapGet("/api/order/{orderId}", GetOrderDetailsHandler);
+        //app.MapGet("/api/order/admin", GetAdminOrdersHandler);
+        app.MediateGet<GetAdminOrdersRequest>("/api/order/admin");
+        
+        //app.MapGet("/api/order/{orderId}", GetOrderDetailsHandler);
+        app.MediateGet<GetOrderDetailsRequest>("/api/order/{orderId}");
 
         return app;
     }
 
-
-
-    [Authorize]
-    private static async Task<IResult> GetOrdersHandler(IOrderService orderService)
-    {
-        var result = await orderService.GetOrdersAsync();
-        return TypedResults.Ok(result);
-    }
-
-    [Authorize(Roles = "Admin")]
-    private static async Task<IResult> GetAdminOrdersHandler(IOrderService orderService)
-    {
-        var result = await orderService.GetAdminOrdersAsync();
-        return TypedResults.Ok(result);
-    }
-
-    [Authorize]
-    private static async Task<IResult> GetOrderDetailsHandler(IOrderService orderService, int orderId)
-    {
-        var result = await orderService.GetOrderDetailsAsync(orderId);
-        return result != null ? TypedResults.Ok(result) : TypedResults.NotFound("Order not found.");
-    }
 }

@@ -1,4 +1,5 @@
-﻿using BagarBasse.Server.Services.ProductTypeService;
+﻿using BagarBasse.Server.Requests.ProductTypeRequests;
+using BagarBasse.Server.Services.ProductTypeService;
 using BagarBasse.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 
@@ -12,38 +13,17 @@ public static class ProductTypeApiExtension
         services.AddScoped<IProductTypeService, ProductTypeService>();
         return services;
     }
-    public static WebApplication MapProductTypeApi(this WebApplication webApplication)
+
+    public static WebApplication MapProductTypeApi(this WebApplication app)
     {
-        webApplication.MapGet("/api/producttype", GetProductTypesHandler);
 
-        webApplication.MapPost("/api/producttype", AddProductTypeHandler);
+        app.MediateGet<GetProductTypesRequest>("/api/producttype");
 
-        webApplication.MapPut("/api/producttype", UpdateProductTypeHandler);
+        app.MediatePost<AddProductTypeRequest>("/api/producttype");
 
-        return webApplication;
+        app.MediatePut<UpdateProductTypeRequest>("/api/producttype");
+
+        return app;
     }
 
-
-    [Authorize(Roles = "Admin")]
-    private static async Task<IResult> GetProductTypesHandler(IProductTypeService productTypeService)
-    {
-        var response = await productTypeService.GetProductTypesAsync();
-        return Results.Ok(response);
-    }
-
-    [Authorize(Roles = "Admin")]
-    private static async Task<IResult> AddProductTypeHandler(IProductTypeService productTypeService,
-        ProductType productType)
-    {
-        var response = await productTypeService.AddProductTypeAsync(productType);
-        return TypedResults.Ok(response);
-    }
-
-    [Authorize(Roles = "Admin")]
-    private static async Task<IResult> UpdateProductTypeHandler(IProductTypeService productTypeService,
-        ProductType productType)
-    {
-        var response = await productTypeService.UpdateProductTypeAsync(productType);
-        return response != null ? TypedResults.Ok(response) : TypedResults.NotFound("Product Type not found");
-    }
 }
