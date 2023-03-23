@@ -29,15 +29,6 @@ public class CategoryService  : ICategoryService
         }
     }
 
-    public async Task GetCategoryByUrl(string categoryUrl)
-    {
-        var response = await _publicHttpClient.GetFromJsonAsync<Category>($"api/single-category/{categoryUrl}");
-        if (response != null)
-        {
-            Categories = new List<Category> { response };
-        }
-    }
-
     public async Task GetAdminCategories()
     {
         var response = await _httpClient.GetFromJsonAsync<List<Category>>("api/category/admin");

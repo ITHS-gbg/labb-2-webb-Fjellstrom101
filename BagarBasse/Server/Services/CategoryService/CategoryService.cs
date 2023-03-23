@@ -20,12 +20,6 @@ public class CategoryService : ICategoryService
         return categories;
     }
 
-    public async Task<Category> GetCategoryByUrlAsync(string categoryUrl)
-    {
-        var categories = await _dataContext.Categories.FirstOrDefaultAsync(c => c.Url.Equals(categoryUrl));
-        return categories;
-    }
-
     public async Task<List<Category>> GetAdminCategoriesAsync()
     {
         var categories = await _dataContext.Categories.Where(c => c.Visible).ToListAsync();

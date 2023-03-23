@@ -163,9 +163,9 @@ public class DataContext : DbContext
             {
                 Id = 14,
                 Title =
-                    "Dela kärleken med våra världsberömda minichoklad- och vaniljcupcakes, alla toppade med ett sortiment av vår vanilj- och chokladsmörkräm och alla hjärtans dag-dekorationer.",
+					"Små Bitar Av Kärlek - Blandade Cupcakes",
                 Description =
-                    "Dela dina känslor med tre hjärtformade utskurna kakor, täckta med rött, vitt och rosa socker.",
+					"Dela kärleken med våra världsberömda minichoklad- och vaniljcupcakes, alla toppade med ett sortiment av vår vanilj- och chokladsmörkräm och alla hjärtans dag-dekorationer.",
                 Ingredients =
                     "Granulated Sugar, Cocoa Powder, Cake Flour, Baking Soda, Salt, Butter, Eggs, Milk, Sour Cream, Vanilla Extract, Food Dye, AP Flour, Canola Oil, Cocoa Powder, Baking Powder, Confectionary Sugar, Sprinkles, Egg Whites",
                 CategoryId = 2,

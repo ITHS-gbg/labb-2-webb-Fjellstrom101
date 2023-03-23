@@ -166,10 +166,14 @@ namespace BagarBasse.Server.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     var defaultRole = await _roleManager.FindByNameAsync("User");
-
-                    if (defaultRole != null)
+                    if (!_userManager.Users.Any())
                     {
-                        IdentityResult roleResult = await _userManager.AddToRoleAsync(user, defaultRole.Name);
+	                    defaultRole = await _roleManager.FindByNameAsync("Admin");
+                    }
+
+					if (defaultRole != null)
+                    {
+	                    IdentityResult roleResult = await _userManager.AddToRoleAsync(user, defaultRole.Name);
                     }
 
                     _logger.LogInformation("User created a new account with password.");

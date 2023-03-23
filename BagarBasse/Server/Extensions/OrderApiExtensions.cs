@@ -1,32 +1,29 @@
 ﻿using BagarBasse.Server.Services.OrderService;
 using BagarBasse.Shared.Models;
 using System.Security.Claims;
+using BagarBasse.Server.Requests.OrderRequests;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BagarBasse.Server.Extensions;
 
 public static class OrderApiExtensions
 {
-    public static WebApplication MapOrderApi(this WebApplication webApplication)
+    public static WebApplication MapOrderApi(this WebApplication app)
     {
-        webApplication.MapPost("/api/order", PlaceOrderHandler);
+        //app.MapPost("/api/order", PlaceOrderHandler);
+        app.MediatePost<PlaceOrderRequest>("/api/order");
 
-        webApplication.MapGet("/api/order", GetOrdersHandler);
+        //app.MapGet("/api/order", GetOrdersHandler);
+        app.MediateGet<GetOrdersRequest>("/api/order");
 
-        webApplication.MapGet("/api/order/admin", GetAdminOrdersHandler);
+        app.MapGet("/api/order/admin", GetAdminOrdersHandler);
 
-        webApplication.MapGet("/api/order/{orderId}", GetOrderDetailsHandler);
+        app.MapGet("/api/order/{orderId}", GetOrderDetailsHandler);
 
-        return webApplication;
+        return app;
     }
 
 
-    [Authorize]
-    private static async Task<IResult> PlaceOrderHandler(IOrderService orderService, List<CartItem> cartItems)
-    {
-        var result = await orderService.PlaceOrderAsync(cartItems);
-        return result != null ? TypedResults.Ok(result) : TypedResults.BadRequest("Cart is null or empty.");
-    }
 
     [Authorize]
     private static async Task<IResult> GetOrdersHandler(IOrderService orderService)

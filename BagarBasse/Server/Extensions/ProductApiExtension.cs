@@ -54,14 +54,14 @@ public static class ProductApiExtension
     private static async Task<IResult> UpdateProductHandler(IProductService productService, Product product)
     {
         var result = await productService.UpdateProductAsync(product);
-        return result != null ? TypedResults.Ok(result) : TypedResults.BadRequest("Product not found");
+        return result != null ? TypedResults.Ok(result) : TypedResults.NotFound("Product not found");
     }
 
     [Authorize(Roles = "Admin")]
     private static async Task<IResult> DeleteProductHandler(IProductService productService, int id)
     {
         var result = await productService.DeleteProductAsync(id);
-        return result ? TypedResults.Ok(result) : TypedResults.BadRequest("Product not found");
+        return result ? TypedResults.Ok(result) : TypedResults.NotFound("Product not found");
     }
 
     private static async Task<IResult> GetProductHandler(IProductService productService, int id)
@@ -69,7 +69,7 @@ public static class ProductApiExtension
         var result = await productService.GetProductAsync(id);
         return result != null
             ? TypedResults.Ok(result)
-            : TypedResults.BadRequest("Sorry, but this product does not exist.");
+            : TypedResults.NotFound("Sorry, but this product does not exist.");
     }
 
     private static async Task<IResult> GetProductsByCategoryHandler(IProductService productService, string categoryUrl)

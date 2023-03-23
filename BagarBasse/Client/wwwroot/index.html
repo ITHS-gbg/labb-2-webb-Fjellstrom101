@@ -36,7 +36,19 @@
     </div>
     <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
-    <script>navigator.serviceWorker.register('service-worker.js');</script>
+<script>navigator.serviceWorker.register('service-worker.js');</script>
+<script>
+document.initializeCarousel = () =>
+{
+    $('#carouselIndicators').carousel({interval: 2000});
+
+    $('#carouselIndicators-prev').click ( 
+            () => $('#carouselIndicators').carousel('prev') );
+    $('#carouselIndicators-next').click ( 
+            () => $('#carouselIndicators').carousel('next') );
+
+}
+</script>
 </body>
 
 </html>

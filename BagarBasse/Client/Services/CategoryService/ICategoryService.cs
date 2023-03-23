@@ -8,8 +8,6 @@ public interface ICategoryService
     List<Category> Categories { get; set; }
     List<Category> AdminCategories { get; set; }
     Task GetCategories();
-    Task GetCategoryByUrl(string categoryUrl);
-
     Task GetAdminCategories();
     Task AddCategory(Category category);
     Task DeleteCategory(int categoryId);

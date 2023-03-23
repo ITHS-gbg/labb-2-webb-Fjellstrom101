@@ -44,6 +44,6 @@ public static class ProductTypeApiExtension
         ProductType productType)
     {
         var response = await productTypeService.UpdateProductTypeAsync(productType);
-        return response != null ? TypedResults.Ok(response) : TypedResults.BadRequest("Product Type not found");
+        return response != null ? TypedResults.Ok(response) : TypedResults.NotFound("Product Type not found");
     }
 }
