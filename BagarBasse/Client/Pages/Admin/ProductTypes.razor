@@ -7,41 +7,55 @@
 @implements IDisposable
 @attribute [Authorize(Roles = "Admin")]
 
-@foreach (var productType in ProductTypeService.ProductTypes)
-{
-    @if (productType.Editing)
-    {
+<div class="d-flex">
+    <div class="me-3">
+        <AdminMenu ActiveItem="3"/>
+    </div>
 
-        <EditForm Model="_editingProductType" OnSubmit="UpdateProductType">
-            <div class="row">
-                <div class="col">
-                    <InputText @bind-Value="_editingProductType.Name" class="form-control" />
+    <div class="flex-grow-1 p-3 font-ambit">
+
+        <h2 class="display-5 mt-3  mb-5 text-center font-gatefold-demi">
+            Produkttyper
+        </h2>
+
+        @foreach (var productType in ProductTypeService.ProductTypes)
+        {
+            @if (productType.Editing)
+            {
+                <EditForm Model="_editingProductType" OnSubmit="UpdateProductType">
+                    <div class="row">
+                        <div class="col">
+                            <InputText @bind-Value="_editingProductType.Name" class="form-control"/>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-pastel-pink" type="submit">
+                                <i class="bi bi-save"></i>
+                            </button>
+                        </div>
+                    </div>
+                </EditForm>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col">
+                        @productType.Name
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-pastel-pink float-end" @onclick="() => EditProductType(productType)">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="col">
-                    <button class="btn btn-primary" type="submit">
-                        <i class="oi oi-cloud-upload"></i>
-                    </button>
-                </div>
-            </div>
-        </EditForm>
-    }
-    else
-    {
-        <div class="row">
-            <div class="col">
-                @productType.Name
-            </div>
-            <div class="col">
-                <button class="btn btn-primary" @onclick="() => EditProductType(productType)">
-                    <i class="oi oi-pencil"></i>
-                </button>
-            </div>
-        </div>
-    }
-}
-<button class="btn btn-primary" @onclick="CreateNewProductType">
-    <i class="oi oi-plus"></i> Add new product type
-</button>
+            }
+        }
+        <hr />
+        <button class="btn btn-pastel-pink" @onclick="CreateNewProductType">
+            <i class="bi bi-plus"></i> Add new product type
+        </button>
+    </div>
+</div>
+
 @code {
     ProductType _editingProductType = null;
 
@@ -49,7 +63,6 @@
     {
         await ProductTypeService.GetProductTypes();
         ProductTypeService.OnChange += StateHasChanged;
-
     }
 
     private void EditProductType(ProductType productType)

@@ -35,6 +35,7 @@
     <Folder Include="Handlers\ProductTypeHandlers\" />
     <Folder Include="Handlers\ProductHandlers\" />
     <Folder Include="Handlers\OrderHandlers\" />
+    <Folder Include="Repositories\" />
     <Folder Include="Requests\ProductTypeRequests\" />
     <Folder Include="Requests\ProductRequests\" />
     <Folder Include="Requests\OrderRequests\" />

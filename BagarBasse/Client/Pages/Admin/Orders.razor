@@ -7,25 +7,34 @@
 @inject NavigationManager NavigationManager
 
 @attribute [Authorize(Roles = "Admin")]
+<div class="d-flex">
+<div class="me-3">
+    <AdminMenu ActiveItem="5"/>
+</div>
 
-<h3>Orders</h3>
-@if (AdminOrders == null)
-{
-    <span>Loading products...</span>
-}
-else
-{
-    <table class="table">
-        <thead>
+<div class="flex-grow-1 p-3 font-ambit">
+        
+    <h2 class="display-5 mt-3  mb-5 text-center font-gatefold-demi">
+        Ordrar
+    </h2>
+
+    @if (AdminOrders == null)
+    {
+        <span>Loading products...</span>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
             <tr>
                 <th></th>
-                <th>Product</th>
-                <th>Variant</th>
-                <th>Price</th>
-                <th>Visible</th>
+                <th>Order</th>
+                <th>Datum</th>
+                <th>Ordertotal</th>
+                <th>Sammanfattning</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             <Virtualize Items="AdminOrders" Context="order">
                 <tr>
                     <td>
@@ -37,9 +46,11 @@ else
                     <td>@order.Product</td>
                 </tr>
             </Virtualize>
-        </tbody>
-    </table>
-}
+            </tbody>
+        </table>
+    }
+</div>
+</div>
 
 @code {
     public List<OrderOverviewDto>? AdminOrders { get; set; } = null;

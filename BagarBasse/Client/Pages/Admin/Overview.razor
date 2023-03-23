@@ -1,7 +1,17 @@
 ﻿@page "/admin/overview"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+<div class="d-flex">
+<div class="me-3">
+    <AdminMenu ActiveItem="0"/>
+</div>
 
-<div class="container-fluid">
-    <AdminMenu />
+<div class="flex-grow-1 p-3 font-ambit">
+        
+    <h2 class="display-5 mt-3  mb-5 text-center font-gatefold-demi">
+        Översikt
+    </h2>
+</div>
 </div>
 
 @code {

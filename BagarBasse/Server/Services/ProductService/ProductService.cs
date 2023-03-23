@@ -73,6 +73,7 @@ public class ProductService : IProductService
         //TODO FIX THIS
         foreach (var variant in product.Variants)
         {
+
             variant.ProductType = null;
         }
 
@@ -132,6 +133,9 @@ public class ProductService : IProductService
         }
 
         dbProduct.Deleted = true;
+
+        _context.Products.Remove(dbProduct);
+
         await _context.SaveChangesAsync();
 
         return true;

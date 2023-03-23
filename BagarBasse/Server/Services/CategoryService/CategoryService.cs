@@ -58,7 +58,7 @@ public class CategoryService : ICategoryService
             return null;
         }
 
-        category.Deleted = true;
+        _dataContext.Categories.Remove(category);
         await _dataContext.SaveChangesAsync();
         return await GetAdminCategoriesAsync();
     }
