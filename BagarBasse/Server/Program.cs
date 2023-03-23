@@ -1,21 +1,17 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using BagarBasse.DataAccess;
-using BagarBasse.Server;
-using BagarBasse.Server.Data;
 using BagarBasse.Server.Extensions;
 using BagarBasse.Server.Models;
+using BagarBasse.Server.Services.AuthService;
 using BagarBasse.Server.Services.CartService;
 using BagarBasse.Server.Services.CategoryService;
 using BagarBasse.Server.Services.OrderService;
 using BagarBasse.Server.Services.ProductService;
-using BagarBasse.Server.Services.ProductTypeService;
-using BagarBasse.Server.Services.ProfileService;
-using Duende.IdentityServer.Services;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,71 +19,55 @@ var builder = WebApplication.CreateBuilder(args);
 var userConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 var storeConnectionString = builder.Configuration.GetConnectionString("StoreConnection") ?? throw new InvalidOperationException("Connection string 'StoreConnection' not found.");
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(userConnectionString));
-
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(storeConnectionString));
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-builder.Services.AddIdentityServer()
-    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(
-        options =>
-        {
-            options.IdentityResources["openid"].UserClaims.Add("name");
-            options.ApiResources.Single().UserClaims.Add("name");
-            options.IdentityResources["openid"].UserClaims.Add("role");
-            options.ApiResources.Single().UserClaims.Add("role");
-        });
-//.AddProfileService<ProfileService>();
 
 JwtSecurityTokenHandler
     .DefaultInboundClaimTypeMap.Remove("role");
 
 
 
-builder.Services.AddAuthentication()
-    .AddIdentityServerJwt();
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-
-
+builder.Services.AddEndpointsApiExplorer();
 //Add Custom Services
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.UseProductTypeApi();
 
-builder.Services.AddTransient<IProfileService, ProfileService>();
-
-builder.Services.Configure<IdentityOptions>(options =>
-    options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier);
 
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey =
+            new SymmetricSecurityKey(
+                System.Text.Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
 
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-app.UseRouting();
-
-app.UseIdentityServer();
-app.UseAuthentication();
-app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
     app.UseWebAssemblyDebugging();
 }
 else
@@ -106,6 +86,7 @@ app.MapCategoryApi();
 app.MapCartApi();
 app.MapOrderApi();
 app.MapProductTypeApi();
+app.MapAuthApi();
 
 
 app.UseHttpsRedirection();

@@ -8,13 +8,11 @@ namespace BagarBasse.Client.Services.ProductService;
 
 public class ProductService : IProductService
 {
-    private readonly HttpClient _publicHttp;
     private readonly HttpClient _http;
 
-    public ProductService(IHttpClientFactory itHttpClientFactory)
+    public ProductService(HttpClient http)
     {
-        _publicHttp = itHttpClientFactory.CreateClient("BagarBasse.PublicServerAPI");
-        _http = itHttpClientFactory.CreateClient("BagarBasse.ServerAPI");
+        _http = http;
     }
 
     public List<Product> Products { get; set; } = new List<Product>();
@@ -22,7 +20,7 @@ public class ProductService : IProductService
 
     public async Task<List<Product>> GetProductsAsync()
     {
-        var result = await _publicHttp.GetFromJsonAsync<List<Product>>("api/product");
+        var result = await _http.GetFromJsonAsync<List<Product>>("api/product");
         return result;
     }
 
@@ -34,20 +32,20 @@ public class ProductService : IProductService
 
     public async Task<List<Product>> GetProductsByCategoryAsync(string categoryUrl = null)
     {
-        var result = await _publicHttp.GetFromJsonAsync<List<Product>>($"api/category/{categoryUrl}");
+        var result = await _http.GetFromJsonAsync<List<Product>>($"api/category/{categoryUrl}");
         return result;
     }
 
     public async Task<Product> GetProductAsync(int id)
     {
-        var result = await _publicHttp.GetFromJsonAsync<Product>($"api/product/{id}");
+        var result = await _http.GetFromJsonAsync<Product>($"api/product/{id}");
         return result;
 
     }
 
     public async Task<List<Product>> SearchProductsAsync(string searchText)
     {
-        var result = await _publicHttp.GetFromJsonAsync<List<Product>>($"api/search/{searchText}");
+        var result = await _http.GetFromJsonAsync<List<Product>>($"api/search/{searchText}");
         return result;
 
     }

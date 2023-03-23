@@ -8,10 +8,10 @@ namespace BagarBasse.Server.Extensions;
 public static class CartApiExtension
 {
 
-    public static WebApplication MapCartApi(this WebApplication webApplication)
+    public static WebApplication MapCartApi(this WebApplication app)
     {
-        webApplication.MediatePost<GetCartProductsRequest>("/api/cart/products");
+        app.MediatePost<GetCartProductsRequest>("/api/cart/products");
 
-        return webApplication;
+        return app;
     }
 }

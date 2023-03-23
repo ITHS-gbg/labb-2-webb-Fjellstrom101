@@ -7,6 +7,7 @@ using BagarBasse.Shared.Models;
 using BagarBasse.Shared;
 using Microsoft.EntityFrameworkCore;
 using BagarBasse.Server.Models;
+using BagarBasse.Server.Services.AuthService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -16,13 +17,14 @@ public class OrderService : IOrderService
 {
     private readonly DataContext _context;
     private readonly ICartService _cartService;
+    private readonly IAuthService _authService;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public OrderService(DataContext context, ICartService cartService, IHttpContextAccessor httpContextAccessor)
+    public OrderService(DataContext context, ICartService cartService, IAuthService authService)
     {
         _context = context;
         _cartService = cartService;
-        _httpContextAccessor = httpContextAccessor;
+        _authService = authService;
     }
 
     public async Task<bool> PlaceOrderAsync(List<CartItem> cartItems)
@@ -45,7 +47,7 @@ public class OrderService : IOrderService
 
         var order = new Order
         {
-            UserId = GetUserId(),
+            UserId = _authService.GetUserId(),
             TotalPrice = totalPrice,
             OrderItems = orderItems
         };
@@ -62,7 +64,7 @@ public class OrderService : IOrderService
         var orders = await _context.Orders
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
-            .Where(o => o.UserId == GetUserId())
+            .Where(o => o.UserId == _authService.GetUserId())
             .OrderByDescending(o => o.OrderDate)
             .ToListAsync();
 
@@ -89,7 +91,7 @@ public class OrderService : IOrderService
             .ThenInclude(oi => oi.Product)
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.ProductType)
-            .Where(o => o.UserId == GetUserId() && o.Id == orderId)
+            .Where(o => o.UserId == _authService.GetUserId() && o.Id == orderId)
             .OrderByDescending(o => o.OrderDate)
             .FirstOrDefaultAsync();
 
@@ -143,6 +145,5 @@ public class OrderService : IOrderService
         return orderResponse;
     }
 
-    private Guid GetUserId() => Guid.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
 }
