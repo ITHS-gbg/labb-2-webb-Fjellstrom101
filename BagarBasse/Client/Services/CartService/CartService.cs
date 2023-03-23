@@ -12,10 +12,10 @@ public class CartService : ICartService
     private readonly ILocalStorageService _localStorage;
     private readonly HttpClient _http;
 
-    public CartService(ILocalStorageService localStorage, IHttpClientFactory itHttpClientFactory)
+    public CartService(ILocalStorageService localStorage, HttpClient http)
     {
         _localStorage = localStorage;
-        _http = itHttpClientFactory.CreateClient("BagarBasse.PublicServerAPI");
+        _http = http;
     }
 
     public event Action? OnChange;

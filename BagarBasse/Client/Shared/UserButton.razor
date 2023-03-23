@@ -1,5 +1,8 @@
-﻿@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@inject NavigationManager Navigation
+﻿@using BagarBasse.Client.Services.CartService
+@using Blazored.LocalStorage
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 
 <div class="dropdown">
@@ -18,11 +21,11 @@
                 <a href="orders" class="dropdown-item" @onclick="HideUserMenu">Mina Ordrar</a>
                 <a href="Identity/Account/Manage" class="dropdown-item" @onclick="HideUserMenu">Ändra Kontouppgifter</a>
                 <hr/>
-                <a class="dropdown-item" @onclick="BeginLogOut">Logga ut</a>
+                <a class="dropdown-item" @onclick="Logout">Logga ut</a>
             </Authorized>
             <NotAuthorized>
-                <a href="authentication/login" class="dropdown-item" @onclick="HideUserMenu">Logga in</a>
-                <a href="authentication/register" class="dropdown-item" @onclick="HideUserMenu">Registrera</a>
+                <a href="login" class="dropdown-item" @onclick="HideUserMenu">Logga in</a>
+                <a href="register" class="dropdown-item" @onclick="HideUserMenu">Registrera</a>
             </NotAuthorized>
         </AuthorizeView>
 
@@ -44,8 +47,11 @@
         await Task.Delay(200);
         _showUserMenu = false;
     }
-    private void BeginLogOut()
+    private async Task Logout()
     {
-        Navigation.NavigateToLogout("authentication/logout");
+        await LocalStorage.RemoveItemAsync("authToken");
+        await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        NavigationManager.NavigateTo("");
     }
 }
