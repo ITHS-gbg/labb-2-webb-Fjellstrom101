@@ -14,7 +14,7 @@ public class GetUserInfoHandler : IRequestHandler<GetUserInfoRequest, IResult>
     }
     public async Task<IResult> Handle(GetUserInfoRequest request, CancellationToken cancellationToken)
     {
-        var response = await _userInfo.GetUserInfo();
+        var response = await _userInfo.GetUserInfoAsync();
         return response;
     }
 }

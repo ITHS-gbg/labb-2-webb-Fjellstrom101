@@ -40,7 +40,12 @@ public class ProductService : IProductService
     {
         var result = await _http.GetFromJsonAsync<Product>($"api/product/{id}");
         return result;
+    }
 
+    public async Task<Product> GetAdminProductAsync(int id)
+    {
+        var result = await _http.GetFromJsonAsync<Product>($"api/product/admin/{id}");
+        return result;
     }
 
     public async Task<List<Product>> SearchProductsAsync(string searchText)

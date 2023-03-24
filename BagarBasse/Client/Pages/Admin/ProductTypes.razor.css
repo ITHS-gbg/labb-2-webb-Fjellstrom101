@@ -1,4 +1,19 @@
-﻿.row {
+﻿.big-checkbox {
+    transform: scale(1.5, 1.5);
+}
+
+.header {
+    display: flex;
+    font-weight: 700;
+    text-align: center;
+    border-bottom: 1px solid lightgrey;
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+}
+.header .col {
+    text-align: left;
+}
+.row {
     display: flex;
     padding: 6px;
 }

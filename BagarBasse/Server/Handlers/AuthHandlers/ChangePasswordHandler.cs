@@ -14,6 +14,6 @@ public class ChangePasswordHandler : IRequestHandler<ChangePasswordRequest, IRes
     }
     public async Task<IResult> Handle(ChangePasswordRequest request, CancellationToken cancellationToken)
     {
-        return await _authService.ChangePassword(_authService.GetUserId(), request.NewPassword);
+        return await _authService.ChangePasswordAsync(_authService.GetUserId(), request.NewPassword);
     }
 }

@@ -17,13 +17,13 @@ public class CategoryService : ICategoryService
     public async Task<List<Category>> GetCategoriesAsync()
     {
         var categories = await _storeUnitOfWork.CategoryRepository.Get()
-                                            .Where(c => c.Visible && !c.Deleted).ToListAsync();
+                                            .Where(c => c.Visible).ToListAsync();
         return categories;
     }
 
     public async Task<List<Category>> GetAdminCategoriesAsync()
     {
-        var categories = await _storeUnitOfWork.CategoryRepository.Get().Where(c => c.Visible).ToListAsync();
+        var categories = await _storeUnitOfWork.CategoryRepository.Get().ToListAsync();
         return categories;
     }
 
@@ -37,7 +37,7 @@ public class CategoryService : ICategoryService
 
     public async Task<List<Category>> UpdateCategoryAsync(Category category)
     {
-        var categoryToUpdate = await GetCategoryById(category.Id);
+        var categoryToUpdate = await GetCategoryByIdAsync(category.Id);
         if (categoryToUpdate == null)
         {
             return null;
@@ -53,7 +53,7 @@ public class CategoryService : ICategoryService
 
     public async Task<List<Category>> DeleteCategoryAsync(int id)
     {
-        var category = await GetCategoryById(id);
+        var category = await GetCategoryByIdAsync(id);
         if (category == null)
         {
             return null;
@@ -64,7 +64,7 @@ public class CategoryService : ICategoryService
         return await GetAdminCategoriesAsync();
     }
 
-    private async Task<Category?> GetCategoryById(int id)
+    private async Task<Category?> GetCategoryByIdAsync(int id)
     {
         return await _storeUnitOfWork.CategoryRepository.GetByID(id);
     }

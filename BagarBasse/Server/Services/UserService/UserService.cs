@@ -12,7 +12,7 @@ public class UserService : IUserService
     {
         _storeUnitOfWork = storeUnitOfWork;
     }
-    public async Task<IResult> GetAdminUsers()
+    public async Task<IResult> GetAdminUsersAsync()
     {
         var result = new List<UserDto>();
 
@@ -28,5 +28,26 @@ public class UserService : IUserService
             }));
 
         return TypedResults.Ok(result);
+    }
+
+    public async Task<IResult> SearchUserByEmailAsync(string email)
+    {
+        var users = _storeUnitOfWork.UserRepository.Get()
+            .Where(u => u.Email.ToLower().Contains(email.ToLower()))
+            .Include(u => u.UserInfo);
+
+        var returnList = await users.Select(u => new UserDto
+        {
+            Id = u.Id,
+            Email = u.Email,
+            Role = u.Role,
+            UserInfo = u.UserInfo,
+            DateCreated = u.DateCreated
+        }).ToListAsync();
+
+        if (users.Any())
+            return TypedResults.Ok(returnList);
+
+        return TypedResults.NoContent();
     }
 }

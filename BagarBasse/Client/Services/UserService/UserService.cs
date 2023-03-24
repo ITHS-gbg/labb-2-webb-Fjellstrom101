@@ -1,4 +1,6 @@
-﻿namespace BagarBasse.Client.Services.UserService;
+﻿using System.Net.Http.Json;
+
+namespace BagarBasse.Client.Services.UserService;
 
 public class UserService : IUserService
 {
@@ -11,5 +13,10 @@ public class UserService : IUserService
     public async Task<HttpResponseMessage> GetAdminUsersAsync()
     {
         return await _http.GetAsync("api/user/all");
+    }
+
+    public async Task<HttpResponseMessage> SearchUserByEmailAsync(string email)
+    {
+        return await _http.GetAsync($"api/user/search/{email}");
     }
 }

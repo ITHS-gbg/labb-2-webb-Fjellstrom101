@@ -1,17 +1,21 @@
 ﻿@inject NavigationManager NavigationManager
-<nav class=" bg-light border border-bottom p-3" id="searchNavbar">
-
-    <div class="input-group">
-        <input type="search"
-               @bind-value="_searchText"
-               class="form-control"/>
-        <div class="input-group-append">
-            <button class=" border-0 bg-transparent text-black-50 m-auto" @onclick="SearchProducts" type="submit">
-                <span class="oi oi-magnifying-glass"></span>
-            </button>
+<nav class="bg-white border border-bottom p-3 d-flex justify-content-center" id="searchNavbar">
+    <div class="search-bar-invisible">
+        <div class="w-100"></div>
+    </div>
+    <div class="search-bar-wrapper w-100">
+        <div class="input-group">
+            <input type="search"
+                   @bind-value="_searchText"
+                   @onkeyup="Enter"
+                   class="form-control"/>
+            <div class="input-group-text">
+                <button class=" border-0 bg-transparent text-black-50 m-auto" @onclick="SearchProducts" type="submit">
+                    <span class="oi oi-magnifying-glass"></span>
+                </button>
+            </div>
         </div>
     </div>
-
 </nav>
 
 @code {
@@ -20,5 +24,12 @@
     public void SearchProducts()
     {
         NavigationManager.NavigateTo($"search/{_searchText}");
+    }
+    public void Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            NavigationManager.NavigateTo($"search/{_searchText}");
+        }
     }
 }

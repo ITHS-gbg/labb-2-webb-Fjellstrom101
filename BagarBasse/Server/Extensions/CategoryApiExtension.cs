@@ -1,12 +1,16 @@
 ﻿using BagarBasse.Server.Requests.CategoryRequest;
 using BagarBasse.Server.Services.CategoryService;
-using BagarBasse.Shared.Models;
-using Microsoft.AspNetCore.Authorization;
+
 
 namespace BagarBasse.Server.Extensions;
 
 public static class CategoryApiExtension
 {
+    public static IServiceCollection UseCategoryApi(this IServiceCollection services)
+    {
+        services.AddScoped<ICategoryService, CategoryService>();
+        return services;
+    }
     public static WebApplication MapCategoryApi(this WebApplication app)
     {
         app.MediateGet<GetCategoriesRequest>("/api/category");

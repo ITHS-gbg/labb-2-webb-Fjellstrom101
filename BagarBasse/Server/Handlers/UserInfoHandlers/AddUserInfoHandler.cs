@@ -17,7 +17,7 @@ public class AddUserInfoHandler : IRequestHandler<AddUserInfoRequest, IResult>
 
     public async Task<IResult> Handle(AddUserInfoRequest request, CancellationToken cancellationToken)
     {
-        var response = await _userInfoService.AddUserInfo(request.UserInfo);
+        var response = await _userInfoService.AddUserInfoAsync(request.UserInfo);
         return response;
     }
 }

@@ -19,8 +19,8 @@ public class ProductService : IProductService
     public async Task<List<Product>> GetProductsAsync()
     {
         return await _storeUnitOfWork.ProductRepository.Get()
-            .Where(p => p.Visible && !p.Deleted)
-            .Include(p => p.Variants)
+            .Where(p => p.Visible)
+            .Include(p => p.Variants.Where( v => v.Visible))
             .ThenInclude(p => p.ProductType)
             .OrderBy(p => p.CategoryId)
             .ToListAsync();
@@ -29,12 +29,22 @@ public class ProductService : IProductService
     public async Task<List<Product>> GetAdminProductsAsync()
     {
         return await _storeUnitOfWork.ProductRepository.Get()
-            .Include(p => p.Variants.Where(v => !v.Deleted))
+            .Include(p => p.Variants)
             .ThenInclude(v => v.ProductType)
             .ToListAsync();
     }
 
     public async Task<Product> GetProductAsync(int id)
+    {
+        var product = await _storeUnitOfWork.ProductRepository.Get()
+            .Include(p => p.Variants.Where(v => v.Visible))
+            .ThenInclude(v => v.ProductType)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+
+        return product;
+    }
+    public async Task<Product> GetAdminProductAsync(int id)
     {
         var product = await _storeUnitOfWork.ProductRepository.Get()
             .Include(p => p.Variants)
@@ -48,7 +58,8 @@ public class ProductService : IProductService
 
     public async Task<List<Product>> GetProductsByCategoryAsync(string categoryUrl)
     {
-        return await _storeUnitOfWork.ProductRepository.Get().Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower()))
+        return await _storeUnitOfWork.ProductRepository.Get()
+            .Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower()) && p.Visible)
             .Include(p => p.Variants)
             .ToListAsync();
     }
@@ -85,7 +96,11 @@ public class ProductService : IProductService
 
     public async Task<Product> UpdateProductAsync(Product product)
     {
-        var dbProduct = await _storeUnitOfWork.ProductRepository.GetByID(product.Id);
+
+        var dbProduct = await _storeUnitOfWork.ProductRepository.Get()
+            .Where(p => p.Id == product.Id)
+            .Include(p => p.Variants)
+            .FirstOrDefaultAsync();
 
         if (dbProduct == null)
         {
@@ -97,6 +112,10 @@ public class ProductService : IProductService
         dbProduct.CategoryId = product.CategoryId;
         dbProduct.Image = product.Image;
         dbProduct.Visible = product.Visible;
+
+
+        dbProduct.Variants = dbProduct.Variants.Where(v => product.Variants.Any(pv => pv.ProductTypeId == v.ProductTypeId)).ToList();
+
 
         foreach (var variant in product.Variants)
         {
@@ -114,9 +133,10 @@ public class ProductService : IProductService
                 dbVariant.Price = variant.Price;
                 dbVariant.OriginalPrice = variant.OriginalPrice;
                 dbVariant.Visible = variant.Visible;
-                dbVariant.Deleted = variant.Deleted;
             }
         }
+
+
 
         await _storeUnitOfWork.SaveChangesAsync();
 
@@ -132,7 +152,6 @@ public class ProductService : IProductService
             return false;
         }
 
-        dbProduct.Deleted = true;
 
         _storeUnitOfWork.ProductRepository.Delete(dbProduct);
 

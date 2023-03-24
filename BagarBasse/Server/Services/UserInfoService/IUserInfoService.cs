@@ -4,8 +4,8 @@ namespace BagarBasse.Server.Services.UserInfoService;
 
 public interface IUserInfoService
 {
-    Task<IResult> GetUserInfo();
+    Task<IResult> GetUserInfoAsync();
 
-    Task<IResult> AddUserInfo(UserInfo userInfo);
-    Task<IResult> UpdateUserInfo(UserInfo userInfo);
+    Task<IResult> AddUserInfoAsync(UserInfo userInfo);
+    Task<IResult> UpdateUserInfoAsync(UserInfo userInfo);
 }

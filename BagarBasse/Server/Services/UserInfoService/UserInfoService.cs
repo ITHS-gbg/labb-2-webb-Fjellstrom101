@@ -17,9 +17,9 @@ public class UserInfoService : IUserInfoService
         _authService = authService;
     }
 
-    public async Task<IResult> GetUserInfo()
+    public async Task<IResult> GetUserInfoAsync()
     {
-        var userInfo = await GetUserInfoForCurrentUser();
+        var userInfo = await GetUserInfoForCurrentUserAsync();
 
         if (userInfo == null)
             return TypedResults.NoContent();
@@ -27,12 +27,12 @@ public class UserInfoService : IUserInfoService
         return TypedResults.Ok(userInfo);
     }
 
-    public async Task<IResult> AddUserInfo(UserInfo userInfo)
+    public async Task<IResult> AddUserInfoAsync(UserInfo userInfo)
     {
-        var dbUserInfo = await GetUserInfoForCurrentUser();
+        var dbUserInfo = await GetUserInfoForCurrentUserAsync();
 
         if (dbUserInfo != null)
-            return await UpdateUserInfo(userInfo);
+            return await UpdateUserInfoAsync(userInfo);
         
 
         userInfo.UserId = _authService.GetUserId();
@@ -43,12 +43,12 @@ public class UserInfoService : IUserInfoService
         return TypedResults.Ok(userInfo);
 
     }
-    public async Task<IResult> UpdateUserInfo(UserInfo userInfo)
+    public async Task<IResult> UpdateUserInfoAsync(UserInfo userInfo)
     {
-        var dbUserInfo = await GetUserInfoForCurrentUser();
+        var dbUserInfo = await GetUserInfoForCurrentUserAsync();
 
         if (dbUserInfo == null)
-            return await AddUserInfo(userInfo);
+            return await AddUserInfoAsync(userInfo);
         
 
         dbUserInfo.FirstName = userInfo.FirstName;
@@ -62,10 +62,10 @@ public class UserInfoService : IUserInfoService
         return TypedResults.Ok(dbUserInfo);
     }
 
-    private async Task<UserInfo?> GetUserInfoForCurrentUser()
+    private async Task<UserInfo?> GetUserInfoForCurrentUserAsync()
     {
         var userId = _authService.GetUserId();
-        return await _storeUnitOfWork.UserInfoRepository.GetByID(userId);
+        return await _storeUnitOfWork.UserInfoRepository.Get().FirstOrDefaultAsync(ui => ui.UserId == userId);
         
     }
 }

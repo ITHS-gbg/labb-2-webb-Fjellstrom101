@@ -14,6 +14,6 @@ public class LoginUserHandler : IRequestHandler<LoginUserRequest, IResult>
     }
     public async Task<IResult> Handle(LoginUserRequest request, CancellationToken cancellationToken)
     {
-        return await _authService.Login(request.User.Email, request.User.Password);
+        return await _authService.LoginAsync(request.User.Email, request.User.Password);
     }
 }

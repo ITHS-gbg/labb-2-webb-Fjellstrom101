@@ -14,7 +14,6 @@ public class Product
     public int CategoryId { get; set; }
     public List<ProductVariant> Variants { get; set; } = new List<ProductVariant>();
     public bool Visible { get; set; } = true;
-    public bool Deleted { get; set; } = false;
 
 
     [NotMapped]

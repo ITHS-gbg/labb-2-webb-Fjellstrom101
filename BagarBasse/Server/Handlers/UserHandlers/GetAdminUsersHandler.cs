@@ -16,6 +16,6 @@ public class GetAdminUsersHandler :IRequestHandler<GetAdminUsersRequest, IResult
     }
     public async Task<IResult> Handle(GetAdminUsersRequest request, CancellationToken cancellationToken)
     {
-        return await _userService.GetAdminUsers();
+        return await _userService.GetAdminUsersAsync();
     }
 }

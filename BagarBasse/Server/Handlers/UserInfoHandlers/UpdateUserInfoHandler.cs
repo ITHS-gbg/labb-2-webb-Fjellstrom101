@@ -14,7 +14,7 @@ public class UpdateUserInfoHandler : IRequestHandler<UpdateUserInfoRequest, IRes
     }
     public async Task<IResult> Handle(UpdateUserInfoRequest request, CancellationToken cancellationToken)
     {
-        var response = await _userInfoService.UpdateUserInfo(request.UserInfo);
+        var response = await _userInfoService.UpdateUserInfoAsync(request.UserInfo);
         return response;
     }
 }

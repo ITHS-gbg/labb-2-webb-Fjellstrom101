@@ -9,23 +9,29 @@
     <a @onclick="ToggleUserMenu" @onfocusout="HideUserMenu" class="user-icon">
         <i class="bi bi-person"></i>
     </a>
-    <div class="dropdown-menu dropdown-menu-right @UserMenuCssClass">
+    <div class="dropdown-menu dropdown-menu-right font-ambit @UserMenuCssClass">
         <AuthorizeView Roles="Admin">
             <Authorized>
-                <a href="admin/overview" class="dropdown-item" @onclick="HideUserMenu">Adminpanel</a>
+                <a href="admin/overview" class="dropdown-item user-button-link" @onclick="HideUserMenu">Adminpanel</a>
                 <hr/>
             </Authorized>
         </AuthorizeView>
         <AuthorizeView>
             <Authorized>
-                <a href="orders" class="dropdown-item" @onclick="HideUserMenu">Mina Ordrar</a>
-                <a href="profile" class="dropdown-item" @onclick="HideUserMenu">Ändra Kontouppgifter</a>
+                <a href="orders" class="dropdown-item user-button-link" @onclick="HideUserMenu">
+                    Mina Ordrar
+                </a>
+                <a href="profile" class="dropdown-item user-button-link" @onclick="HideUserMenu">
+                    Ändra Kontouppgifter
+                </a>
                 <hr/>
-                <a class="dropdown-item" @onclick="Logout">Logga ut</a>
+                <a class="dropdown-item user-button-link" @onclick="Logout">Logga ut</a>
             </Authorized>
             <NotAuthorized>
-                <a href="login" class="dropdown-item" @onclick="HideUserMenu">Logga in</a>
-                <a href="register" class="dropdown-item" @onclick="HideUserMenu">Registrera</a>
+                <a href="login" class="dropdown-item user-button-link" @onclick="HideUserMenu">
+                    Logga in
+                </a>
+                <a href="register" class="dropdown-item user-button-link" @onclick="HideUserMenu">Registrera</a>
             </NotAuthorized>
         </AuthorizeView>
 

@@ -1,14 +1,16 @@
-﻿using BagarBasse.Server.Services.ProductService;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
-using BagarBasse.Server.Handlers.ProductHandlers;
-using BagarBasse.Server.Requests.ProductRequests;
-using BagarBasse.Shared.Models;
+﻿using BagarBasse.Server.Requests.ProductRequests;
+using BagarBasse.Server.Services.ProductService;
 
 namespace BagarBasse.Server.Extensions;
 
+
 public static class ProductApiExtension
 {
+    public static IServiceCollection UseProductApi(this IServiceCollection services)
+    {
+        services.AddScoped<IProductService, ProductService>();
+        return services;
+    }
     public static WebApplication MapProductApi(this WebApplication app)
     {
         app.MediateGet<GetProductsRequest>("/api/product");
@@ -22,6 +24,8 @@ public static class ProductApiExtension
         app.MediateDelete<DeleteProductRequest>("/api/product/{id:int}");
 
         app.MediateGet<GetProductRequest>("/api/product/{id:int}");
+
+        app.MediateGet<GetAdminProductRequest>("/api/product/admin/{id:int}");
 
         app.MediateGet<GetProductsByCategoryRequest>("/api/category/{categoryUrl}");
 

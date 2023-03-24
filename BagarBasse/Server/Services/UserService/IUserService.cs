@@ -2,5 +2,6 @@
 
 public interface IUserService
 {
-    Task<IResult> GetAdminUsers();
+    Task<IResult> GetAdminUsersAsync();
+    Task<IResult> SearchUserByEmailAsync(string email);
 }

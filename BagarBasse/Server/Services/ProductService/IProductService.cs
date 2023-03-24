@@ -9,6 +9,7 @@ public interface IProductService
     Task<List<Product>> GetProductsAsync();
     Task<List<Product>> GetAdminProductsAsync();
     Task<Product> GetProductAsync(int id);
+    Task<Product> GetAdminProductAsync(int id);
     Task<List<Product>> GetProductsByCategoryAsync(string categoryUrl);
     Task<List<Product>> SearchProductsAsync(string searchText);
 

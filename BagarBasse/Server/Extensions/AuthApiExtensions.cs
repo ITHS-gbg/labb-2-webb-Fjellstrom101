@@ -1,10 +1,15 @@
 ﻿using BagarBasse.Server.Requests.AuthRequests;
-using BagarBasse.Server.Requests.CartRequests;
+using BagarBasse.Server.Services.AuthService;
 
 namespace BagarBasse.Server.Extensions;
 
 public static class AuthApiExtensions
 {
+    public static IServiceCollection UseAuthApi(this IServiceCollection services)
+    {
+        services.AddScoped<IAuthService, AuthService>();
+        return services;
+    }
     public static WebApplication MapAuthApi(this WebApplication app)
     {
         app.MediatePost<RegisterUserRequest>("/api/auth/register");

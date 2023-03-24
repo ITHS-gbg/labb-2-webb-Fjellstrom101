@@ -23,9 +23,9 @@ public class AuthService : IAuthService
         _storeUnitOfWork = storeUnitOfWork;
     }
 
-    public async Task<IResult> Register(User user, string password)
+    public async Task<IResult> RegisterAsync(User user, string password)
     {
-        if (await UserExists(user.Email))
+        if (await UserExistsAsync(user.Email))
         {
             return TypedResults.Conflict("User already exists");
         }
@@ -35,18 +35,23 @@ public class AuthService : IAuthService
         user.PasswordHash = passwordHash;
         user.PasswordSalt = passwordSalt;
 
+        if (! (await _storeUnitOfWork.UserRepository.Get().AnyAsync()))
+        {
+            user.Role = "Admin";
+        }
+
         await _storeUnitOfWork.UserRepository.InsertAsync(user);
         await _storeUnitOfWork.SaveChangesAsync();
 
         return TypedResults.Ok(user.Id);
     }
 
-    public async Task<bool> UserExists(string email)
+    public async Task<bool> UserExistsAsync(string email)
     {
         return await _storeUnitOfWork.UserRepository.Get().AnyAsync(u => u.Email.ToLower().Equals(email.ToLower()));
     }
 
-    public async Task<IResult> Login(string email, string password)
+    public async Task<IResult> LoginAsync(string email, string password)
     {
         var user = await _storeUnitOfWork.UserRepository.Get().FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
 
@@ -61,7 +66,7 @@ public class AuthService : IAuthService
         }
     }
 
-    public async Task<IResult> ChangePassword(int userId, string newPassword)
+    public async Task<IResult> ChangePasswordAsync(int userId, string newPassword)
     {
         var user = await _storeUnitOfWork.UserRepository.GetByID(userId);
         if (user == null)

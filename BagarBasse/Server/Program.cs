@@ -40,15 +40,15 @@ builder.Services.AddEndpointsApiExplorer();
 
 //Add Custom Services
 
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<ICartService, CartService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserInfoService, UserInfoService>();
 builder.Services.AddScoped<StoreUnitOfWork, StoreUnitOfWork>();
 
+builder.Services.UseProductApi();
+builder.Services.UseCategoryApi();
+builder.Services.UseCartApi();
+builder.Services.UseOrderApi();
+builder.Services.UseAuthApi();
+builder.Services.UseUserApi();
+builder.Services.UseUserInfoApi();
 builder.Services.UseProductTypeApi();
 
 

@@ -38,13 +38,6 @@
     <Folder Include="Handlers\ProductTypeHandlers\" />
     <Folder Include="Handlers\ProductHandlers\" />
     <Folder Include="Handlers\OrderHandlers\" />
-    <Folder Include="Repositories\CategoryRepository\" />
-    <Folder Include="Repositories\ProductVariantsRepository\" />
-    <Folder Include="Repositories\UserRepository\" />
-    <Folder Include="Repositories\UserInfoRepository\" />
-    <Folder Include="Repositories\ProductTypeRepository\" />
-    <Folder Include="Repositories\ProductRepository\" />
-    <Folder Include="Repositories\OrderRepository\" />
     <Folder Include="Requests\AuthRequests\" />
     <Folder Include="Requests\UserInfoRequests\" />
     <Folder Include="Requests\UserRequests\" />

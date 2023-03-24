@@ -14,6 +14,7 @@ public interface IProductService
     Task<List<Product>> GetAdminProductsAsync();
     Task<List<Product>> GetProductsByCategoryAsync(string categoryUrl = null);
     Task<Product> GetProductAsync(int id);
+    Task<Product> GetAdminProductAsync(int id);
 
     Task<List<Product>> SearchProductsAsync(string searchText);
 

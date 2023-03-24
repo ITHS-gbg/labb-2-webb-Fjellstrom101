@@ -1,3 +1,14 @@
 ﻿.show-user-menu {
     display: block;
 }
+.user-button-link {
+    color: #83848a;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+.user-button-link i {
+    font-size: 18px;
+    margin-right: 10px;
+}
