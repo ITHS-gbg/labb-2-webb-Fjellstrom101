@@ -15,14 +15,13 @@ namespace BagarBasse.Server.Services.OrderService;
 
 public class OrderService : IOrderService
 {
-    private readonly DataContext _context;
+    private readonly StoreUnitOfWork _storeUnitOfWork;
     private readonly ICartService _cartService;
     private readonly IAuthService _authService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public OrderService(DataContext context, ICartService cartService, IAuthService authService)
+    public OrderService(StoreUnitOfWork storeUnitOfWork, ICartService cartService, IAuthService authService)
     {
-        _context = context;
+        _storeUnitOfWork = storeUnitOfWork;
         _cartService = cartService;
         _authService = authService;
     }
@@ -51,9 +50,9 @@ public class OrderService : IOrderService
             TotalPrice = totalPrice,
             OrderItems = orderItems
         };
-        _context.Orders.Add(order);
+        await _storeUnitOfWork.OrderRepository.InsertAsync(order);
 
-        await _context.SaveChangesAsync();
+        await _storeUnitOfWork.SaveChangesAsync();
 
         return true;
     }
@@ -61,7 +60,7 @@ public class OrderService : IOrderService
     public async Task<List<OrderOverviewDto>> GetOrdersAsync()
     {
 
-        var orders = await _context.Orders
+        var orders = await _storeUnitOfWork.OrderRepository.Get()
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .Where(o => o.UserId == _authService.GetUserId())
@@ -86,7 +85,7 @@ public class OrderService : IOrderService
 
     public async Task<OrderDetailsDto> GetOrderDetailsAsync(int orderId)
     {
-        var order = await _context.Orders
+        var order = await _storeUnitOfWork.OrderRepository.Get()
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .Include(o => o.OrderItems)
@@ -123,7 +122,7 @@ public class OrderService : IOrderService
     public async Task<List<OrderOverviewDto>> GetAdminOrdersAsync()
     {
 
-        var orders = await _context.Orders
+        var orders = await _storeUnitOfWork.OrderRepository.Get()
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .OrderByDescending(o => o.OrderDate)

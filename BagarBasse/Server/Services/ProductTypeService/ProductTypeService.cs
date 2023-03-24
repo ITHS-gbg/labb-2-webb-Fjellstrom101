@@ -8,30 +8,30 @@ namespace BagarBasse.Server.Services.ProductTypeService;
 
 public class ProductTypeService : IProductTypeService
 {
-    private readonly DataContext _dataContext;
+    private readonly StoreUnitOfWork _storeUnitOfWork;
 
-    public ProductTypeService(DataContext dataContext)
+    public ProductTypeService(StoreUnitOfWork storeUnitOfWork)
     {
-        _dataContext = dataContext;
+        _storeUnitOfWork = storeUnitOfWork;
     }
     public async Task<List<ProductType>> GetProductTypesAsync()
     {
-        var productTypes = await _dataContext.ProductTypes.ToListAsync();
+        var productTypes = await _storeUnitOfWork.ProductTypeRepository.Get().ToListAsync();
         return productTypes;
     }
 
     public async Task<List<ProductType>> AddProductTypeAsync(ProductType productType)
     {
         productType.IsNew = productType.Editing = false;
-        await _dataContext.ProductTypes.AddAsync(productType);
-        await _dataContext.SaveChangesAsync();
+        await _storeUnitOfWork.ProductTypeRepository.InsertAsync(productType);
+        await _storeUnitOfWork.SaveChangesAsync();
 
         return await GetProductTypesAsync();
     }
 
     public async Task<List<ProductType>?> UpdateProductTypeAsync(ProductType productType)
     {
-        var dbProductType = await _dataContext.ProductTypes.FindAsync(productType.Id);
+        var dbProductType = await _storeUnitOfWork.ProductTypeRepository.GetByID(productType.Id);
 
         if (dbProductType == null)
         {
@@ -39,7 +39,8 @@ public class ProductTypeService : IProductTypeService
         }
 
         dbProductType.Name = productType.Name;
-        await _dataContext.SaveChangesAsync();
+
+        await _storeUnitOfWork.SaveChangesAsync();
 
         return await GetProductTypesAsync();
     }

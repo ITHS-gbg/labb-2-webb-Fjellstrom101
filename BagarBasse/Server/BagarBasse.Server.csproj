@@ -34,17 +34,28 @@
 
   <ItemGroup>
     <Folder Include="Handlers\AuthHandlers\" />
+    <Folder Include="Handlers\UserHandlers\" />
     <Folder Include="Handlers\ProductTypeHandlers\" />
     <Folder Include="Handlers\ProductHandlers\" />
     <Folder Include="Handlers\OrderHandlers\" />
-    <Folder Include="Repositories\" />
+    <Folder Include="Repositories\CategoryRepository\" />
+    <Folder Include="Repositories\ProductVariantsRepository\" />
+    <Folder Include="Repositories\UserRepository\" />
+    <Folder Include="Repositories\UserInfoRepository\" />
+    <Folder Include="Repositories\ProductTypeRepository\" />
+    <Folder Include="Repositories\ProductRepository\" />
+    <Folder Include="Repositories\OrderRepository\" />
     <Folder Include="Requests\AuthRequests\" />
+    <Folder Include="Requests\UserInfoRequests\" />
+    <Folder Include="Requests\UserRequests\" />
     <Folder Include="Requests\ProductTypeRequests\" />
     <Folder Include="Requests\ProductRequests\" />
     <Folder Include="Requests\OrderRequests\" />
     <Folder Include="Services\CategoryService\" />
     <Folder Include="Services\CartService\" />
     <Folder Include="Services\AuthService\" />
+    <Folder Include="Services\UserInfoService\" />
+    <Folder Include="Services\UserService\" />
     <Folder Include="Services\ProductTypeService\" />
     <Folder Include="Services\OrderService\" />
     <Folder Include="Services\ProductService\" />

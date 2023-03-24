@@ -15,10 +15,10 @@ public class AuthService : IAuthService
         _http = http;
         _authenticationStateProvider = authenticationStateProvider;
     }
-    public async Task<int> Register(UserRegister request)
+    public async Task<HttpResponseMessage> Register(UserRegister request)
     {
         var response = await _http.PostAsJsonAsync("api/auth/register", request);
-        return await response.Content.ReadFromJsonAsync<int>();
+        return response;
     }
 
     public async Task<HttpResponseMessage> Login(UserLogin request)
@@ -27,10 +27,10 @@ public class AuthService : IAuthService
         return response;
     }
 
-    public async Task<bool> ChangePassword(UserChangePassword request)
+    public async Task<HttpResponseMessage> ChangePassword(UserChangePassword request)
     {
         var result = await _http.PostAsJsonAsync("api/auth/change-password", request.Password);
-        return await result.Content.ReadFromJsonAsync<bool>();
+        return result;
     }
 
     public async Task<bool> IsUserAuthenticated()

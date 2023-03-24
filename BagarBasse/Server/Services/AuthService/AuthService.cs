@@ -4,53 +4,56 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using BagarBasse.Shared.Models;
+using BagarBasse.Server.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace BagarBasse.Server.Services.AuthService;
 
 public class AuthService : IAuthService
 {
-    private readonly DataContext _context;
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly StoreUnitOfWork _storeUnitOfWork;
 
-    public AuthService(DataContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+    public AuthService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor,
+        StoreUnitOfWork storeUnitOfWork)
     {
-        _context = context;
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
+        _storeUnitOfWork = storeUnitOfWork;
     }
+
     public async Task<IResult> Register(User user, string password)
     {
         if (await UserExists(user.Email))
         {
             return TypedResults.Conflict("User already exists");
         }
+
         CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
         user.PasswordHash = passwordHash;
         user.PasswordSalt = passwordSalt;
 
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+        await _storeUnitOfWork.UserRepository.InsertAsync(user);
+        await _storeUnitOfWork.SaveChangesAsync();
 
         return TypedResults.Ok(user.Id);
     }
 
     public async Task<bool> UserExists(string email)
     {
-        return await _context.Users.AnyAsync(u => u.Email.ToLower().Equals(email.ToLower()));
+        return await _storeUnitOfWork.UserRepository.Get().AnyAsync(u => u.Email.ToLower().Equals(email.ToLower()));
     }
 
     public async Task<IResult> Login(string email, string password)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
+        var user = await _storeUnitOfWork.UserRepository.Get().FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
 
 
         if (user == null || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
         {
             return TypedResults.NotFound("Wrong username or password");
-
         }
         else
         {
@@ -60,7 +63,7 @@ public class AuthService : IAuthService
 
     public async Task<IResult> ChangePassword(int userId, string newPassword)
     {
-        var user = await _context.Users.FindAsync(userId);
+        var user = await _storeUnitOfWork.UserRepository.GetByID(userId);
         if (user == null)
         {
             return TypedResults.NotFound("User not found.");
@@ -71,7 +74,7 @@ public class AuthService : IAuthService
         user.PasswordHash = passwordHash;
         user.PasswordSalt = passwordSalt;
 
-        await _context.SaveChangesAsync();
+        await _storeUnitOfWork.SaveChangesAsync();
 
         return TypedResults.Ok("Password has been changed.");
     }
@@ -94,7 +97,7 @@ public class AuthService : IAuthService
             claims: claims,
             expires: DateTime.Now.AddDays(1),
             signingCredentials: creds
-            );
+        );
 
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
         return jwt;
@@ -119,11 +122,6 @@ public class AuthService : IAuthService
         }
     }
 
-    public int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-    public string GetUserEmail() => _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
-    public async Task<User> GetUserByEmail(string email)
-    {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
-    }
-
+    public int GetUserId() =>
+        int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 }

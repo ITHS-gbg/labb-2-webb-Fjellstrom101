@@ -1,3 +1,4 @@
+global using BagarBasse.Server.UnitOfWork;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using BagarBasse.DataAccess;
@@ -8,6 +9,8 @@ using BagarBasse.Server.Services.CartService;
 using BagarBasse.Server.Services.CategoryService;
 using BagarBasse.Server.Services.OrderService;
 using BagarBasse.Server.Services.ProductService;
+using BagarBasse.Server.Services.UserInfoService;
+using BagarBasse.Server.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,15 +19,14 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var userConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 var storeConnectionString = builder.Configuration.GetConnectionString("StoreConnection") ?? throw new InvalidOperationException("Connection string 'StoreConnection' not found.");
 
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(storeConnectionString));
 
 
-JwtSecurityTokenHandler
-    .DefaultInboundClaimTypeMap.Remove("role");
+//JwtSecurityTokenHandler
+//    .DefaultInboundClaimTypeMap.Remove("role");
 
 
 
@@ -35,6 +37,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddEndpointsApiExplorer();
+
 //Add Custom Services
 
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -42,6 +45,9 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserInfoService, UserInfoService>();
+builder.Services.AddScoped<StoreUnitOfWork, StoreUnitOfWork>();
 
 builder.Services.UseProductTypeApi();
 
@@ -87,6 +93,8 @@ app.MapCartApi();
 app.MapOrderApi();
 app.MapProductTypeApi();
 app.MapAuthApi();
+app.MapUserApi();
+app.MapUserInfoApi();
 
 
 app.UseHttpsRedirection();

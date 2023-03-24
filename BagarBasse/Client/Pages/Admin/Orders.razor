@@ -18,7 +18,7 @@
         Ordrar
     </h2>
 
-    @if (AdminOrders == null)
+    @if (OrdersList == null)
     {
         <span>Loading products...</span>
     }
@@ -35,7 +35,7 @@
             </tr>
             </thead>
             <tbody>
-            <Virtualize Items="AdminOrders" Context="order">
+            <Virtualize Items="OrdersList" Context="order">
                 <tr>
                     <td>
                         <img src="@order.ProductImageUrl" alt="" />
@@ -53,11 +53,11 @@
 </div>
 
 @code {
-    public List<OrderOverviewDto>? AdminOrders { get; set; } = null;
+    public List<OrderOverviewDto>? OrdersList { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
-        AdminOrders = await OrderService.GetAdminOrders();
+        OrdersList = await OrderService.GetAdminOrders();
     }
 
 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -27,6 +27,7 @@
     <Folder Include="Services\CategoryService\" />
     <Folder Include="Services\CartService\" />
     <Folder Include="Services\AuthService\" />
+    <Folder Include="Services\UserService\" />
     <Folder Include="Services\ProductTypeService\" />
     <Folder Include="Services\OrderService\" />
     <Folder Include="Services\ProductService\" />

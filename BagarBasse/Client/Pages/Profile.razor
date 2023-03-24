@@ -1,0 +1,65 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components
+@using BagarBasse.Client.Services.AuthService
+@using BagarBasse.Shared.Models
+@page "/profile"
+@inject NavigationManager NavigationManager
+@inject IAuthService AuthService
+@attribute [Authorize]
+
+
+<div class="d-flex justify-content-center align-items-center profile-form-wrapper my-5 flex-column font-ambit">
+    <h3 class="fs-1 font-gatefold-demi text-center pb-5">Användaruppgifter</h3>
+    <div class="profile-form">
+        <AuthorizeView>
+            <p>
+                <span class="fw-semibold">E-post:</span><br/>
+                @context.User.Identity.Name
+            </p>
+        </AuthorizeView>
+        <span class="fw-semibold">Användaruppgifter:</span><br />
+        <UserInfoForm/>
+        <p></p>
+
+
+        <h3 class="fs-1 font-gatefold-demi text-center p-5">Ändra Lösenord</h3>
+        <EditForm Model="_request" OnValidSubmit="ChangePassword">
+            <DataAnnotationsValidator/>
+            <div class="mb-3">
+            <div class="form-floating">
+                <InputText id="password" @bind-Value="_request.Password" type="password" class="form-control" placeholder="Password"></InputText>
+                <label for="email">Lösenord</label>
+                </div>
+                <ValidationMessage For="@(() => _request.Password)"/>
+            </div>
+            <div class="mb-3">
+                <div class="form-floating">
+                    <InputText id="confirmPassword" @bind-Value="_request.ConfirmPassword" class="form-control" type="password" placeholder="Repeat password"></InputText>
+                    <label for="confirmPassword">Upprepa Lösenord</label>
+                </div>
+                <ValidationMessage For="@(() => _request.ConfirmPassword)"/>
+            </div>
+            <button class="btn btn-pastel-pink w-100 mt-3 p-2">Ändra Lösenord</button>
+            <div>
+                <span>@_message</span>
+            </div>
+        </EditForm>
+
+    </div>
+</div>
+
+@code {
+    UserChangePassword _request = new UserChangePassword();
+    string _message = string.Empty;
+
+    private async Task ChangePassword()
+    {
+        var result = await AuthService.ChangePassword(_request);
+
+        if (result.IsSuccessStatusCode)
+        {
+            _message = await result.Content.ReadFromJsonAsync<string>();
+        }
+    }
+
+}

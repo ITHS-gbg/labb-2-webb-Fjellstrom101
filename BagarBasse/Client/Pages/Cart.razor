@@ -4,6 +4,7 @@
 @using BagarBasse.Shared.DTOs
 @inject ICartService CartService
 @inject IOrderService OrderService
+
 @implements IDisposable
 
 <PageTitle>Shopping Cart</PageTitle>
@@ -32,6 +33,7 @@ else
                 <h2 class="display-5 mb-5 text-center font-gatefold-demi">
                     Kundvagn
                 </h2>
+
                 <table
                     class="table table-condensed table-responsive shopping-cart font-ambit">
                     <thead>
@@ -50,10 +52,8 @@ else
                     }
                     else
                     {
-
                         @foreach (var product in _cartProducts)
                         {
-
                             <tr class="shopping-cart-item">
                                 <td data-th="Product">
                                     <div class="row">
@@ -90,9 +90,6 @@ else
                                     </div>
                                 </td>
                             </tr>
-
-
-
                         }
                     }
 
@@ -104,19 +101,33 @@ else
                 </div>
             </div>
         </div>
+        <AuthorizeView>
+            <Authorized>
+                <div class="w-100 d-flex justify-content-center align-items-center">
+                    <div class="col-6">
+                        <div class="border border-1 p-4 my-5 mx-2 rounded-4 font-ambit">
+                            <span class="fw-semibold font-gatefold-demi fs-5 mb-3">Leveransadress:</span><br/>
+                            <UserInfoForm/>
+                        </div>
+                    </div>
+
+                </div>
+            </Authorized>
+        </AuthorizeView>
         <div class="row mt-4 d-flex align-items-center">
             <div class="col-sm-6 order-md-2 text-end">
                 <AuthorizeView>
                     <Authorized>
-                        <button
-                            @onclick="PlaceOrder"
-                            class="btn btn-pastel-pink border-0 font-ambit-regular btn-primary mb-4 btn-lg pl-5 pr-5 checkout-button text-dark ">
-                            Placera order
-                        </button>
+
+                            <button
+                                @onclick="PlaceOrder"
+                            class="btn btn-pastel-pink border-0 font-ambit-regular btn-primary mb-4 btn-lg pl-5 pr-5 checkout-button text-dark">
+                                Placera order
+                            </button>
                     </Authorized>
                     <NotAuthorized>
                         <a href="authentication/login"
-                            class="btn btn-pastel-pink border-0 font-ambit-regular btn-primary mb-4 btn-lg pl-5 pr-5 checkout-button text-dark">
+                           class="btn btn-pastel-pink border-0 font-ambit-regular btn-primary mb-4 btn-lg pl-5 pr-5 checkout-button text-dark">
                             Logga In
                         </a>
                     </NotAuthorized>
@@ -134,9 +145,11 @@ else
 }
 
 @code {
+
     List<CartProductDto> _cartProducts = null;
     string _message = "Loading cart...";
     private bool _orderPlaced = false;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -182,9 +195,7 @@ else
 
     private string GetTotalPrice()
     {
-
         return (_cartProducts == null ? 0 : _cartProducts.Sum(p => p.Price * p.Quantity)).ToString();
-
     }
 
     public void Dispose()

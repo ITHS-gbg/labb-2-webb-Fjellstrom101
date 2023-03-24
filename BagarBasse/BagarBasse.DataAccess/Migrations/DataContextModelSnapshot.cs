@@ -22,53 +22,6 @@ namespace BagarBasse.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BagarBasse.Shared.Models.Address", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Address");
-                });
-
             modelBuilder.Entity("BagarBasse.Shared.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -827,13 +780,47 @@ namespace BagarBasse.DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("BagarBasse.Shared.Models.Address", b =>
+            modelBuilder.Entity("BagarBasse.Shared.Models.UserInfo", b =>
                 {
-                    b.HasOne("BagarBasse.Shared.Models.User", null)
-                        .WithOne("Address")
-                        .HasForeignKey("BagarBasse.Shared.Models.Address", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserInfos");
                 });
 
             modelBuilder.Entity("BagarBasse.Shared.Models.OrderItem", b =>
@@ -893,6 +880,15 @@ namespace BagarBasse.DataAccess.Migrations
                     b.Navigation("ProductType");
                 });
 
+            modelBuilder.Entity("BagarBasse.Shared.Models.UserInfo", b =>
+                {
+                    b.HasOne("BagarBasse.Shared.Models.User", null)
+                        .WithOne("UserInfo")
+                        .HasForeignKey("BagarBasse.Shared.Models.UserInfo", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BagarBasse.Shared.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
@@ -905,7 +901,7 @@ namespace BagarBasse.DataAccess.Migrations
 
             modelBuilder.Entity("BagarBasse.Shared.Models.User", b =>
                 {
-                    b.Navigation("Address")
+                    b.Navigation("UserInfo")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

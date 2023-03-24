@@ -9,16 +9,17 @@ namespace BagarBasse.Server.Services.ProductService;
 
 public class ProductService : IProductService
 {
-    private readonly DataContext _context;
+    private readonly StoreUnitOfWork _storeUnitOfWork;
 
-    public ProductService(DataContext context)
+    public ProductService(StoreUnitOfWork storeUnitOfWork)
     {
-        _context = context;
+        _storeUnitOfWork = storeUnitOfWork;
     }
 
     public async Task<List<Product>> GetProductsAsync()
     {
-        return await _context.Products
+        return await _storeUnitOfWork.ProductRepository.Get()
+            .Where(p => p.Visible && !p.Deleted)
             .Include(p => p.Variants)
             .ThenInclude(p => p.ProductType)
             .OrderBy(p => p.CategoryId)
@@ -27,8 +28,7 @@ public class ProductService : IProductService
 
     public async Task<List<Product>> GetAdminProductsAsync()
     {
-        return await _context.Products
-            .Where(p => p.Visible && !p.Deleted)
+        return await _storeUnitOfWork.ProductRepository.Get()
             .Include(p => p.Variants.Where(v => !v.Deleted))
             .ThenInclude(v => v.ProductType)
             .ToListAsync();
@@ -36,7 +36,7 @@ public class ProductService : IProductService
 
     public async Task<Product> GetProductAsync(int id)
     {
-        var product = await _context.Products
+        var product = await _storeUnitOfWork.ProductRepository.Get()
             .Include(p => p.Variants)
             .ThenInclude(v => v.ProductType)
             .FirstOrDefaultAsync(p => p.Id == id);
@@ -48,7 +48,7 @@ public class ProductService : IProductService
 
     public async Task<List<Product>> GetProductsByCategoryAsync(string categoryUrl)
     {
-        return await _context.Products.Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower()))
+        return await _storeUnitOfWork.ProductRepository.Get().Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower()))
             .Include(p => p.Variants)
             .ToListAsync();
     }
@@ -56,7 +56,7 @@ public class ProductService : IProductService
 
     public async Task<List<Product>> SearchProductsAsync(string searchText)
     {
-        return await _context.Products
+        return await _storeUnitOfWork.ProductRepository.Get()
             .Where(p => p.Title
                             .ToLower()
                             .Contains(searchText.ToLower())
@@ -77,15 +77,15 @@ public class ProductService : IProductService
             variant.ProductType = null;
         }
 
-        _context.Products.Add(product);
-        await _context.SaveChangesAsync();
+        await _storeUnitOfWork.ProductRepository.InsertAsync(product);
+        await _storeUnitOfWork.SaveChangesAsync();
 
         return product;
     }
 
     public async Task<Product> UpdateProductAsync(Product product)
     {
-        var dbProduct = await _context.Products.FindAsync(product.Id);
+        var dbProduct = await _storeUnitOfWork.ProductRepository.GetByID(product.Id);
 
         if (dbProduct == null)
         {
@@ -100,13 +100,13 @@ public class ProductService : IProductService
 
         foreach (var variant in product.Variants)
         {
-            var dbVariant = await _context.ProductVariants
+            var dbVariant = await _storeUnitOfWork.ProductVariantRepository.Get()
                 .FirstOrDefaultAsync(v => v.ProductId == variant.ProductId &&
                                            v.ProductTypeId == variant.ProductTypeId);
             if (dbVariant == null)
             {
                 variant.ProductType = null;
-                _context.ProductVariants.Add(variant);
+                await _storeUnitOfWork.ProductVariantRepository.InsertAsync(variant);
             }
             else
             {
@@ -118,7 +118,7 @@ public class ProductService : IProductService
             }
         }
 
-        await _context.SaveChangesAsync();
+        await _storeUnitOfWork.SaveChangesAsync();
 
         return product;
 
@@ -126,7 +126,7 @@ public class ProductService : IProductService
 
     public async Task<bool> DeleteProductAsync(int id)
     {
-        var dbProduct = await _context.Products.FindAsync(id);
+        var dbProduct = await _storeUnitOfWork.ProductRepository.GetByID(id);
         if (dbProduct == null)
         {
             return false;
@@ -134,9 +134,9 @@ public class ProductService : IProductService
 
         dbProduct.Deleted = true;
 
-        _context.Products.Remove(dbProduct);
+        _storeUnitOfWork.ProductRepository.Delete(dbProduct);
 
-        await _context.SaveChangesAsync();
+        await _storeUnitOfWork.SaveChangesAsync();
 
         return true;
     }

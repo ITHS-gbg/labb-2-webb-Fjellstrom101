@@ -8,11 +8,11 @@ namespace BagarBasse.Server.Services.CartService;
 
 public class CartService : ICartService
 {
-    private readonly DataContext _context;
+    private readonly StoreUnitOfWork _storeUnitOfWork;
 
-    public CartService(DataContext context)
+    public CartService(StoreUnitOfWork storeUnitOfWork)
     {
-        _context = context;
+        _storeUnitOfWork = storeUnitOfWork;
     }
     public async Task<List<CartProductDto>> GetCartProductsAsync(List<CartItem> cartItems)
     {
@@ -20,14 +20,14 @@ public class CartService : ICartService
 
         foreach (var item in cartItems)
         {
-            var product = await _context.Products.Where(p => p.Id == item.ProductId).FirstOrDefaultAsync();
+            var product = await _storeUnitOfWork.ProductRepository.Get().Where(p => p.Id == item.ProductId).FirstOrDefaultAsync();
 
             if (product == null)
             {
                 continue;
             }
 
-            var productVariant = await _context.ProductVariants
+            var productVariant = await _storeUnitOfWork.ProductVariantRepository.Get()
                 .Where(v => v.ProductId == item.ProductId && v.ProductTypeId == item.ProductTypeId)
                 .Include(v => v.ProductType)
                 .FirstOrDefaultAsync();

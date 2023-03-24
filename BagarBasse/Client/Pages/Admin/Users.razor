@@ -1,0 +1,94 @@
+﻿@page "/admin/users"
+@using BagarBasse.Client.Services.UserService
+@using BagarBasse.Shared.DTOs
+@using BagarBasse.Shared.Models
+@using Microsoft.AspNetCore.Authorization
+
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
+
+@attribute [Authorize(Roles = "Admin")]
+
+<div class="d-flex">
+    <div class="me-3">
+        <AdminMenu ActiveItem="4"/>
+    </div>
+
+    <div class="flex-grow-1 p-3 font-ambit">
+
+        <h2 class="display-5 mt-3  mb-5 text-center font-gatefold-demi">
+            Användare
+        </h2>
+
+        @if (UsersList == null)
+        {
+            <span>Laddar användare...</span>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Konto-Id</th>
+                    <th>Roll</th>
+                    <th>E-Post</th>
+                    <th>Användaruppgifter</th>
+                    <th>Registreringsdatum</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <Virtualize Items="UsersList" Context="user">
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>
+                            @if (@user.Role.Equals("Admin"))
+                            {
+                                <i class="bi bi-robot fs-5 m-3"></i>
+                                <span>Administratör</span>
+                            }
+                            else
+                            {
+                                <i class="bi bi-person fs-5 m-3"></i>
+                                <span>Kund</span>
+                            }
+                        </td>
+                        <td>@user.Email</td>
+                        <td>
+                            @if (user.UserInfo != null)
+                            {
+                                <span class="fw-semibold float-start">Namn:</span>
+                                <span class="float-end">@user.UserInfo.FirstName @user.UserInfo.LastName</span>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td>@user.DateCreated</td>
+
+                    </tr>
+                </Virtualize>
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@code {
+    public List<UserDto>? UsersList { get; set; } = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await UserService.GetAdminUsersAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            UsersList = await response.Content.ReadFromJsonAsync<List<UserDto>>();
+
+            UsersList = UsersList.OrderBy(u => u.Role).ThenBy(u => u.Id).ToList();
+        }
+    }
+
+
+}

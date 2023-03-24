@@ -7,30 +7,31 @@ namespace BagarBasse.Server.Services.CategoryService;
 
 public class CategoryService : ICategoryService
 {
-    private readonly DataContext _dataContext;
+    private readonly StoreUnitOfWork _storeUnitOfWork;
 
-    public CategoryService(DataContext dataContext)
+    public CategoryService(StoreUnitOfWork storeUnitOfWork)
     {
-        _dataContext = dataContext;
+        _storeUnitOfWork = storeUnitOfWork;
     }
 
     public async Task<List<Category>> GetCategoriesAsync()
     {
-        var categories = await _dataContext.Categories.Where(c => c.Visible && !c.Deleted).ToListAsync();
+        var categories = await _storeUnitOfWork.CategoryRepository.Get()
+                                            .Where(c => c.Visible && !c.Deleted).ToListAsync();
         return categories;
     }
 
     public async Task<List<Category>> GetAdminCategoriesAsync()
     {
-        var categories = await _dataContext.Categories.Where(c => c.Visible).ToListAsync();
+        var categories = await _storeUnitOfWork.CategoryRepository.Get().Where(c => c.Visible).ToListAsync();
         return categories;
     }
 
     public async Task<List<Category>> AddCategoryAsync(Category category)
     {
         category.Editing = category.IsNew = false;
-        _dataContext.Categories.Add(category);
-        await _dataContext.SaveChangesAsync();
+        await _storeUnitOfWork.CategoryRepository.InsertAsync(category);
+        await _storeUnitOfWork.SaveChangesAsync();
         return await GetAdminCategoriesAsync();
     }
 
@@ -46,7 +47,7 @@ public class CategoryService : ICategoryService
         categoryToUpdate.Url = category.Url;
         categoryToUpdate.Visible = category.Visible;
 
-        await _dataContext.SaveChangesAsync();
+        await _storeUnitOfWork.SaveChangesAsync();
         return await GetAdminCategoriesAsync();
     }
 
@@ -58,13 +59,13 @@ public class CategoryService : ICategoryService
             return null;
         }
 
-        _dataContext.Categories.Remove(category);
-        await _dataContext.SaveChangesAsync();
+        _storeUnitOfWork.CategoryRepository.Delete(category);
+        await _storeUnitOfWork.SaveChangesAsync();
         return await GetAdminCategoriesAsync();
     }
 
     private async Task<Category?> GetCategoryById(int id)
     {
-        return await _dataContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+        return await _storeUnitOfWork.CategoryRepository.GetByID(id);
     }
 }

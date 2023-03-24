@@ -509,5 +509,5 @@ public class DataContext : DbContext
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<Address> Address { get; set; }
+    public DbSet<UserInfo> UserInfos { get; set; }
 }
