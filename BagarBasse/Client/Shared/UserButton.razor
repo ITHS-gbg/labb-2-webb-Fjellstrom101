@@ -28,10 +28,10 @@
                 <a class="dropdown-item user-button-link" @onclick="Logout">Logga ut</a>
             </Authorized>
             <NotAuthorized>
-                <a href="login" class="dropdown-item user-button-link" @onclick="HideUserMenu">
+                <a href="login?returnUrl=@NavigationManager.ToBaseRelativePath(NavigationManager.Uri)" class="dropdown-item user-button-link" @onclick="HideUserMenu">
                     Logga in
                 </a>
-                <a href="register" class="dropdown-item user-button-link" @onclick="HideUserMenu">Registrera</a>
+                <a href="register?returnUrl=@NavigationManager.ToBaseRelativePath(NavigationManager.Uri)" class="dropdown-item user-button-link" @onclick="HideUserMenu">Registrera</a>
             </NotAuthorized>
         </AuthorizeView>
 

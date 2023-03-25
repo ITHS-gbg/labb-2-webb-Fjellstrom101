@@ -24,7 +24,8 @@ else if (!editUserInfo)
 }
 else
 {
-    <EditForm Model=userInfo OnSubmit="SubmitUserInfo">
+    <EditForm Model=userInfo OnValidSubmit="SubmitUserInfo">
+        <DataAnnotationsValidator />
         <div class="mb-3">
             <div class="form-floating">
                 <InputText id="firstname" @bind-Value="userInfo.FirstName" class="form-control" placeholder="First Name"></InputText>

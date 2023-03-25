@@ -2,7 +2,13 @@
 @using Microsoft.AspNetCore.Components
 @using BagarBasse.Shared.Models
 @using BagarBasse.Client.Services.AuthService
+@using Blazored.LocalStorage
 @inject IAuthService AuthService
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
 <PageTitle> Registration</PageTitle>
 
 <div class="d-flex justify-content-center align-items-center register-form-wrapper my-5 flex-column font-ambit">
@@ -32,7 +38,7 @@
                 <ValidationMessage For="@(() => user.ConfirmPassword)"/>
             </div>
             <button class="btn btn-pastel-pink w-100 fw-bold fs-5 p-2">Registrera Konto</button>
-            <div class="@_messageCss">
+            <div class="p-3 text-center @_messageCss">
                 <span>@_message</span>
             </div>
         </EditForm>
@@ -45,18 +51,50 @@
     string _message = string.Empty;
     string _messageCss = string.Empty;
 
-    async Task HandleRegistration()
+
+    private async Task HandleRegistration()
     {
         var result = await AuthService.Register(user);
-    //_message = result.Message;
-    //if (result.Success)
-    //{
-    //    _messageCss = "text-success";
-    //}
-    //else
-    //{
-    //    _messageCss = "text-danger";
-    //}
+
+        if (result.IsSuccessStatusCode)
+        {
+            _message = "Registreringen lyckades! \n Du loggas in...";
+            _messageCss = "text-success";
+
+            StateHasChanged();
+
+            await Task.Delay(1200);
+
+            Login();
+        }
+        else
+        {
+            _message = "Det finns redan ett konto kopplat till den angivna epost adressen";
+            _messageCss = "text-danger";
+        }
     }
+
+    private async Task Login()
+    {
+        var login = new UserLogin
+        {
+            Email = user.Email,
+            Password = user.Password
+        };
+
+        var result = await AuthService.Login(login);
+        if (result.IsSuccessStatusCode)
+        {
+            _message = string.Empty;
+            await LocalStorage.SetItemAsync("authToken", await result.Content.ReadFromJsonAsync<string>());
+            await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            NavigationManager.NavigateTo("profile");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("login");
+        }
+    }
+
 
 }
