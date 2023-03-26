@@ -1,6 +1,6 @@
 ﻿namespace BagarBasse.Server.UnitOfWork;
 
-public interface IUnitOfWork : IDisposable
+public interface IStoreUnitOfWork : IDisposable
 {
     Task SaveChangesAsync();
 }

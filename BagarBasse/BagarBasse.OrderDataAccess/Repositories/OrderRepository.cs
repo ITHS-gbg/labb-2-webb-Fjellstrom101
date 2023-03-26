@@ -1,38 +1,51 @@
-﻿using BagarBasse.OrderDataAccess.UnitOfWork;
-using BagarBasse.Shared.Models;
+﻿using BagarBasse.OrderDataAccess.Context;
+using BagarBasse.OrderDataAccess.UnitOfWork;
+using BagarBasse.Shared.DTOs.OrderDTOs;
 using MongoDB.Driver;
 
 namespace BagarBasse.OrderDataAccess.Repositories;
 
 public class OrderRepository : IOrderRepository
 {
+    public readonly IMongoContext OrderContext;
+    public IMongoCollection<OrderDto> DbSet;
 
-    private readonly IMongoDatabase _database;
-    private readonly IMongoCollection<ProductMongoEntity> _productsCollection;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public IQueryable<Order> Get()
+    public OrderRepository(IMongoContext orderContext)
     {
-        throw new NotImplementedException();
+        OrderContext = orderContext;
+
+        DbSet = OrderContext.GetCollection<OrderDto>("Orders");
     }
 
-    public Order GetById(Guid id)
+    public virtual void Add(OrderDto obj)
     {
-        throw new NotImplementedException();
+        OrderContext.AddCommand(() => DbSet.InsertOneAsync(obj));
     }
 
-    public void Insert(Order order)
+    public virtual async Task<OrderDto> GetById(Guid id)
     {
-        throw new NotImplementedException();
+        var data = await DbSet.FindAsync(Builders<OrderDto>.Filter.Eq("_id", id));
+        return data.SingleOrDefault();
     }
 
-    public void Update(Order order)
+    public virtual async Task<IEnumerable<OrderDto>> GetAll()
     {
-        throw new NotImplementedException();
+        var all = await DbSet.FindAsync(Builders<OrderDto>.Filter.Empty);
+        return all.ToEnumerable();
     }
 
-    public void Remove(Guid id)
+    public virtual void Update(OrderDto obj)
     {
-        throw new NotImplementedException();
+        OrderContext.AddCommand(() => DbSet.ReplaceOneAsync(Builders<OrderDto>.Filter.Eq("_id", obj.Id), obj));
+    }
+
+    public virtual void Remove(Guid id)
+    {
+        OrderContext.AddCommand(() => DbSet.DeleteOneAsync(Builders<OrderDto>.Filter.Eq("_id", id)));
+    }
+
+    public void Dispose()
+    {
+        OrderContext?.Dispose();
     }
 }

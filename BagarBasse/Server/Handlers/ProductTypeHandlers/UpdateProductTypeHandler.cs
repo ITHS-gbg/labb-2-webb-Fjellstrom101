@@ -8,7 +8,6 @@ using System.Data;
 
 namespace BagarBasse.Server.Handlers.ProductTypeHandlers;
 
-[Authorize(Roles = "Admin")]
 public class UpdateProductTypeHandler : IRequestHandler<UpdateProductTypeRequest, IResult>
 {
     private readonly IProductTypeService _productTypeService;

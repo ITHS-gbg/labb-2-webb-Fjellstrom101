@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 using BagarBasse.Client.Services.CartService;
+using BagarBasse.Shared.DTOs.OrderDTOs;
 
 namespace BagarBasse.Client.Services.OrderService;
 
@@ -37,9 +38,9 @@ public class OrderService : IOrderService
         return result;
     }
 
-    public async Task<OrderDetailsDto> GetOrderDetails(int orderId)
+    public async Task<OrderDto> GetOrderDetails(string id)
     {
-        var result = await _http.GetFromJsonAsync<OrderDetailsDto>($"api/order/{orderId}");
+        var result = await _http.GetFromJsonAsync<OrderDto>($"api/order/{id}");
         return result;
     }
 

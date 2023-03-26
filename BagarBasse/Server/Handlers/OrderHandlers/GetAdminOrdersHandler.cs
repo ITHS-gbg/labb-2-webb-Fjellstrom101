@@ -6,8 +6,6 @@ using System.Data;
 
 namespace BagarBasse.Server.Handlers.OrderHandlers;
 
-
-[Authorize(Roles = "Admin")]
 public class GetAdminOrdersHandler : IRequestHandler<GetAdminOrdersRequest, IResult>
 {
     private readonly IOrderService _orderService;

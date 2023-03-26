@@ -13,8 +13,6 @@ public class MongoContext : IMongoContext
     public MongoContext(IConfiguration configuration)
     {
         _configuration = configuration;
-
-        // Every command will be stored and it'll be processed at SaveChanges
         _commands = new List<Func<Task>>();
     }
 
@@ -43,10 +41,9 @@ public class MongoContext : IMongoContext
             return;
         }
 
-        // Configure mongo (You can inject the config, just to simplify)
-        MongoClient = new MongoClient(_configuration["MongoSettings:Connection"]);
+        MongoClient = new MongoClient(_configuration.GetConnectionString("OrderConnection")) ?? throw new InvalidOperationException("Connection string 'OrderConnection' not found.");
 
-        Database = MongoClient.GetDatabase(_configuration["MongoSettings:DatabaseName"]);
+        Database = MongoClient.GetDatabase("BagarBasse");
     }
 
     public IMongoCollection<T> GetCollection<T>(string name)

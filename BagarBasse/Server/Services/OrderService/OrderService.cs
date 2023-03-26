@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Xml;
 using BagarBasse.DataAccess;
+using BagarBasse.OrderDataAccess.UnitOfWork;
 using BagarBasse.Server.Services.CartService;
 using BagarBasse.Shared.DTOs;
 using BagarBasse.Shared.Models;
@@ -8,20 +9,21 @@ using BagarBasse.Shared;
 using Microsoft.EntityFrameworkCore;
 using BagarBasse.Server.Models;
 using BagarBasse.Server.Services.AuthService;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Components.Authorization;
+using BagarBasse.Shared.DTOs.OrderDTOs;
 
 namespace BagarBasse.Server.Services.OrderService;
 
 public class OrderService : IOrderService
 {
     private readonly StoreUnitOfWork _storeUnitOfWork;
+    private readonly OrderUnitOfWork _orderUnitOfWork;
     private readonly ICartService _cartService;
     private readonly IAuthService _authService;
 
-    public OrderService(StoreUnitOfWork storeUnitOfWork, ICartService cartService, IAuthService authService)
+    public OrderService(StoreUnitOfWork storeUnitOfWork, OrderUnitOfWork orderUnitOfWork, ICartService cartService, IAuthService authService)
     {
         _storeUnitOfWork = storeUnitOfWork;
+        _orderUnitOfWork = orderUnitOfWork;
         _cartService = cartService;
         _authService = authService;
     }
@@ -32,115 +34,105 @@ public class OrderService : IOrderService
             return false;
 
         var products = (await _cartService.GetCartProductsAsync(cartItems));
-        decimal totalPrice = 0;
-        products.ForEach(p => totalPrice += p.Price * p.Quantity);
+        var orderItems = new List<OrderItemDto>();
 
-        var orderItems = new List<OrderItem>();
-        products.ForEach(p => orderItems.Add(new OrderItem
+        foreach (var product in products)
         {
-            ProductId = p.ProductId,
-            ProductTypeId = p.ProductTypeId,
-            Quantity = p.Quantity,
-            TotalPrice = p.Price * p.Quantity
-        }));
+            var variant = await _storeUnitOfWork.ProductVariantRepository.Get()
+                .Where(pv => pv.ProductId == product.ProductId && pv.ProductTypeId == product.ProductTypeId)
+                .Include(pv => pv.ProductType)
+                .FirstOrDefaultAsync();
 
-        var order = new Order
+            orderItems.Add(new OrderItemDto
+            {
+                Id = product.ProductId,
+                Title = product.Title,
+                Image = product.ImageUrl,
+                Quantity = product.Quantity,
+                ProductVariant = variant.ProductType.Name,
+                OriginalPrice = variant.OriginalPrice,
+                Price = variant.Price
+            });
+        }
+
+        var user = await _storeUnitOfWork.UserRepository
+            .Get(u => u.Id == _authService.GetUserId())
+            .Include(u => u.UserInfo)
+            .FirstOrDefaultAsync();
+
+        _orderUnitOfWork.OrderRepository.Add(new OrderDto
         {
-            UserId = _authService.GetUserId(),
-            TotalPrice = totalPrice,
-            OrderItems = orderItems
-        };
-        await _storeUnitOfWork.OrderRepository.InsertAsync(order);
+            UserId = user.Id,
+            OrderItems = orderItems,
+            TotalPrice = products.Sum(p => (p.Price * p.Quantity)),
+            User = new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                DateCreated = user.DateCreated,
+                Role = string.Empty,
+                UserInfo = user.UserInfo
+            }
+        });
 
-        await _storeUnitOfWork.SaveChangesAsync();
+        await _orderUnitOfWork.SaveChangesAsync();
 
         return true;
     }
 
     public async Task<List<OrderOverviewDto>> GetOrdersAsync()
     {
+        var userId = _authService.GetUserId();
+        var orderList = (await _orderUnitOfWork.OrderRepository.GetAll())
+            .Where(o => o.UserId == userId)
+            .OrderByDescending(o => o.OrderDate);
 
-        var orders = await _storeUnitOfWork.OrderRepository.Get()
-            .Include(o => o.OrderItems)
-            .ThenInclude(oi => oi.Product)
-            .Where(o => o.UserId == _authService.GetUserId())
-            .OrderByDescending(o => o.OrderDate)
-            .ToListAsync();
-
-        var orderResponse = new List<OrderOverviewDto>();
-
-        orders.ForEach(o => orderResponse.Add(new OrderOverviewDto
-        {
-            Id = o.Id,
-            OrderDate = o.OrderDate,
-            TotalPrice = o.TotalPrice,
-            Product = o.OrderItems.Count > 1 ?
-                $"{o.OrderItems.First().Product.Title} och " +
-                $"{o.OrderItems.Count - 1} andra produkter..." :
-                o.OrderItems.First().Product.Title,
-            ProductImageUrl = o.OrderItems.First().Product.Image
-        }));
-        return orderResponse;
+        return orderList.Select(order => new OrderOverviewDto
+            {
+                Id = order.Id,
+                OrderDate = order.OrderDate,
+                TotalPrice = order.TotalPrice,
+                Product = order.OrderItems.Count > 1
+                    ? $"{order.OrderItems.First().Title} och " + $"{order.OrderItems.Count - 1} andra produkter..."
+                    : order.OrderItems.First().Title,
+                ProductImageUrl = order.OrderItems.First().Image
+            })
+            .ToList();
     }
 
-    public async Task<OrderDetailsDto> GetOrderDetailsAsync(int orderId)
+    public async Task<OrderDto> GetOrderDetailsAsync(string orderId)
     {
-        var order = await _storeUnitOfWork.OrderRepository.Get()
-            .Include(o => o.OrderItems)
-            .ThenInclude(oi => oi.Product)
-            .Include(o => o.OrderItems)
-            .ThenInclude(oi => oi.ProductType)
-            .Where(o => o.UserId == _authService.GetUserId() && o.Id == orderId)
-            .OrderByDescending(o => o.OrderDate)
-            .FirstOrDefaultAsync();
+        Guid orderIdGuid = Guid.Parse(orderId);
+        var order = (await _orderUnitOfWork.OrderRepository.GetAll())
+            .Where( o => o.User.Id == _authService.GetUserId() && o.Id.Equals(orderIdGuid))
+            .FirstOrDefault();
 
         if (order == null)
         {
             return null;
         }
 
-        var orderDetailsDto = new OrderDetailsDto
-        {
-            OrderDate = order.OrderDate,
-            TotalPrice = order.TotalPrice,
-            Products = new List<OrderDetailsProductDto>()
-        };
+        return order;
 
-        order.OrderItems.ForEach(o => orderDetailsDto.Products.Add(new OrderDetailsProductDto
-        {
-            ProductId = o.ProductId,
-            ImageUrl = o.Product.Image,
-            ProductType = o.ProductType.Name,
-            Quantity = o.Quantity,
-            Title = o.Product.Title,
-            TotalPrice = o.TotalPrice
-        }));
-
-        return orderDetailsDto;
     }
 
     public async Task<List<OrderOverviewDto>> GetAdminOrdersAsync()
     {
+        var orderList = (await _orderUnitOfWork.OrderRepository.GetAll())
+            .OrderByDescending(o => o.OrderDate);
 
-        var orders = await _storeUnitOfWork.OrderRepository.Get()
-            .Include(o => o.OrderItems)
-            .ThenInclude(oi => oi.Product)
-            .OrderByDescending(o => o.OrderDate)
-            .ToListAsync();
+        var orderResponse = orderList.Select(order => new OrderOverviewDto
+            {
+                Id = order.Id,
+                OrderDate = order.OrderDate,
+                TotalPrice = order.TotalPrice,
+                Product = order.OrderItems.Count > 1
+                    ? $"{order.OrderItems.First().Title} och " + $"{order.OrderItems.Count - 1} andra produkter..."
+                    : order.OrderItems.First().Title,
+                ProductImageUrl = order.OrderItems.First().Image
+            })
+            .ToList();
 
-        var orderResponse = new List<OrderOverviewDto>();
-
-        orders.ForEach(o => orderResponse.Add(new OrderOverviewDto
-        {
-            Id = o.Id,
-            OrderDate = o.OrderDate,
-            TotalPrice = o.TotalPrice,
-            Product = o.OrderItems.Count > 1 ?
-                $"{o.OrderItems.First().Product.Title} och " +
-                $"{o.OrderItems.Count - 1} andra produkter..." :
-                o.OrderItems.First().Product.Title,
-            ProductImageUrl = o.OrderItems.First().Product.Image
-        }));
         return orderResponse;
     }
 

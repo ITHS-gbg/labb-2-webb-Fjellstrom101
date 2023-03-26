@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BagarBasse.Server.Handlers.OrderHandlers;
 
-[Authorize]
 public class PlaceOrderHandler : IRequestHandler<PlaceOrderRequest, IResult>
 {
     private readonly IOrderService _orderService;

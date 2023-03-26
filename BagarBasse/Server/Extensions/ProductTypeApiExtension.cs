@@ -17,11 +17,11 @@ public static class ProductTypeApiExtension
     public static WebApplication MapProductTypeApi(this WebApplication app)
     {
 
-        app.MediateGet<GetProductTypesRequest>("/api/producttype");
+        app.MediateAuthorizedGet<GetProductTypesRequest>("/api/producttype", "Admin");
 
-        app.MediatePost<AddProductTypeRequest>("/api/producttype");
+        app.MediateAuthorizedPost<AddProductTypeRequest>("/api/producttype", "Admin");
 
-        app.MediatePut<UpdateProductTypeRequest>("/api/producttype");
+        app.MediateAuthorizedPut<UpdateProductTypeRequest>("/api/producttype", "Admin");
 
         return app;
     }

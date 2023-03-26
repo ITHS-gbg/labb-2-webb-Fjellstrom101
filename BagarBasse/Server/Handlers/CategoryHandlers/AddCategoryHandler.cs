@@ -7,7 +7,6 @@ using System.Data;
 
 namespace BagarBasse.Server.Handlers.CategoryHandlers;
 
-[Authorize(Roles = "Admin")]
 public class AddCategoryHandler : IRequestHandler<AddCategoryRequest, IResult>
 {
     private readonly ICategoryService _categoryService;

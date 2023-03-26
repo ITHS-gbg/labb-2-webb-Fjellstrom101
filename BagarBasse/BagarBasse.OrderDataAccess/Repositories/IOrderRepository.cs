@@ -1,16 +1,13 @@
-﻿using BagarBasse.Shared.Models;
+﻿using BagarBasse.Shared.DTOs.OrderDTOs;
+using BagarBasse.Shared.Models;
 
 namespace BagarBasse.OrderDataAccess.Repositories;
 
-public interface IOrderRepository
+public interface IOrderRepository : IDisposable
 {
-    IQueryable<Order> Get();
-
-    Order GetById(Guid id);
-
-    void Insert(Order order);
-
-    void Update(Order order);
-
+    void Add(OrderDto obj);
+    Task<OrderDto> GetById(Guid id);
+    Task<IEnumerable<OrderDto>> GetAll();
+    void Update(OrderDto obj);
     void Remove(Guid id);
 }

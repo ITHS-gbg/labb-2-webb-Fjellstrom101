@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BagarBasse.Server.Handlers.UserHandlers;
 
-[Authorize(Roles = "Admin")]
 public class GetAdminUsersHandler :IRequestHandler<GetAdminUsersRequest, IResult>
 {
     private readonly IUserService _userService;

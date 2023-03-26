@@ -16,10 +16,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BagarBasse.DataAccess\BagarBasse.DataAccess.csproj" />
+    <ProjectReference Include="..\BagarBasse.OrderDataAccess\BagarBasse.OrderDataAccess.csproj" />
     <ProjectReference Include="..\Client\BagarBasse.Client.csproj" />
     <ProjectReference Include="..\Shared\BagarBasse.Shared.csproj" />
   </ItemGroup>

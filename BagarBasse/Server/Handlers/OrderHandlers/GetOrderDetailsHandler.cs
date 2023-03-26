@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BagarBasse.Server.Handlers.OrderHandlers;
 
-[Authorize]
 public class GetOrderDetailsHandler : IRequestHandler<GetOrderDetailsRequest, IResult>
 {
     private readonly IOrderService _orderService;

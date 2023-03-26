@@ -16,7 +16,7 @@ public static class AuthApiExtensions
         
         app.MediatePost<LoginUserRequest>("/api/auth/login");
 
-        app.MediatePost<ChangePasswordRequest>("/api/auth/change-password");
+        app.MediateAuthorizedPost<ChangePasswordRequest>("/api/auth/change-password", "User");
 
         return app;
     }

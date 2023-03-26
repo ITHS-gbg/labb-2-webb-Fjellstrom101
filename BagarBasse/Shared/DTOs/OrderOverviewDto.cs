@@ -1,8 +1,10 @@
-﻿namespace BagarBasse.Shared.DTOs;
+﻿using MongoDB.Bson;
+
+namespace BagarBasse.Shared.DTOs;
 
 public class OrderOverviewDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public DateTime OrderDate { get; set; }
     public decimal TotalPrice { get; set; }
     public string Product { get; set; } = string.Empty;

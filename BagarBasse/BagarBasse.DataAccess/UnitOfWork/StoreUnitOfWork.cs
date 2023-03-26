@@ -4,18 +4,16 @@ using BagarBasse.Shared.Models;
 
 namespace BagarBasse.Server.UnitOfWork;
 
-public class StoreUnitOfWork : IUnitOfWork
+public class StoreUnitOfWork : IStoreUnitOfWork
 {
     private readonly DataContext _context;
 
-    private GenericRepository<Product> _productRepository;
-    private GenericRepository<ProductType> _productTypeRepository;
-    private GenericRepository<ProductVariant> _productVariantRepository;
-    private GenericRepository<Category> _categoryRepository;
-    private GenericRepository<User> _userRepository;
-    private GenericRepository<UserInfo> _userInfoRepository;
-    private GenericRepository<Order> _orderRepository;
-    private GenericRepository<OrderItem> _orderItemRepository;
+    private GenericRepository<Product>? _productRepository;
+    private GenericRepository<ProductType>? _productTypeRepository;
+    private GenericRepository<ProductVariant>? _productVariantRepository;
+    private GenericRepository<Category>? _categoryRepository;
+    private GenericRepository<User>? _userRepository;
+    private GenericRepository<UserInfo>? _userInfoRepository;
 
     public StoreUnitOfWork(DataContext context)
     {
@@ -45,14 +43,6 @@ public class StoreUnitOfWork : IUnitOfWork
     public GenericRepository<UserInfo> UserInfoRepository
     {
         get { return _userInfoRepository ??= new GenericRepository<UserInfo>(_context); }
-    }
-    public GenericRepository<Order> OrderRepository
-    {
-        get { return _orderRepository ??= new GenericRepository<Order>(_context); }
-    }
-    public GenericRepository<OrderItem> OrderItemRepository
-    {
-        get { return _orderItemRepository ??= new GenericRepository<OrderItem>(_context); }
     }
 
     public async Task SaveChangesAsync()

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BagarBasse.Server.Handlers.UserInfoHandlers;
 
-[Authorize(Roles = "Admin")]
 public class AddUserInfoHandler : IRequestHandler<AddUserInfoRequest, IResult>
 {
     private readonly IUserInfoService _userInfoService;

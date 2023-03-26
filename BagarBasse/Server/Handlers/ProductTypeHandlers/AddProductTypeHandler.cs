@@ -7,7 +7,6 @@ using BagarBasse.Server.Services.ProductTypeService;
 
 namespace BagarBasse.Server.Handlers.ProductTypeHandlers;
 
-[Authorize(Roles = "Admin")]
 public class AddProductTypeHandler : IRequestHandler<AddProductTypeRequest, IResult>
 {
     private readonly IProductTypeService _productTypeService;

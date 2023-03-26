@@ -6,7 +6,7 @@ using MediatR;
 using BagarBasse.Shared.Models;
 
 namespace BagarBasse.Server.Handlers.ProductHandlers;
-[Authorize(Roles = "Admin")]
+
 public class CreateProductHandler : IRequestHandler<CreateProductRequest, IResult>
 {
     private readonly IProductService _productService;

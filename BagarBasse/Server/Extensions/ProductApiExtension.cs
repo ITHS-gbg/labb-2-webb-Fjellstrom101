@@ -15,17 +15,17 @@ public static class ProductApiExtension
     {
         app.MediateGet<GetProductsRequest>("/api/product");
 
-        app.MediateGet<GetAdminProductsRequest>("/api/product/admin");
+        app.MediateAuthorizedGet<GetAdminProductsRequest>("/api/product/admin", "Admin");
 
-        app.MediatePost<CreateProductRequest>("/api/product/");
+        app.MediateAuthorizedPost<CreateProductRequest>("/api/product/", "Admin");
 
-        app.MediatePut<UpdateProductRequest>("/api/product/");
+        app.MediateAuthorizedPut<UpdateProductRequest>("/api/product/", "Admin");
 
-        app.MediateDelete<DeleteProductRequest>("/api/product/{id:int}");
+        app.MediateAuthorizedDelete<DeleteProductRequest>("/api/product/{id:int}", "Admin");
 
         app.MediateGet<GetProductRequest>("/api/product/{id:int}");
 
-        app.MediateGet<GetAdminProductRequest>("/api/product/admin/{id:int}");
+        app.MediateAuthorizedGet<GetAdminProductRequest>("/api/product/admin/{id:int}", "Admin");
 
         app.MediateGet<GetProductsByCategoryRequest>("/api/category/{categoryUrl}");
 

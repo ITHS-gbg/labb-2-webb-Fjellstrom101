@@ -26,8 +26,10 @@ public class UserService : IUserService
                 UserInfo = u.UserInfo,
                 DateCreated = u.DateCreated
             }));
+        if(result.Any())
+            return TypedResults.Ok(result);
 
-        return TypedResults.Ok(result);
+        return TypedResults.NoContent();
     }
 
     public async Task<IResult> SearchUserByEmailAsync(string email)

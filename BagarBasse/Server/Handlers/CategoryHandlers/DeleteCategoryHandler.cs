@@ -6,7 +6,6 @@ using BagarBasse.Server.Services.CategoryService;
 
 namespace BagarBasse.Server.Handlers.CategoryHandlers;
 
-[Authorize(Roles = "Admin")]
 public class DeleteCategoryHandler : IRequestHandler<DeleteCategoryRequest, IResult>
 {
     private readonly ICategoryService _categoryService;

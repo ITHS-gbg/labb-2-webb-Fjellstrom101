@@ -7,7 +7,6 @@ using BagarBasse.Shared.Models;
 
 namespace BagarBasse.Server.Handlers.ProductHandlers;
 
-[Authorize(Roles = "Admin")]
 public class UpdateProductHandler : IRequestHandler<UpdateProductRequest, IResult>
 {
     private readonly IProductService _productService;

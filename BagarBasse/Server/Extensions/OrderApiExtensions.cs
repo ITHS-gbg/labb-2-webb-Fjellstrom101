@@ -12,13 +12,13 @@ public static class OrderApiExtensions
     }
     public static WebApplication MapOrderApi(this WebApplication app)
     {
-        app.MediatePost<PlaceOrderRequest>("/api/order");
+        app.MediateAuthorizedPost<PlaceOrderRequest>("/api/order", "User");
 
-        app.MediateGet<GetOrdersRequest>("/api/order");
+        app.MediateAuthorizedGet<GetOrdersRequest>("/api/order", "User");
 
-        app.MediateGet<GetAdminOrdersRequest>("/api/order/admin");
+        app.MediateAuthorizedGet<GetAdminOrdersRequest>("/api/order/admin", "Admin");
         
-        app.MediateGet<GetOrderDetailsRequest>("/api/order/{orderId}");
+        app.MediateAuthorizedGet<GetOrderDetailsRequest>("/api/order/{orderId}", "User");
 
         return app;
     }

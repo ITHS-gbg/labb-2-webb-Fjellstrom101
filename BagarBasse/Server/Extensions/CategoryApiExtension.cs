@@ -15,13 +15,13 @@ public static class CategoryApiExtension
     {
         app.MediateGet<GetCategoriesRequest>("/api/category");
 
-        app.MediateGet<GetAdminCategoriesRequest>("/api/category/admin");
+        app.MediateAuthorizedGet<GetAdminCategoriesRequest>("/api/category/admin", "Admin");
 
-        app.MediatePost<AddCategoryRequest>("/api/category/admin");
+        app.MediateAuthorizedPost<AddCategoryRequest>("/api/category/admin", "Admin");
 
-        app.MediatePut<UpdateCategoryRequest>("/api/category/admin");
+        app.MediateAuthorizedPut<UpdateCategoryRequest>("/api/category/admin", "Admin");
 
-        app.MediateDelete<DeleteCategoryRequest>("/api/category/admin/{id:int}");
+        app.MediateAuthorizedDelete<DeleteCategoryRequest>("/api/category/admin/{id:int}", "Admin");
 
         return app;
     }

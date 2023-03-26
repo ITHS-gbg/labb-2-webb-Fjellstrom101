@@ -13,11 +13,11 @@ public static class UserInfoApiExtensions
     }
     public static WebApplication MapUserInfoApi(this WebApplication app)
     {
-        app.MediateGet<GetUserInfoRequest>("api/userinfo");
+        app.MediateAuthorizedGet<GetUserInfoRequest>("api/userinfo", "User");
 
-        app.MediatePost<AddUserInfoRequest>("api/userinfo");
+        app.MediateAuthorizedPost<AddUserInfoRequest>("api/userinfo", "User");
 
-        app.MediatePut<UpdateUserInfoRequest>("api/userinfo");
+        app.MediateAuthorizedPut<UpdateUserInfoRequest>("api/userinfo", "User");
 
         return app;
     }

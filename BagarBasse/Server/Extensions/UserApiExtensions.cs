@@ -12,8 +12,8 @@ public static class UserApiExtensions
     }
     public static WebApplication MapUserApi(this WebApplication app)
     {
-        app.MediateGet<GetAdminUsersRequest>("api/user/all");
-        app.MediateGet<SearchUserByEmailRequest>("api/user/search/{email}");
+        app.MediateAuthorizedGet<GetAdminUsersRequest>("api/user/all", "Admin");
+        app.MediateAuthorizedGet<SearchUserByEmailRequest>("api/user/search/{email}", "Admin");
 
         return app;
     }

@@ -6,7 +6,6 @@ using System.Data;
 
 namespace BagarBasse.Server.Handlers.UserHandlers;
 
-[Authorize(Roles = "Admin")]
 public class SearchUserByEmailHandler : IRequestHandler<SearchUserByEmailRequest, IResult>
 {
     private readonly IUserService _userService;
