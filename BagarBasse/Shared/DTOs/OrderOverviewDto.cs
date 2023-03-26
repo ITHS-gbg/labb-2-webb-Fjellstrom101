@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson;
-
-namespace BagarBasse.Shared.DTOs;
+﻿namespace BagarBasse.Shared.DTOs;
 
 public class OrderOverviewDto
 {

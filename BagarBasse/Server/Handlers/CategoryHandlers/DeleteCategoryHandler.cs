@@ -1,7 +1,5 @@
 ﻿using BagarBasse.Server.Requests.CategoryRequest;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
 using BagarBasse.Server.Services.CategoryService;
 
 namespace BagarBasse.Server.Handlers.CategoryHandlers;

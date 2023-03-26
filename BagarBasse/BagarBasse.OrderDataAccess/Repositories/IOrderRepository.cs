@@ -1,5 +1,4 @@
 ﻿using BagarBasse.Shared.DTOs.OrderDTOs;
-using BagarBasse.Shared.Models;
 
 namespace BagarBasse.OrderDataAccess.Repositories;
 

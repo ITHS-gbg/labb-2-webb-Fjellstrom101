@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using BagarBasse.Shared.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 

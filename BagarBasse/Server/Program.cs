@@ -1,13 +1,9 @@
 global using BagarBasse.Server.UnitOfWork;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using BagarBasse.DataAccess;
 using BagarBasse.OrderDataAccess.Context;
 using BagarBasse.OrderDataAccess.UnitOfWork;
 using BagarBasse.Server.Extensions;
-using BagarBasse.Server.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 

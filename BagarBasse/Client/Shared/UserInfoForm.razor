@@ -4,61 +4,61 @@
 @inject IUserInfoService UserInfoService
 
 
-@if (userInfo == null)
+@if (_userInfo == null)
 {
     <span>
         <p> Du har inte angett några uppgifter ännu</p>
         <button class="btn btn-pastel-pink w-100 mt-3 p-2" @onclick="InitUserInfo">Lägg till användaruppgifter</button>
     </span>
 }
-else if (!editUserInfo)
+else if (!_editUserInfo)
 {
     <p>
-        <span>@userInfo.FirstName @userInfo.LastName</span><br/>
-        <span>@userInfo.Street</span><br/>
-        <span>@userInfo.PostalCode</span><br/>
-        <span>@userInfo.City</span><br/>
-        <span>@userInfo.PhoneNumber</span><br/>
+        <span>@_userInfo.FirstName @_userInfo.LastName</span><br/>
+        <span>@_userInfo.Street</span><br/>
+        <span>@_userInfo.PostalCode</span><br/>
+        <span>@_userInfo.City</span><br/>
+        <span>@_userInfo.PhoneNumber</span><br/>
     </p>
     <button class="btn btn-pastel-pink w-100 mt-3 p-2" @onclick="EditUserInfo">Ändra användaruppgifter</button>
 }
 else
 {
-    <EditForm Model=userInfo OnValidSubmit="SubmitUserInfo">
+    <EditForm Model=_userInfo OnValidSubmit="SubmitUserInfo">
         <DataAnnotationsValidator />
         <div class="mb-3">
             <div class="form-floating">
-                <InputText id="firstname" @bind-Value="userInfo.FirstName" class="form-control" placeholder="First Name"></InputText>
+                <InputText id="firstname" @bind-Value="_userInfo.FirstName" class="form-control" placeholder="First Name"></InputText>
                 <label for="firstname">Förnamn:</label>
             </div>
         </div>
         <div class="mb-3">
             <div class="form-floating">
-                <InputText id="lastname" @bind-Value="userInfo.LastName" class="form-control" placeholder="Last Name"></InputText>
+                <InputText id="lastname" @bind-Value="_userInfo.LastName" class="form-control" placeholder="Last Name"></InputText>
                 <label for="lastname">Efternamn:</label>
             </div>
         </div>
         <div class="mb-3">
             <div class="form-floating">
-                <InputText id="street" @bind-Value="userInfo.Street" class="form-control" placeholder="Street"></InputText>
+                <InputText id="street" @bind-Value="_userInfo.Street" class="form-control" placeholder="Street"></InputText>
                 <label for="street">Adress:</label>
             </div>
         </div>
         <div class="mb-3">
             <div class="form-floating">
-                <InputText id="postalcode" @bind-Value="userInfo.PostalCode" class="form-control" placeholder="Postal Code"></InputText>
+                <InputText id="postalcode" @bind-Value="_userInfo.PostalCode" class="form-control" placeholder="Postal Code"></InputText>
                 <label for="postalcode">Postnummer:</label>
             </div>
         </div>
         <div class="mb-3">
             <div class="form-floating">
-                <InputText id="city" @bind-Value="userInfo.City" class="form-control" placeholder="City"></InputText>
+                <InputText id="city" @bind-Value="_userInfo.City" class="form-control" placeholder="City"></InputText>
                 <label for="city">Stad:</label>
             </div>
         </div>
         <div class="mb-3">
             <div class="form-floating">
-                <InputText id="phonenumber" @bind-Value="userInfo.PhoneNumber" class="form-control" placeholder="Phone Number"></InputText>
+                <InputText id="phonenumber" @bind-Value="_userInfo.PhoneNumber" class="form-control" placeholder="Phone Number"></InputText>
                 <label for="phonenumber">Telefonnummer:</label>
             </div>
         </div>
@@ -67,9 +67,12 @@ else
 }
 
 @code {
-    UserInfo? userInfo = null;
-    bool editUserInfo = false;
-    bool userHasUserInfo = false;
+    UserInfo? _userInfo = null;
+    bool _editUserInfo = false;
+    bool _userHasUserInfo = false;
+
+    [Parameter]
+    public EventCallback<bool> OnUserInfoChanged { get; set; }
 
 
     protected override async Task OnInitializedAsync()
@@ -79,38 +82,48 @@ else
         if (response.IsSuccessStatusCode)
         {
             if(response.StatusCode == HttpStatusCode.NoContent)
-                userHasUserInfo = true;
+                _userHasUserInfo = false;
             else
-                userInfo = await response.Content.ReadFromJsonAsync<UserInfo>();
+            {
+                _userInfo = await response.Content.ReadFromJsonAsync<UserInfo>();
+                _userHasUserInfo = true;
+            }
+
+            await OnUserInfoChanged.InvokeAsync(_userHasUserInfo);
+        }
+        else
+        {
+
         }
     }
 
     private async Task SubmitUserInfo()
     {
-        editUserInfo = false;
+        _editUserInfo = false;
         HttpResponseMessage response;
 
-        if (!userHasUserInfo)
+        if (!_userHasUserInfo)
         {
-            response = await UserInfoService.AddUserInfo(userInfo);
+            response = await UserInfoService.AddUserInfo(_userInfo);
+            _userHasUserInfo = true;
         }
         else
         {
-            response = await UserInfoService.UpdateUserInfo(userInfo);
+            response = await UserInfoService.UpdateUserInfo(_userInfo);
         }
-
-        userInfo = await response.Content.ReadFromJsonAsync<UserInfo>();
+        await OnUserInfoChanged.InvokeAsync(true);
+        _userInfo = await response.Content.ReadFromJsonAsync<UserInfo>();
     }
 
     private void InitUserInfo()
     {
-        userInfo = new UserInfo();
-        editUserInfo = true;
+        _userInfo = new UserInfo();
+        _editUserInfo = true;
     }
 
     private void EditUserInfo()
     {
-        editUserInfo = true;
+        _editUserInfo = true;
     }
 
 }

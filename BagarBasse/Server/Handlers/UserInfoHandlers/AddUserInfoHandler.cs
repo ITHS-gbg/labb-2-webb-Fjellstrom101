@@ -1,7 +1,6 @@
 ﻿using BagarBasse.Server.Requests.UserInfoRequests;
 using BagarBasse.Server.Services.UserInfoService;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 
 namespace BagarBasse.Server.Handlers.UserInfoHandlers;
 

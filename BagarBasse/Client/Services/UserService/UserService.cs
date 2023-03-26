@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Json;
-
-namespace BagarBasse.Client.Services.UserService;
+﻿namespace BagarBasse.Client.Services.UserService;
 
 public class UserService : IUserService
 {

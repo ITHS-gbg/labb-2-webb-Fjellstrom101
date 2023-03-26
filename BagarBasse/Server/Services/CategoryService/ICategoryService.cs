@@ -1,5 +1,4 @@
 ﻿using BagarBasse.Shared.Models;
-using BagarBasse.Shared;
 
 namespace BagarBasse.Server.Services.CategoryService;
 

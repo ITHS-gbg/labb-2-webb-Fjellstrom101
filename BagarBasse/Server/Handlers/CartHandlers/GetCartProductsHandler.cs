@@ -1,6 +1,5 @@
 ﻿using BagarBasse.Server.Requests.CartRequests;
 using BagarBasse.Server.Services.CartService;
-using BagarBasse.Shared.Models;
 using MediatR;
 
 namespace BagarBasse.Server.Handlers.CartHandlers;

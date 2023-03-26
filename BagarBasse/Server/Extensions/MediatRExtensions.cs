@@ -1,5 +1,4 @@
-﻿using Amazon.Auth.AccessControlPolicy;
-using BagarBasse.Server.Requests;
+﻿using BagarBasse.Server.Requests;
 using MediatR;
 
 namespace BagarBasse.Server.Extensions;

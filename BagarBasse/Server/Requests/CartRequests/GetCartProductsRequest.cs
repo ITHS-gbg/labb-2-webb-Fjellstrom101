@@ -1,5 +1,4 @@
-﻿using BagarBasse.Server.Services.CartService;
-using BagarBasse.Shared.Models;
+﻿using BagarBasse.Shared.Models;
 
 namespace BagarBasse.Server.Requests.CartRequests;
 

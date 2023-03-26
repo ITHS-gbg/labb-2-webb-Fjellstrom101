@@ -1,13 +1,8 @@
-﻿using System.Security.Claims;
-using System.Xml;
-using BagarBasse.DataAccess;
-using BagarBasse.OrderDataAccess.UnitOfWork;
+﻿using BagarBasse.OrderDataAccess.UnitOfWork;
 using BagarBasse.Server.Services.CartService;
 using BagarBasse.Shared.DTOs;
 using BagarBasse.Shared.Models;
-using BagarBasse.Shared;
 using Microsoft.EntityFrameworkCore;
-using BagarBasse.Server.Models;
 using BagarBasse.Server.Services.AuthService;
 using BagarBasse.Shared.DTOs.OrderDTOs;
 

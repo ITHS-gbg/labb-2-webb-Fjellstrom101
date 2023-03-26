@@ -1,5 +1,4 @@
-﻿using System.Net;
-using BagarBasse.Shared.Models;
+﻿using BagarBasse.Shared.Models;
 
 namespace BagarBasse.Client.Services.UserInfoService;
 

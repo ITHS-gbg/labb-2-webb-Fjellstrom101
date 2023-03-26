@@ -1,6 +1,5 @@
 ﻿using BagarBasse.Server.Requests.UserInfoRequests;
 using BagarBasse.Server.Services.UserInfoService;
-using BagarBasse.Shared.Models;
 
 namespace BagarBasse.Server.Extensions;
 

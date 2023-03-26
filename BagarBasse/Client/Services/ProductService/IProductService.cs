@@ -1,5 +1,4 @@
 ﻿using BagarBasse.Shared.Models;
-using BagarBasse.Shared;
 
 namespace BagarBasse.Client.Services.ProductService;
 
@@ -12,11 +11,11 @@ public interface IProductService
     Task<List<Product>> GetProductsAsync();
 
     Task<List<Product>> GetAdminProductsAsync();
-    Task<List<Product>> GetProductsByCategoryAsync(string categoryUrl = null);
+    Task<HttpResponseMessage> GetProductsByCategoryAsync(string categoryUrl = null);
     Task<HttpResponseMessage> GetProductAsync(int id);
     Task<Product> GetAdminProductAsync(int id);
 
-    Task<List<Product>> SearchProductsAsync(string searchText);
+    Task<HttpResponseMessage> SearchProductsAsync(string searchText);
 
     Task<Product> CreateProductAsync(Product product);
     Task<Product> UpdateProductAsync(Product product);

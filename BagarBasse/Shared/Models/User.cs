@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace BagarBasse.Shared.Models;
+﻿namespace BagarBasse.Shared.Models;
 
 public class User
 {

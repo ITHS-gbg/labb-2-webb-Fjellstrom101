@@ -1,8 +1,6 @@
 ﻿using BagarBasse.Server.Requests.OrderRequests;
 using BagarBasse.Server.Services.OrderService;
-using BagarBasse.Shared.Models;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 
 namespace BagarBasse.Server.Handlers.OrderHandlers;
 

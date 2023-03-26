@@ -1,5 +1,4 @@
-﻿using BagarBasse.DataAccess;
-using BagarBasse.Shared.DTOs;
+﻿using BagarBasse.Shared.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace BagarBasse.Server.Services.UserService;

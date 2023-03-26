@@ -1,9 +1,7 @@
 ﻿using BagarBasse.Shared.DTOs;
 using BagarBasse.Shared.Models;
-using BagarBasse.Shared;
 using System.Net.Http.Json;
 using Blazored.LocalStorage;
-using BagarBasse.Client.Pages;
 
 namespace BagarBasse.Client.Services.CartService;
 

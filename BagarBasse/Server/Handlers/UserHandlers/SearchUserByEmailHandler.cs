@@ -1,8 +1,6 @@
 ﻿using BagarBasse.Server.Requests.UserRequests;
 using BagarBasse.Server.Services.UserService;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
 
 namespace BagarBasse.Server.Handlers.UserHandlers;
 

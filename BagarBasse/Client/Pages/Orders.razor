@@ -1,6 +1,7 @@
 ﻿@page "/orders"
 @using BagarBasse.Shared.DTOs
 @using BagarBasse.Client.Services.OrderService
+@using System.Net
 @inject IOrderService OrderService
 
 
@@ -76,7 +77,16 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _orders = await OrderService.GetOrders();
+        var result = await OrderService.GetOrders();
+        if (result.IsSuccessStatusCode)
+        {
+            if (result.StatusCode == HttpStatusCode.NoContent)
+                _orders = new List<OrderOverviewDto>();
+            else
+            {
+                _orders = await result.Content.ReadFromJsonAsync<List<OrderOverviewDto>>();
+            }
+        }
     }
 
 }

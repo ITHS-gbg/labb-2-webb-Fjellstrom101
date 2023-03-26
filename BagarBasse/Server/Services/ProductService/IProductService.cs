@@ -1,6 +1,4 @@
 ﻿using BagarBasse.Shared.Models;
-using BagarBasse.Shared;
-using BagarBasse.Shared.DTOs;
 
 namespace BagarBasse.Server.Services.ProductService;
 

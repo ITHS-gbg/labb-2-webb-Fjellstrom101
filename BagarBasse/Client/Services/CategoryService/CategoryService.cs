@@ -1,7 +1,5 @@
 ﻿using System.Net.Http.Json;
-using BagarBasse.Shared;
 using BagarBasse.Shared.Models;
-using static System.Net.WebRequestMethods;
 
 namespace BagarBasse.Client.Services.CategoryService;
 

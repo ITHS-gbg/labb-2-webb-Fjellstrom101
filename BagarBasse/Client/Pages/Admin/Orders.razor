@@ -2,6 +2,7 @@
 @using BagarBasse.Client.Services.OrderService
 @using BagarBasse.Shared.DTOs
 @using Microsoft.AspNetCore.Authorization
+@using System.Net
 
 @inject IOrderService OrderService
 @inject NavigationManager NavigationManager
@@ -59,7 +60,17 @@
 
     protected override async Task OnInitializedAsync()
     {
-        OrdersList = await OrderService.GetAdminOrders();
+        var result = await OrderService.GetAdminOrders();
+
+        if (result.IsSuccessStatusCode)
+        {
+            if (result.StatusCode == HttpStatusCode.NoContent)
+                OrdersList = new List<OrderOverviewDto>();
+            else
+            {
+                OrdersList = await result.Content.ReadFromJsonAsync<List<OrderOverviewDto>>();
+            }
+        }
     }
 
 

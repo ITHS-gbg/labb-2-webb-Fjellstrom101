@@ -3,6 +3,7 @@
 @using BagarBasse.Shared.Models
 @using System.Reflection.Metadata
 @using BagarBasse.Shared
+@using System.Net
 
 @if (Products == null)
 {
@@ -66,7 +67,8 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        List<Product> response;
+        //List<Product> response;
+        HttpResponseMessage response;
 
         if (!string.IsNullOrEmpty(CategoryUrl))
         {
@@ -79,9 +81,11 @@ else
 
         }
 
-        if (response != null)
+        if (response.IsSuccessStatusCode)
         {
-            Products = response;
+            if (response.StatusCode == HttpStatusCode.OK)
+                Products = await response.Content.ReadFromJsonAsync<List<Product>>();
+
             StateHasChanged();
         }
     }

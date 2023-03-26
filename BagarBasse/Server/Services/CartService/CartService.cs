@@ -1,7 +1,5 @@
-﻿using BagarBasse.DataAccess;
-using BagarBasse.Shared.DTOs;
+﻿using BagarBasse.Shared.DTOs;
 using BagarBasse.Shared.Models;
-using BagarBasse.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace BagarBasse.Server.Services.CartService;

@@ -1,12 +1,11 @@
-﻿using BagarBasse.Shared.DTOs;
-using BagarBasse.Shared.DTOs.OrderDTOs;
+﻿using BagarBasse.Shared.DTOs.OrderDTOs;
 
 namespace BagarBasse.Client.Services.OrderService;
 
 public interface IOrderService
 {
     Task PlaceOrder();
-    Task<List<OrderOverviewDto>> GetOrders();
-    Task<List<OrderOverviewDto>> GetAdminOrders();
+    Task<HttpResponseMessage> GetOrders();
+    Task<HttpResponseMessage> GetAdminOrders();
     Task<OrderDto> GetOrderDetails(string id);
 }

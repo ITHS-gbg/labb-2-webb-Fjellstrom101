@@ -1,9 +1,5 @@
-﻿using BagarBasse.DataAccess;
-using BagarBasse.Shared;
-using BagarBasse.Shared.DTOs;
-using BagarBasse.Shared.Models;
+﻿using BagarBasse.Shared.Models;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.WebRequestMethods;
 
 namespace BagarBasse.Server.Services.ProductService;
 
@@ -71,10 +67,6 @@ public class ProductService : IProductService
 
     public async Task<IResult> GetProductsByCategoryAsync(string categoryUrl)
     {
-        if (!_storeUnitOfWork.ProductRepository.Get()
-            .Any(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower()) && p.Visible))
-            return TypedResults.UnprocessableEntity("Category not found");
-
         var list = await _storeUnitOfWork.ProductRepository.Get()
             .Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower()) && p.Visible)
             .Include(p => p.Variants)

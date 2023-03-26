@@ -1,6 +1,4 @@
-﻿using System.Net;
-using BagarBasse.DataAccess;
-using BagarBasse.Server.Services.AuthService;
+﻿using BagarBasse.Server.Services.AuthService;
 using BagarBasse.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,5 +1,4 @@
 ﻿@page "/"
-@using System.Security.Claims
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JsRuntime
 
@@ -82,13 +81,4 @@
 @code
 {
 
-
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-        if (firstRender)
-        {
-            //await JsRuntime.InvokeAsync<object>("initializeCarousel");
-            firstRender = false;
-        }
-	}
 }

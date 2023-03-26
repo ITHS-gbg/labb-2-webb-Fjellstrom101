@@ -1,7 +1,6 @@
 using BagarBasse.Client;
 using Blazored.LocalStorage;
 
-using BagarBasse.Client;
 using BagarBasse.Client.Services.AuthService;
 using BagarBasse.Client.Services.CartService;
 using BagarBasse.Client.Services.CategoryService;
@@ -10,7 +9,6 @@ using BagarBasse.Client.Services.ProductService;
 using BagarBasse.Client.Services.ProductTypeService;
 using BagarBasse.Client.Services.UserInfoService;
 using BagarBasse.Client.Services.UserService;
-using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

@@ -1,6 +1,4 @@
-﻿using BagarBasse.Shared.Models;
-
-namespace BagarBasse.Server.Requests.ProductRequests;
+﻿namespace BagarBasse.Server.Requests.ProductRequests;
 
 public class DeleteProductRequest : IHttpRequest
 {

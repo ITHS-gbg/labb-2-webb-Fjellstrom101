@@ -1,6 +1,4 @@
 ﻿using BagarBasse.Shared.Models;
-using BagarBasse.Shared;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace BagarBasse.Server.Services.ProductTypeService;
 

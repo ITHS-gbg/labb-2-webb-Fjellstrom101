@@ -1,7 +1,4 @@
-﻿using BagarBasse.DataAccess;
-using BagarBasse.Shared.Models;
-using BagarBasse.Shared;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using BagarBasse.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BagarBasse.Server.Services.ProductTypeService;
@@ -26,7 +23,7 @@ public class ProductTypeService : IProductTypeService
         await _storeUnitOfWork.ProductTypeRepository.InsertAsync(productType);
         await _storeUnitOfWork.SaveChangesAsync();
 
-        return TypedResults.Ok(await GetProductTypesAsync());
+        return TypedResults.Ok(await _storeUnitOfWork.ProductTypeRepository.Get().ToListAsync());
     }
 
     public async Task<IResult> UpdateProductTypeAsync(ProductType productType)
@@ -42,6 +39,6 @@ public class ProductTypeService : IProductTypeService
 
         await _storeUnitOfWork.SaveChangesAsync();
 
-        return TypedResults.Ok(await GetProductTypesAsync());
+        return TypedResults.Ok(await _storeUnitOfWork.ProductTypeRepository.Get().ToListAsync());
     }
 }

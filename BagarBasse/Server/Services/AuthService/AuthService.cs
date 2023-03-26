@@ -1,10 +1,8 @@
-﻿using BagarBasse.DataAccess;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using BagarBasse.Shared.Models;
-using BagarBasse.Server.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace BagarBasse.Server.Services.AuthService;

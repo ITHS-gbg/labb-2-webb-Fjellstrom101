@@ -1,7 +1,4 @@
-﻿using BagarBasse.Shared;
-using BagarBasse.Shared.DTOs;
-using BagarBasse.Shared.DTOs.OrderDTOs;
-using BagarBasse.Shared.Models;
+﻿using BagarBasse.Shared.Models;
 
 namespace BagarBasse.Server.Services.OrderService;
 

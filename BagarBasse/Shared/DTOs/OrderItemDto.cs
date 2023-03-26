@@ -1,6 +1,4 @@
-﻿using BagarBasse.Shared.Models;
-using MongoDB.Bson.Serialization.Attributes;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace BagarBasse.Shared.DTOs.OrderDTOs;
 

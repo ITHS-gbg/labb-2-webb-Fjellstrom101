@@ -1,6 +1,4 @@
-﻿using BagarBasse.DataAccess;
-using BagarBasse.Shared;
-using BagarBasse.Shared.Models;
+﻿using BagarBasse.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BagarBasse.Server.Services.CategoryService;

@@ -1,8 +1,5 @@
 ﻿using BagarBasse.Shared.Models;
-using BagarBasse.Shared;
 using System.Net.Http.Json;
-using BagarBasse.Shared.DTOs;
-using System.Net.Http;
 
 namespace BagarBasse.Client.Services.ProductService;
 
@@ -30,16 +27,15 @@ public class ProductService : IProductService
         return result;
     }
 
-    public async Task<List<Product>> GetProductsByCategoryAsync(string categoryUrl = null)
+    public async Task<HttpResponseMessage> GetProductsByCategoryAsync(string categoryUrl = null)
     {
-        var result = await _http.GetFromJsonAsync<List<Product>>($"api/category/{categoryUrl}");
+        var result = await _http.GetAsync($"api/category/{categoryUrl}");
         return result;
     }
 
     public async Task<HttpResponseMessage> GetProductAsync(int id)
     {
         var result = await _http.GetAsync($"api/product/{id}");
-        //var result = await _http.GetFromJsonAsync<Product>($"api/product/{id}");
         return result;
     }
 
@@ -49,9 +45,9 @@ public class ProductService : IProductService
         return result;
     }
 
-    public async Task<List<Product>> SearchProductsAsync(string searchText)
+    public async Task<HttpResponseMessage> SearchProductsAsync(string searchText)
     {
-        var result = await _http.GetFromJsonAsync<List<Product>>($"api/search/{searchText}");
+        var result = await _http.GetAsync($"api/search/{searchText}");
         return result;
 
     }

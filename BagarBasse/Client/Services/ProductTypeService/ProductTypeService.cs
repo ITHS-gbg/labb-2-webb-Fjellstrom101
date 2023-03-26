@@ -1,5 +1,4 @@
 ﻿using BagarBasse.Shared.Models;
-using BagarBasse.Shared;
 using System.Net.Http.Json;
 
 namespace BagarBasse.Client.Services.ProductTypeService;

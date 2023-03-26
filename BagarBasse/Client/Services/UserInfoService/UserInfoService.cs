@@ -1,6 +1,5 @@
 ﻿using BagarBasse.Shared.Models;
 using System.Net.Http.Json;
-using System.Net;
 
 namespace BagarBasse.Client.Services.UserInfoService;
 

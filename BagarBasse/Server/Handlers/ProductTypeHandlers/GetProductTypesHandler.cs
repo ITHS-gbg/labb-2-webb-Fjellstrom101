@@ -1,8 +1,6 @@
 ﻿using BagarBasse.Server.Requests.ProductTypeRequests;
 using BagarBasse.Server.Services.ProductTypeService;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
 
 namespace BagarBasse.Server.Handlers.ProductTypeHandlers;
 

@@ -1,7 +1,5 @@
 ﻿using BagarBasse.OrderDataAccess.Context;
 using BagarBasse.OrderDataAccess.Repositories;
-using BagarBasse.Shared.DTOs;
-using BagarBasse.Shared.Models;
 
 namespace BagarBasse.OrderDataAccess.UnitOfWork;
 

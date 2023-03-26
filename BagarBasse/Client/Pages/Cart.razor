@@ -107,7 +107,7 @@ else
                     <div class="col-6">
                         <div class="border border-1 p-4 my-5 mx-2 rounded-4 font-ambit">
                             <span class="fw-semibold font-gatefold-demi fs-5 mb-3">Leveransadress:</span><br/>
-                            <UserInfoForm/>
+                            <UserInfoForm OnUserInfoChanged="UserInfoChanged"/>
                         </div>
                     </div>
 
@@ -121,7 +121,7 @@ else
 
                             <button
                                 @onclick="PlaceOrder"
-                            class="btn btn-pastel-pink border-0 font-ambit-regular btn-primary mb-4 btn-lg pl-5 pr-5 checkout-button text-dark">
+                            class="btn btn-pastel-pink border-0 font-ambit-regular btn-primary mb-4 btn-lg pl-5 pr-5 checkout-button text-dark" disabled="@(!_hasAddress || (_cartProducts == null || _cartProducts.Count == 0))">
                                 Placera order
                             </button>
                     </Authorized>
@@ -148,8 +148,8 @@ else
 
     List<CartProductDto> _cartProducts = null;
     string _message = "Loading cart...";
-    private bool _orderPlaced = false;
-    private bool _hasAddress = false;
+    private bool _orderPlaced;
+    private bool _hasAddress;
 
     protected override async Task OnInitializedAsync()
     {
@@ -201,6 +201,11 @@ else
     public void Dispose()
     {
         CartService.OnChange -= StateHasChanged;
+    }
+
+    private void UserInfoChanged(bool hasUserInfo)
+    {
+        _hasAddress = hasUserInfo;
     }
 
 }

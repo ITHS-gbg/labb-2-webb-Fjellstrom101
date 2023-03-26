@@ -1,7 +1,5 @@
 ﻿using BagarBasse.Server.Requests.ProductTypeRequests;
 using BagarBasse.Server.Services.ProductTypeService;
-using BagarBasse.Shared.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace BagarBasse.Server.Extensions;
 
