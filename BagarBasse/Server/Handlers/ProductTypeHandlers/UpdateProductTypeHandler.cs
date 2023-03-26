@@ -20,6 +20,6 @@ public class UpdateProductTypeHandler : IRequestHandler<UpdateProductTypeRequest
     public async Task<IResult> Handle(UpdateProductTypeRequest request, CancellationToken cancellationToken)
     {
         var response = await _productTypeService.UpdateProductTypeAsync(request.ProductType);
-        return response != null ? TypedResults.Ok(response) : TypedResults.NotFound("Product Type not found");
+        return response;
     }
 }

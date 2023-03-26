@@ -16,6 +16,6 @@ public class SearchProductsHandler : IRequestHandler<SearchProductsRequest, IRes
     public async Task<IResult> Handle(SearchProductsRequest request, CancellationToken cancellationToken)
     {
         var result = await _productService.SearchProductsAsync(request.SearchText);
-        return Results.Ok(result);
+        return result;
     }
 }

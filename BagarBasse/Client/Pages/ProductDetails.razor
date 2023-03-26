@@ -7,7 +7,7 @@
 
 @if (_product == null)
 {
-    <span>@_message</span>
+    <div class="w-100 d-flex justify-content-center"><span class="fs-1 font-gatefold-demi text-center py-5">@_message</span></div>
 }
 else
 {
@@ -79,13 +79,13 @@ else
         _message = "Loading Products...";
         var result = await ProductService.GetProductAsync(Id);
 
-        if (result == null)
+        if (!result.IsSuccessStatusCode)
         {
             _message = "Produkten hittades inte";
         }
         else
         {
-            _product = result;
+            _product = await result.Content.ReadFromJsonAsync<Product>();
             if (_product.Variants.Count > 0)
             {
                 currentTypeId = _product.Variants[0].ProductTypeId;

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 using BagarBasse.Client.Services.CartService;
 using BagarBasse.Shared.DTOs.OrderDTOs;
+using BagarBasse.Shared.Models;
 
 namespace BagarBasse.Client.Services.OrderService;
 

@@ -6,6 +6,8 @@
 
 main {
     flex: 1;
+    display: flex !important;
+    flex-direction: column;
 }
 
 .sidebar {
@@ -52,7 +54,7 @@ main {
 
 @media (min-width: 641px) {
     .page {
-        flex-direction: row;
+        flex-direction: column;
     }
 
     .sidebar {

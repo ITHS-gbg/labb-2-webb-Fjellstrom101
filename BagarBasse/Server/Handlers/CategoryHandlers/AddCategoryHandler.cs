@@ -18,6 +18,6 @@ public class AddCategoryHandler : IRequestHandler<AddCategoryRequest, IResult>
     public async Task<IResult> Handle(AddCategoryRequest request, CancellationToken cancellationToken)
     {
         var result = await _categoryService.AddCategoryAsync(request.Category);
-        return TypedResults.Ok(result);
+        return result;
     }
 }

@@ -18,6 +18,6 @@ public class GetAdminProductsHandler : IRequestHandler<GetAdminProductsRequest, 
     public async Task<IResult> Handle(GetAdminProductsRequest request, CancellationToken cancellationToken)
     {
         var result = await _productService.GetAdminProductsAsync();
-        return TypedResults.Ok(result);
+        return result;
     }
 }

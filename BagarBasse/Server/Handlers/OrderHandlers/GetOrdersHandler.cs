@@ -16,6 +16,6 @@ public class GetOrdersHandler : IRequestHandler<GetOrdersRequest,IResult>
     public async Task<IResult> Handle(GetOrdersRequest request, CancellationToken cancellationToken)
     {
         var result = await _orderService.GetOrdersAsync();
-        return TypedResults.Ok(result);
+        return result;
     }
 }

@@ -36,9 +36,10 @@ public class ProductService : IProductService
         return result;
     }
 
-    public async Task<Product> GetProductAsync(int id)
+    public async Task<HttpResponseMessage> GetProductAsync(int id)
     {
-        var result = await _http.GetFromJsonAsync<Product>($"api/product/{id}");
+        var result = await _http.GetAsync($"api/product/{id}");
+        //var result = await _http.GetFromJsonAsync<Product>($"api/product/{id}");
         return result;
     }
 

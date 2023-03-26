@@ -16,6 +16,6 @@ public class GetCartProductsHandler : IRequestHandler<GetCartProductsRequest, IR
     public async Task<IResult> Handle(GetCartProductsRequest request, CancellationToken cancellationToken)
     {
         var result = await _cartService.GetCartProductsAsync(request.CartItems);
-        return TypedResults.Ok(result);
+        return result;
     }
 }

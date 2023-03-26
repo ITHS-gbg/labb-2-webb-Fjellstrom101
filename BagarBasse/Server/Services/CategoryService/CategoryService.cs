@@ -14,33 +14,41 @@ public class CategoryService : ICategoryService
         _storeUnitOfWork = storeUnitOfWork;
     }
 
-    public async Task<List<Category>> GetCategoriesAsync()
+    public async Task<IResult> GetCategoriesAsync()
     {
         var categories = await _storeUnitOfWork.CategoryRepository.Get()
                                             .Where(c => c.Visible).ToListAsync();
-        return categories;
+        if (!categories.Any())
+            return TypedResults.NoContent();
+
+        return TypedResults.Ok(categories);
     }
 
-    public async Task<List<Category>> GetAdminCategoriesAsync()
+    public async Task<IResult> GetAdminCategoriesAsync()
     {
         var categories = await _storeUnitOfWork.CategoryRepository.Get().ToListAsync();
-        return categories;
+        if (!categories.Any())
+            return TypedResults.NoContent();
+
+        return TypedResults.Ok(categories);
     }
 
-    public async Task<List<Category>> AddCategoryAsync(Category category)
+    public async Task<IResult> AddCategoryAsync(Category category)
     {
         category.Editing = category.IsNew = false;
         await _storeUnitOfWork.CategoryRepository.InsertAsync(category);
         await _storeUnitOfWork.SaveChangesAsync();
+
         return await GetAdminCategoriesAsync();
     }
 
-    public async Task<List<Category>> UpdateCategoryAsync(Category category)
+    public async Task<IResult> UpdateCategoryAsync(Category category)
     {
         var categoryToUpdate = await GetCategoryByIdAsync(category.Id);
+
         if (categoryToUpdate == null)
         {
-            return null;
+            return TypedResults.UnprocessableEntity("Category not found");
         }
 
         categoryToUpdate.Name = category.Name;
@@ -51,16 +59,17 @@ public class CategoryService : ICategoryService
         return await GetAdminCategoriesAsync();
     }
 
-    public async Task<List<Category>> DeleteCategoryAsync(int id)
+    public async Task<IResult> DeleteCategoryAsync(int id)
     {
         var category = await GetCategoryByIdAsync(id);
         if (category == null)
         {
-            return null;
+            return TypedResults.UnprocessableEntity("Category not found");
         }
 
         _storeUnitOfWork.CategoryRepository.Delete(category);
         await _storeUnitOfWork.SaveChangesAsync();
+
         return await GetAdminCategoriesAsync();
     }
 

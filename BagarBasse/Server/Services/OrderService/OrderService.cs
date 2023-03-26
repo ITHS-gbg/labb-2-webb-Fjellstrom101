@@ -28,12 +28,12 @@ public class OrderService : IOrderService
         _authService = authService;
     }
 
-    public async Task<bool> PlaceOrderAsync(List<CartItem> cartItems)
+    public async Task<IResult> PlaceOrderAsync(List<CartItem> cartItems)
     {
         if(cartItems == null || cartItems.Count==0)
-            return false;
+            return TypedResults.UnprocessableEntity("Cart is null or empty.");
 
-        var products = (await _cartService.GetCartProductsAsync(cartItems));
+        var products = (await _cartService.GetCartProductsAsListAsync(cartItems));
         var orderItems = new List<OrderItemDto>();
 
         foreach (var product in products)
@@ -77,17 +77,21 @@ public class OrderService : IOrderService
 
         await _orderUnitOfWork.SaveChangesAsync();
 
-        return true;
+        return TypedResults.Ok("Order has been created");
     }
 
-    public async Task<List<OrderOverviewDto>> GetOrdersAsync()
+    public async Task<IResult> GetOrdersAsync()
     {
         var userId = _authService.GetUserId();
         var orderList = (await _orderUnitOfWork.OrderRepository.GetAll())
             .Where(o => o.UserId == userId)
-            .OrderByDescending(o => o.OrderDate);
+            .OrderByDescending(o => o.OrderDate)
+            .ToList();
 
-        return orderList.Select(order => new OrderOverviewDto
+        if (orderList == null || !orderList.Any())
+            return TypedResults.NoContent();
+
+        var overviewList = orderList.Select(order => new OrderOverviewDto
             {
                 Id = order.Id,
                 OrderDate = order.OrderDate,
@@ -98,25 +102,28 @@ public class OrderService : IOrderService
                 ProductImageUrl = order.OrderItems.First().Image
             })
             .ToList();
+
+        return TypedResults.Ok(overviewList);
     }
 
-    public async Task<OrderDto> GetOrderDetailsAsync(string orderId)
+    public async Task<IResult> GetOrderDetailsAsync(string orderId)
     {
-        Guid orderIdGuid = Guid.Parse(orderId);
+        var orderIdGuid = Guid.Parse(orderId);
         var order = (await _orderUnitOfWork.OrderRepository.GetAll())
             .Where( o => o.User.Id == _authService.GetUserId() && o.Id.Equals(orderIdGuid))
             .FirstOrDefault();
 
         if (order == null)
         {
-            return null;
+            return TypedResults.UnprocessableEntity("Order not found.");
         }
 
-        return order;
+
+        return TypedResults.Ok(order);
 
     }
 
-    public async Task<List<OrderOverviewDto>> GetAdminOrdersAsync()
+    public async Task<IResult> GetAdminOrdersAsync()
     {
         var orderList = (await _orderUnitOfWork.OrderRepository.GetAll())
             .OrderByDescending(o => o.OrderDate);
@@ -133,7 +140,10 @@ public class OrderService : IOrderService
             })
             .ToList();
 
-        return orderResponse;
+        if (orderResponse.Count > 0)
+            return TypedResults.Ok(orderResponse);
+
+        return TypedResults.NoContent();
     }
 
 

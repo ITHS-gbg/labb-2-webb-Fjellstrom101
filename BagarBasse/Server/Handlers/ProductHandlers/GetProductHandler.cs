@@ -16,8 +16,6 @@ public class GetProductHandler : IRequestHandler<GetProductRequest, IResult>
     public async Task<IResult> Handle(GetProductRequest request, CancellationToken cancellationToken)
     {
         var result = await _productService.GetProductAsync(request.Id);
-        return result != null
-            ? TypedResults.Ok(result)
-            : TypedResults.NotFound("Sorry, but this product does not exist.");
+        return result;
     }
 }

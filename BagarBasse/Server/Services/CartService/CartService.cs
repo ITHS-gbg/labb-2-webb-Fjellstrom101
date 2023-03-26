@@ -14,8 +14,19 @@ public class CartService : ICartService
     {
         _storeUnitOfWork = storeUnitOfWork;
     }
-    public async Task<List<CartProductDto>> GetCartProductsAsync(List<CartItem> cartItems)
+    public async Task<IResult> GetCartProductsAsync(List<CartItem> cartItems)
     {
+        if (cartItems == null || cartItems.Count == 0)
+            return TypedResults.NoContent();
+
+        return TypedResults.Ok(await GetCartProductsAsListAsync(cartItems));
+    }
+
+    public async Task<List<CartProductDto>> GetCartProductsAsListAsync(List<CartItem> cartItems)
+    {
+        if (cartItems == null || cartItems.Count == 0)
+            return null;
+        
         var response = new List<CartProductDto>();
 
         foreach (var item in cartItems)

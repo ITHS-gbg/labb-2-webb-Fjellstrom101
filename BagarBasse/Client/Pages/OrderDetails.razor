@@ -10,25 +10,105 @@
 }
 else
 {
-    <h3>Order from @order.OrderDate</h3>
+    <div class="container p-5">
 
-    <div>
-        @foreach (var product in order.OrderItems)
-        {
-            <div class="container">
-                <div class="image-wrapper">
-                    <img src="@product.Image" alt="" class="image" />
+
+
+        <div class="row w-100">
+            <div class="col-lg-12 col-md-12 col-12">
+                <h2 class="display-5 mb-5 text-center font-gatefold-demi">
+                    Orderdetaljer 
+                </h2>
+
+                <div class="w-100 d-flex justify-content-center align-items-center">
+                    <div class="col-6">
+                        <div class="border border-1 p-4 my-5 mx-2 rounded-4 font-ambit h-100">
+                            <span class="fw-semibold font-gatefold-demi fs-5 mb-4">Leveransadress:</span><br/>
+                            <p>
+                                <span>@order.User.UserInfo.FirstName @order.User.UserInfo.LastName</span><br />
+                                <span>@order.User.UserInfo.Street</span><br />
+                                <span>@order.User.UserInfo.PostalCode</span><br />
+                                <span>@order.User.UserInfo.City</span><br />
+                                <span>@order.User.UserInfo.PhoneNumber</span><br />
+
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border border-1 p-4 my-5 mx-2 rounded-4 font-ambit h-100">
+                            <span class="fw-semibold font-gatefold-demi fs-5 mb-4">Orderdetaljer:</span><br />
+                            <p>
+                                <span class="fw-semibold">Orderdatum:</span>
+                                <span class="float-end">@order.OrderDate</span><br/>
+                                <span class="fw-semibold">Orderstatus:</span>
+                                <span class="float-end fw-bold">Ordern Behandlas</span><br />
+                                <span class="fw-semibold">Order-id:</span>
+                                <span class="float-end">@order.Id</span><br />
+                                <span class="fw-semibold">Totalt antal varor:</span>
+                                <span class="float-end">@order.OrderItems.Sum(p => p.Quantity)</span><br /><br />
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div class="name">
-                    <h5><a href="/product/@product.Title">@product.Title</a></h5>
-                    <span>@product.ProductVariant</span>
-                    <span>Quantity: @product.Quantity</span>
+
+                <table class="table table-condensed table-responsive shopping-cart font-ambit">
+                    <thead>
+                    <tr>
+                        <th style="width: 60%">Produkt</th>
+                        <th style="width: 12%">Pris</th>
+                        <th style="width: 10%">Antal</th>
+                        <th style="width: 16%"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="shopping-cart-items">
+
+                        @if (order == null )
+                    {
+                        <span>Eh...</span>
+                    }
+                    else
+                    {
+                            @foreach (var product in order.OrderItems)
+                        {
+                            <tr class="shopping-cart-item">
+                                <td data-th="Product">
+                                    <div class="row">
+                                        <div class="col-md-3 text-start">
+                                            <img src="@product.Image"
+                                                 alt=""
+                                                 class="img-fluid d-none d-md-block rounded mb-2 cart-item-image"/>
+                                        </div>
+                                        <div class="col-md-9 text-start mt-sm-2">
+                                            <p class="h4 cart-item-title font-ambit-regular">@product.Title</p>
+                                            <p class="font-weight-light cart-item-category">
+                                                @product.ProductVariant
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-th="Price" class="cart-item-price">@(product.Price * product.Quantity) kr</td>
+                                <td data-th="Quantity">
+                                    <input type="number"
+                                           class="form-control form-control-lg text-center cart-item-quantity-input"
+                                           value="@product.Quantity"
+                                           aria-label="Item amount"
+                                           disabled/>
+                                </td>
+                                <td class="actions" data-th="">
+                                    <div class="text-end">
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                    </tbody>
+                </table>
+                <div class="float-end text-end font-ambit-regular pb-3">
+                    <h1 class="h4">Totalt:</h1>
+                    <h1 class="cart-total-price">@order.TotalPrice kr</h1>
                 </div>
-                <div class="product-price">@(product.Price * product.Quantity ) kr</div>
             </div>
-        }
-        <div class="product-price">
-            Total: @order.TotalPrice kr
         </div>
     </div>
 }

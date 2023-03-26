@@ -31,6 +31,8 @@ public static class ProductApiExtension
 
         app.MediateGet<SearchProductsRequest>("/api/search/{searchText}");
 
+        app.MediateAuthorizedPut<SetProductVisibilityRequest>("/api/product/visibility/{id}", "Admin");
+
         return app;
     }
 }

@@ -58,7 +58,7 @@ public class AuthService : IAuthService
 
         if (user == null || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
         {
-            return TypedResults.NotFound("Wrong username or password");
+            return TypedResults.Unauthorized();
         }
         else
         {

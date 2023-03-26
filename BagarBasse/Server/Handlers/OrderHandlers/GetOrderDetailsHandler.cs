@@ -17,6 +17,6 @@ public class GetOrderDetailsHandler : IRequestHandler<GetOrderDetailsRequest, IR
     public async Task<IResult> Handle(GetOrderDetailsRequest request, CancellationToken cancellationToken)
     {
         var result = await _orderService.GetOrderDetailsAsync(request.OrderId);
-        return result != null ? TypedResults.Ok(result) : TypedResults.NotFound("Order not found.");
+        return result;
     }
 }

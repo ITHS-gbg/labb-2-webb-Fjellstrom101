@@ -14,9 +14,7 @@ public class GetAdminProductHandler : IRequestHandler<GetAdminProductRequest, IR
     }
     public async Task<IResult> Handle(GetAdminProductRequest request, CancellationToken cancellationToken)
     {
-        var response = await _productService.GetAdminProductAsync(request.Id);
-        return response != null
-            ? TypedResults.Ok(response)
-            : TypedResults.NotFound("Sorry, but this product does not exist.");
+        var result = await _productService.GetAdminProductAsync(request.Id);
+        return result;
     }
 }

@@ -19,6 +19,6 @@ public class CreateProductHandler : IRequestHandler<CreateProductRequest, IResul
     public async Task<IResult> Handle(CreateProductRequest request, CancellationToken cancellationToken)
     {
         var result = await _productService.CreateProductAsync(request.Product);
-        return TypedResults.Ok(result);
+        return result;
     }
 }

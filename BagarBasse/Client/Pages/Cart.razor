@@ -12,7 +12,7 @@
 {
     <div class="container checkout-container">
         <div class="py-5">
-            <h2 class="display-5 mb-5 text-center font-gatefold-demi">
+            <h2 class="display-5 my-5 text-center font-gatefold-demi">
                 Tack för din order!
             </h2>
             <h3 class="mb-5 text-center font-gatefold-demi">
@@ -30,7 +30,7 @@ else
     <div class="container cart-container">
         <div class="row w-100">
             <div class="col-lg-12 col-md-12 col-12">
-                <h2 class="display-5 mb-5 text-center font-gatefold-demi">
+                <h2 class="display-5 my-5 text-center font-gatefold-demi">
                     Kundvagn
                 </h2>
 
@@ -149,7 +149,7 @@ else
     List<CartProductDto> _cartProducts = null;
     string _message = "Loading cart...";
     private bool _orderPlaced = false;
-
+    private bool _hasAddress = false;
 
     protected override async Task OnInitializedAsync()
     {

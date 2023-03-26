@@ -18,6 +18,6 @@ public class GetAdminOrdersHandler : IRequestHandler<GetAdminOrdersRequest, IRes
     public async Task<IResult> Handle(GetAdminOrdersRequest request, CancellationToken cancellationToken)
     {
         var result = await _orderService.GetAdminOrdersAsync();
-        return TypedResults.Ok(result);
+        return result;
     }
 }

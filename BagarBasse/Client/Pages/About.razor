@@ -1,0 +1,70 @@
+﻿@page "/about"
+<div class="container py-4 mb-5">
+    <div class="mb-4">
+        <div class="container-fluid map-container rounded-3">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2966.357029867338!2d12.293132723393944!3d58.2832084787347!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ssv!2sse!4v1675586157811!5m2!1ssv!2sse"
+                    style="border: 0"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    class="h-100 w-100"
+                    title="map-frame"></iframe>
+        </div>
+    </div>
+
+    <div class="row align-items-md-stretch">
+        <div class="col-md-6">
+            <div class="h-100 p-5 bg-pastel-pink rounded-3">
+                <h2 class="font-gt-alpina text-dark">Kontakta oss</h2>
+                <div class="container px-0 text-black pt-3 font-ambit">
+                    <form novalidate>
+                        <div class="form-floating mb-3">
+                            <input type="text"
+                                   class="form-control"
+                                   id="name"
+                                   placeholder="name@example.com" />
+                            <label for="name">Namn</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email"
+                                   class="form-control"
+                                   id="email"
+                                   placeholder="name@example.com" />
+                            <label for="email">E-post</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control"
+                                      id="message"
+                                      rows="5"
+                                      style="height: 200px"></textarea>
+                            <label for="message">Meddelande</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 font-ambit">
+            <div class="h-100 p-5">
+                <h2 class="font-gt-alpina mb-3">Hitta hit</h2>
+                <p>
+                    Hjärtligt välkommen till Bagar-Basses bageri & konditori!
+                    Bagar-Basses bageri ligger i hjärtat av Trollhättan, precis
+                    bredvid macken-lekplatsen, ca. 2 minuter ifrån avfarten vid
+                    E45:an.
+                </p>
+                <p class="font-ambit-regular fw-semibold">Vår adress är:</p>
+                <p>
+                    Bagar-Basses bageri & konditori<br />Nydqvistsgatan 4A<br />
+                    461 32 Trollhättan
+                </p>
+                <p class="font-ambit-regular fw-semibold">Telefonnummer:</p>
+                <p>0144-106 29 60</p>
+                <p class="font-ambit-regular fw-semibold">E-post:</p>
+                <p>info@bagarbasse.se</p>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+
+}

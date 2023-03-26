@@ -14,34 +14,34 @@ public class ProductTypeService : IProductTypeService
     {
         _storeUnitOfWork = storeUnitOfWork;
     }
-    public async Task<List<ProductType>> GetProductTypesAsync()
+    public async Task<IResult> GetProductTypesAsync()
     {
         var productTypes = await _storeUnitOfWork.ProductTypeRepository.Get().ToListAsync();
-        return productTypes;
+        return TypedResults.Ok(productTypes);
     }
 
-    public async Task<List<ProductType>> AddProductTypeAsync(ProductType productType)
+    public async Task<IResult> AddProductTypeAsync(ProductType productType)
     {
         productType.IsNew = productType.Editing = false;
         await _storeUnitOfWork.ProductTypeRepository.InsertAsync(productType);
         await _storeUnitOfWork.SaveChangesAsync();
 
-        return await GetProductTypesAsync();
+        return TypedResults.Ok(await GetProductTypesAsync());
     }
 
-    public async Task<List<ProductType>?> UpdateProductTypeAsync(ProductType productType)
+    public async Task<IResult> UpdateProductTypeAsync(ProductType productType)
     {
         var dbProductType = await _storeUnitOfWork.ProductTypeRepository.GetByID(productType.Id);
 
         if (dbProductType == null)
         {
-            return null;
+            return TypedResults.UnprocessableEntity("Product Type not found");
         }
 
         dbProductType.Name = productType.Name;
 
         await _storeUnitOfWork.SaveChangesAsync();
 
-        return await GetProductTypesAsync();
+        return TypedResults.Ok(await GetProductTypesAsync());
     }
 }

@@ -18,6 +18,6 @@ public class GetAdminCategoriesHandler : IRequestHandler<GetAdminCategoriesReque
     public async Task<IResult> Handle(GetAdminCategoriesRequest request, CancellationToken cancellationToken)
     {
         var result = await _categoryService.GetAdminCategoriesAsync();
-        return TypedResults.Ok(result);
+        return result;
     }
 }

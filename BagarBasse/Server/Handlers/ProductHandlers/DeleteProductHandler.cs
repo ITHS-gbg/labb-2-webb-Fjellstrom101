@@ -19,6 +19,6 @@ public class DeleteProductHandler : IRequestHandler<DeleteProductRequest, IResul
     public async Task<IResult> Handle(DeleteProductRequest request, CancellationToken cancellationToken)
     {
         var result = await _productService.DeleteProductAsync(request.Id);
-        return result ? TypedResults.Ok(result) : TypedResults.NotFound("Product not found");
+        return result;
     }
 }

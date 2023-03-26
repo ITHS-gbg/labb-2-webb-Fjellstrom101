@@ -19,6 +19,6 @@ public class UpdateCategoryHandler : IRequestHandler<UpdateCategoryRequest, IRes
     public async Task<IResult> Handle(UpdateCategoryRequest request, CancellationToken cancellationToken)
     {
         var result = await _categoryService.UpdateCategoryAsync(request.Category);
-        return result != null ? TypedResults.Ok(result) : TypedResults.NotFound("Category not found");
+        return result;
     }
 }

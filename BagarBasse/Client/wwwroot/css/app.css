@@ -118,3 +118,8 @@ a, .btn-link {
     background-repeat: no-repeat;
     filter: invert(79%) sepia(4%) saturate(1021%) hue-rotate(324deg) brightness(117%) contrast(98%);
 }
+#app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}

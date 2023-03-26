@@ -15,6 +15,6 @@ public class GetProductsHandler : IRequestHandler<GetProductsRequest, IResult>
     public async Task<IResult> Handle(GetProductsRequest request, CancellationToken cancellationToken)
     {
         var result = await _productService.GetProductsAsync();
-        return TypedResults.Ok(result);
+        return result;
     }
 }

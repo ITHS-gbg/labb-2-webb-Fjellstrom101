@@ -17,6 +17,6 @@ public class DeleteCategoryHandler : IRequestHandler<DeleteCategoryRequest, IRes
     public async Task<IResult> Handle(DeleteCategoryRequest request, CancellationToken cancellationToken)
     {
         var result = await _categoryService.DeleteCategoryAsync(request.Id);
-        return result != null ? TypedResults.Ok(result) : TypedResults.NotFound("Category not found");
+        return result;
     }
 }

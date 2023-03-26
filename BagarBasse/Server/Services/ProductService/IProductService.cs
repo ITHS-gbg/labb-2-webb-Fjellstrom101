@@ -6,15 +6,15 @@ namespace BagarBasse.Server.Services.ProductService;
 
 public interface IProductService
 {
-    Task<List<Product>> GetProductsAsync();
-    Task<List<Product>> GetAdminProductsAsync();
-    Task<Product> GetProductAsync(int id);
-    Task<Product> GetAdminProductAsync(int id);
-    Task<List<Product>> GetProductsByCategoryAsync(string categoryUrl);
-    Task<List<Product>> SearchProductsAsync(string searchText);
-
-    Task<Product> CreateProductAsync(Product product);
-    Task<Product> UpdateProductAsync(Product product);
-    Task<bool> DeleteProductAsync(int id);
+    Task<IResult> GetProductsAsync();
+    Task<IResult> GetAdminProductsAsync();
+    Task<IResult> GetProductAsync(int id);
+    Task<IResult> GetAdminProductAsync(int id);
+    Task<IResult> GetProductsByCategoryAsync(string categoryUrl);
+    Task<IResult> SearchProductsAsync(string searchText);
+    Task<IResult> CreateProductAsync(Product product);
+    Task<IResult> UpdateProductAsync(Product product);
+    Task<IResult> DeleteProductAsync(int id);
+    Task<IResult> SetProductVisibility(int id, bool visible);
 
 }

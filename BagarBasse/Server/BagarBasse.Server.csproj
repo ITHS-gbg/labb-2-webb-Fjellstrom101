@@ -38,7 +38,6 @@
     <Folder Include="Handlers\AuthHandlers\" />
     <Folder Include="Handlers\UserHandlers\" />
     <Folder Include="Handlers\ProductTypeHandlers\" />
-    <Folder Include="Handlers\ProductHandlers\" />
     <Folder Include="Handlers\OrderHandlers\" />
     <Folder Include="Requests\AuthRequests\" />
     <Folder Include="Requests\UserInfoRequests\" />

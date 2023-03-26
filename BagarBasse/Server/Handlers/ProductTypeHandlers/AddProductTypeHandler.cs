@@ -19,6 +19,6 @@ public class AddProductTypeHandler : IRequestHandler<AddProductTypeRequest, IRes
     public async Task<IResult> Handle(AddProductTypeRequest request, CancellationToken cancellationToken)
     {
         var response = await _productTypeService.AddProductTypeAsync(request.ProductType);
-        return TypedResults.Ok(response);
+        return response;
     }
 }

@@ -15,6 +15,6 @@ public class GetCategoriesHandler : IRequestHandler<GetCategoriesRequest, IResul
     public async Task<IResult> Handle(GetCategoriesRequest request, CancellationToken cancellationToken)
     {
         var result = await _categoryService.GetCategoriesAsync();
-        return TypedResults.Ok(result);
+        return result;
     }
 }

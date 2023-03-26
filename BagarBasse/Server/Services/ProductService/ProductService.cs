@@ -16,58 +16,80 @@ public class ProductService : IProductService
         _storeUnitOfWork = storeUnitOfWork;
     }
 
-    public async Task<List<Product>> GetProductsAsync()
+    public async Task<IResult> GetProductsAsync()
     {
-        return await _storeUnitOfWork.ProductRepository.Get()
+        var list = await _storeUnitOfWork.ProductRepository.Get()
             .Where(p => p.Visible)
             .Include(p => p.Variants.Where( v => v.Visible))
             .ThenInclude(p => p.ProductType)
             .OrderBy(p => p.CategoryId)
             .ToListAsync();
+
+        if (!list.Any())
+            return TypedResults.NoContent();
+
+        return TypedResults.Ok(list);
     }
 
-    public async Task<List<Product>> GetAdminProductsAsync()
+    public async Task<IResult> GetAdminProductsAsync()
     {
-        return await _storeUnitOfWork.ProductRepository.Get()
+        var list =  await _storeUnitOfWork.ProductRepository.Get()
             .Include(p => p.Variants)
             .ThenInclude(v => v.ProductType)
             .ToListAsync();
+        if (!list.Any())
+            return TypedResults.NoContent();
+
+        return TypedResults.Ok(list);
     }
 
-    public async Task<Product> GetProductAsync(int id)
+    public async Task<IResult> GetProductAsync(int id)
     {
         var product = await _storeUnitOfWork.ProductRepository.Get()
             .Include(p => p.Variants.Where(v => v.Visible))
             .ThenInclude(v => v.ProductType)
             .FirstOrDefaultAsync(p => p.Id == id);
 
+        if (product == null)
+            return TypedResults.UnprocessableEntity("Product not found");
 
-        return product;
+        return TypedResults.Ok(product);
     }
-    public async Task<Product> GetAdminProductAsync(int id)
+
+    public async Task<IResult> GetAdminProductAsync(int id)
     {
         var product = await _storeUnitOfWork.ProductRepository.Get()
             .Include(p => p.Variants)
             .ThenInclude(v => v.ProductType)
             .FirstOrDefaultAsync(p => p.Id == id);
 
+        if (product == null)
+            return TypedResults.UnprocessableEntity("Product not found");
 
-        return product;
+        return TypedResults.Ok(product);
     }
 
-
-    public async Task<List<Product>> GetProductsByCategoryAsync(string categoryUrl)
+    public async Task<IResult> GetProductsByCategoryAsync(string categoryUrl)
     {
-        return await _storeUnitOfWork.ProductRepository.Get()
+        if (!_storeUnitOfWork.ProductRepository.Get()
+            .Any(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower()) && p.Visible))
+            return TypedResults.UnprocessableEntity("Category not found");
+
+        var list = await _storeUnitOfWork.ProductRepository.Get()
             .Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower()) && p.Visible)
             .Include(p => p.Variants)
             .ToListAsync();
+
+        if (!list.Any())
+            return TypedResults.NoContent();
+
+        return TypedResults.Ok(list);
     }
 
 
-    public async Task<List<Product>> SearchProductsAsync(string searchText)
+    public async Task<IResult> SearchProductsAsync(string searchText)
     {
-        return await _storeUnitOfWork.ProductRepository.Get()
+        var list = await _storeUnitOfWork.ProductRepository.Get()
             .Where(p => p.Title
                             .ToLower()
                             .Contains(searchText.ToLower())
@@ -77,11 +99,14 @@ public class ProductService : IProductService
             .Include(p => p.Variants)
             .ToListAsync();
 
+        if (!list.Any())
+            return TypedResults.NoContent();
+
+        return TypedResults.Ok(list);
     }
 
-    public async Task<Product> CreateProductAsync(Product product)
+    public async Task<IResult> CreateProductAsync(Product product)
     {
-        //TODO FIX THIS
         foreach (var variant in product.Variants)
         {
 
@@ -91,10 +116,10 @@ public class ProductService : IProductService
         await _storeUnitOfWork.ProductRepository.InsertAsync(product);
         await _storeUnitOfWork.SaveChangesAsync();
 
-        return product;
+        return TypedResults.Ok(product);
     }
 
-    public async Task<Product> UpdateProductAsync(Product product)
+    public async Task<IResult> UpdateProductAsync(Product product)
     {
 
         var dbProduct = await _storeUnitOfWork.ProductRepository.Get()
@@ -104,7 +129,7 @@ public class ProductService : IProductService
 
         if (dbProduct == null)
         {
-            return null;
+            return TypedResults.UnprocessableEntity("Product not found");
         }
 
         dbProduct.Title = product.Title;
@@ -140,16 +165,16 @@ public class ProductService : IProductService
 
         await _storeUnitOfWork.SaveChangesAsync();
 
-        return product;
+        return TypedResults.Ok(product);
 
     }
 
-    public async Task<bool> DeleteProductAsync(int id)
+    public async Task<IResult> DeleteProductAsync(int id)
     {
         var dbProduct = await _storeUnitOfWork.ProductRepository.GetByID(id);
         if (dbProduct == null)
         {
-            return false;
+            return TypedResults.UnprocessableEntity("Product not found");
         }
 
 
@@ -157,6 +182,20 @@ public class ProductService : IProductService
 
         await _storeUnitOfWork.SaveChangesAsync();
 
-        return true;
+        return TypedResults.Ok("Product Removed");
+    }
+
+    public async Task<IResult> SetProductVisibility(int id, bool visible)
+    {
+        var product = await _storeUnitOfWork.ProductRepository.GetByID(id);
+
+        if (product == null)
+            return TypedResults.UnprocessableEntity("Product not found");
+        
+        product.Visible = visible;
+
+        await _storeUnitOfWork.SaveChangesAsync();
+
+        return TypedResults.Ok(product);
     }
 }

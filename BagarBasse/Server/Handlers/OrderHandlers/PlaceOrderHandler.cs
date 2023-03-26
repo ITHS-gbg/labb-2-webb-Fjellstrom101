@@ -18,6 +18,6 @@ public class PlaceOrderHandler : IRequestHandler<PlaceOrderRequest, IResult>
     public async Task<IResult> Handle(PlaceOrderRequest request, CancellationToken cancellationToken)
     {
         var result = await _orderService.PlaceOrderAsync(request.CartItems);
-        return result ? TypedResults.Ok(result) : TypedResults.NotFound("Cart is null or empty.");
+        return result;
     }
 }
