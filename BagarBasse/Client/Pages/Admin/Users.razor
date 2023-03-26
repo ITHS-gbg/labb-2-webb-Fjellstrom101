@@ -1,0 +1,177 @@
+﻿@page "/admin/users"
+@page "/admin/users/{search}"
+@using BagarBasse.Client.Services.UserService
+@using BagarBasse.Shared.DTOs
+@using Microsoft.AspNetCore.Authorization
+@using System.Net
+
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
+
+@attribute [Authorize(Roles = "Admin")]
+
+<div class="d-flex flex-grow-1">
+    <div class="me-3">
+        <AdminMenu ActiveItem="4"/>
+    </div>
+
+    <div class="flex-grow-1 p-3 font-ambit">
+
+        <h2 class="display-5 mt-3  mb-5 text-center font-gatefold-demi">
+            Användare
+        </h2>
+        <div class="w-100 d-flex justify-content-center mb-5">
+            <div class="search-bar-wrapper">
+                <div class="input-group">
+                    <input type="search"
+                           @bind-value="_searchText"
+                           @onkeyup="Enter"
+                           placeholder="Sök..."
+                           class="form-control"/>
+                    <div class="input-group-text">
+                        <button class=" border-0 bg-transparent text-black-50 m-auto" @onclick="SearchUsers" type="submit">
+                            <span class="oi oi-magnifying-glass"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (UsersList == null)
+        {
+            <span>@_message</span>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Konto-Id</th>
+                    <th>Roll</th>
+                    <th>E-Post</th>
+                    <th>Användaruppgifter</th>
+                    <th>Registreringsdatum</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <Virtualize Items="UsersList" Context="user">
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>
+                            @if (@user.Role.Equals("Admin"))
+                            {
+                                <i class="bi bi-robot fs-5 m-3"></i>
+                                <span>Administratör</span>
+                            }
+                            else
+                            {
+                                <i class="bi bi-person fs-5 m-3"></i>
+                                <span>Kund</span>
+                            }
+                        </td>
+                        <td>@user.Email</td>
+                        <td>
+                            @if (user.UserInfo != null)
+                            {
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td class="fw-semibold float-start me-3">Namn:</td>
+                                        <td>@user.UserInfo.FirstName @user.UserInfo.LastName</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold float-start">Telefon:</td>
+                                        <td>@user.UserInfo.PhoneNumber</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold float-start">Adress:</td>
+                                        <td>@user.UserInfo.Street</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold float-start"></td>
+                                        <td>@user.UserInfo.PostalCode</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold float-start"></td>
+                                        <td>@user.UserInfo.City</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td>@user.DateCreated</td>
+
+                    </tr>
+                </Virtualize>
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@code {
+
+    public List<UserDto>? UsersList { get; set; } = null;
+
+    [Parameter]
+    public string Search { get; set; } = string.Empty;
+
+    private string _searchText = string.Empty;
+    private string _message = string.Empty;
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        UsersList = null;
+
+        if (!string.IsNullOrEmpty(Search))
+        {
+            _searchText = Search;
+        }
+
+        await InitUserList();
+    }
+
+    public async Task SearchUsers()
+    {
+        await InitUserList();
+        NavigationManager.NavigateTo($"admin/users/{_searchText}");
+    }
+
+    public async Task Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            await SearchUsers();
+        }
+    }
+
+    public async Task InitUserList()
+    {
+        _message = "Laddar användare...";
+
+        var response = string.IsNullOrEmpty(Search) ? await UserService.GetAdminUsersAsync() : await UserService.SearchUserByEmailAsync(Search);
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                _message = "Inga användare hittades";
+            }
+            else
+            {
+                UsersList = await response.Content.ReadFromJsonAsync<List<UserDto>>();
+                UsersList = UsersList.OrderBy(u => u.Role).ThenBy(u => u.Id).ToList();
+            }
+        }
+        StateHasChanged();
+    }
+
+
+
+}

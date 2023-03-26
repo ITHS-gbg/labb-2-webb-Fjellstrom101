@@ -1,0 +1,77 @@
+﻿@page "/admin/orders"
+@using BagarBasse.Client.Services.OrderService
+@using BagarBasse.Shared.DTOs
+@using Microsoft.AspNetCore.Authorization
+@using System.Net
+
+@inject IOrderService OrderService
+@inject NavigationManager NavigationManager
+
+@attribute [Authorize(Roles = "Admin")]
+
+
+<div class="d-flex flex-grow-1">
+<div class="me-3">
+    <AdminMenu ActiveItem="5"/>
+</div>
+
+<div class="flex-grow-1 p-3 font-ambit">
+        
+    <h2 class="display-5 mt-3  mb-5 text-center font-gatefold-demi">
+        Ordrar
+    </h2>
+
+    @if (OrdersList == null)
+    {
+        <span>Loading products...</span>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Order</th>
+                <th>Datum</th>
+                <th>Ordertotal</th>
+                <th>Sammanfattning</th>
+            </tr>
+            </thead>
+            <tbody>
+            <Virtualize Items="OrdersList" Context="order">
+                <tr>
+                    <td>
+                        <img src="@order.ProductImageUrl" alt="" />
+                    </td>
+                    <td>@order.Product</td>
+                    <td>@order.OrderDate</td>
+                    <td>@order.TotalPrice</td>
+                    <td>@order.Product</td>
+                </tr>
+            </Virtualize>
+            </tbody>
+        </table>
+    }
+</div>
+</div>
+
+@code {
+    public List<OrderOverviewDto>? OrdersList { get; set; } = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await OrderService.GetAdminOrders();
+
+        if (result.IsSuccessStatusCode)
+        {
+            if (result.StatusCode == HttpStatusCode.NoContent)
+                OrdersList = new List<OrderOverviewDto>();
+            else
+            {
+                OrdersList = await result.Content.ReadFromJsonAsync<List<OrderOverviewDto>>();
+            }
+        }
+    }
+
+
+}

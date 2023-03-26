@@ -1,0 +1,48 @@
+﻿<div class="sidebar font-ambit h-100">
+    <div class="sidebar-wrapper">
+        <ul class="nav flex-column mb-auto">
+            <li class="nav-item @(ActiveItem==0? "active" : "")">
+                <a href="admin/overview" class="" aria-current="page">
+                    <i class="bi bi-speedometer2"></i>
+                    Översikt
+                </a>
+            </li>
+            <li class="nav-item @(ActiveItem==1? "active" : "")">
+                <a href="admin/categories" class="nav-link">
+                    <i class="bi bi-justify"></i>
+                    Kategorier
+                </a>
+            </li>
+            <li class="nav-item @(ActiveItem==2? "active" : "")">
+                <a href="admin/products" class="nav-link">
+                    <i class="bi bi-basket"></i>
+                    Produkter
+                </a>
+            </li>
+            <li class="nav-item @(ActiveItem==3? "active" : "")">
+                <a href="admin/product-types" class="nav-link">
+                    <i class="bi bi-diagram-2"></i>
+                    Produkttyper
+                </a>
+            </li>
+            <li class="nav-item @(ActiveItem==4? "active" : "")">
+                <a href="admin/users" class="nav-link">
+                    <i class="bi bi-people"></i>
+                    Användare
+                </a>
+            </li>
+            <li class="nav-item @(ActiveItem==5? "active" : "")">
+                <a href="admin/orders" class="nav-link">
+                    <i class="bi bi-box-seam"></i>
+                    Ordrar
+                </a>
+            </li>
+        </ul>
+        <hr>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int ActiveItem { get; set; }
+}

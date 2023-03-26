@@ -1,0 +1,232 @@
+﻿@page "/recipes"
+<div class="container py-4">
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h2 class="display-5 font-gatefold-demi">
+                Sök bland våra bästa recept!
+            </h2>
+            <p class="col-md-8 fs-4 py-4 font-gt-alpina">
+                Vill du baka några av våra bakverk själv? Här har vi samlat våra
+                mest populära recept!
+            </p>
+            <div class="input-group mb-3 w-50">
+                <input type="text"
+                       class="form-control search-box"
+                       placeholder="Sökord"
+                       aria-label="Search box"
+                       aria-describedby="search-button" />
+                <button class="btn btn-outline-secondary search-button"
+                        type="button"
+                        id="search-button"
+                        aria-label="Search Button">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="recipes font-gt-alpina row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3">
+        <div class="col recipe-item" onClick="showRecipe(649593)">
+            <div class="card border-0 h-100 align-items-top">
+                <div class="recipe-card-img-top-wrapper rounded-4 d-inline-block overflow-hidden">
+                    <img class="card-img-top rounded-4 store-item-image h-100 w-100"
+                         aria-label="Product Image"
+                         width="312"
+                         height="231"
+                         src="https://spoonacular.com/recipeImages/649593-312x231.jpg"
+                         alt="Card image cap" />
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h5 card-title store-item-title">Lemon Cupcakes</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col recipe-item" onClick="showRecipe(632527)">
+            <div class="card border-0 h-100 align-items-top">
+                <div class="recipe-card-img-top-wrapper rounded-4 d-inline-block overflow-hidden">
+                    <img class="card-img-top rounded-4 store-item-image h-100 w-100"
+                         width="312"
+                         height="231"
+                         aria-label="Product Image"
+                         src="https://spoonacular.com/recipeImages/632527-312x231.jpg"
+                         alt="Card image cap" />
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h5 card-title store-item-title">Apple Cupcakes</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col recipe-item" onClick="showRecipe(652155)">
+            <div class="card border-0 h-100 align-items-top">
+                <div class="recipe-card-img-top-wrapper rounded-4 d-inline-block overflow-hidden">
+                    <img class="card-img-top rounded-4 store-item-image h-100 w-100"
+                         aria-label="Product Image"
+                         width="312"
+                         height="231"
+                         src="https://spoonacular.com/recipeImages/652155-312x231.jpg"
+                         alt="Card image cap" />
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h5 card-title store-item-title">
+                        Mocca Cupcakes With Dried Fruit
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col recipe-item" onClick="showRecipe(636331)">
+            <div class="card border-0 h-100 align-items-top">
+                <div class="recipe-card-img-top-wrapper rounded-4 d-inline-block overflow-hidden">
+                    <img class="card-img-top rounded-4 store-item-image h-100 w-100"
+                         aria-label="Product Image"
+                         width="312"
+                         height="231"
+                         src="https://spoonacular.com/recipeImages/636331-312x231.jpg"
+                         alt="Card image cap" />
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h2 class="card-title store-item-title h5">Brownie Cupcakes</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col recipe-item" onClick="showRecipe(658943)">
+            <div class="card border-0 h-100 align-items-top">
+                <div class="recipe-card-img-top-wrapper rounded-4 d-inline-block overflow-hidden">
+                    <img class="card-img-top rounded-4 store-item-image h-100 w-100"
+                         width="312"
+                         height="231"
+                         aria-label="Product Image"
+                         src="https://spoonacular.com/recipeImages/658943-312x231.jpg"
+                         alt="Card image cap" />
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h5 card-title store-item-title">S'mores Cupcakes</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col recipe-item" onClick="showRecipe(653353)">
+            <div class="card border-0 h-100 align-items-top">
+                <div class="recipe-card-img-top-wrapper rounded-4 d-inline-block overflow-hidden">
+                    <img class="card-img-top rounded-4 store-item-image h-100 w-100"
+                         aria-label="Product Image"
+                         width="312"
+                         height="231"
+                         src="https://spoonacular.com/recipeImages/653353-312x231.jpg"
+                         alt="Card image cap" />
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h5 card-title store-item-title">
+                        Nutella Cupcakes & Peanut Butter Frosting
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col recipe-item" onClick="showRecipe(654487)">
+            <div class="card border-0 h-100 align-items-top">
+                <div class="recipe-card-img-top-wrapper rounded-4 d-inline-block overflow-hidden">
+                    <img class="card-img-top rounded-4 store-item-image h-100 d-100"
+                         aria-label="Product Image"
+                         width="312"
+                         height="231"
+                         src="https://spoonacular.com/recipeImages/654487-312x231.jpg"
+                         alt="Card image cap" />
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h5 card-title store-item-title">
+                        Pancake Cupcakes With Maple Frosting and Candied Bacon
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col recipe-item" onClick="showRecipe(664312)">
+            <div class="card border-0 h-100 align-items-top">
+                <div class="recipe-card-img-top-wrapper rounded-4 d-inline-block overflow-hidden">
+                    <img class="card-img-top rounded-4 store-item-image h-100 w-100"
+                         aria-label="Product Image"
+                         width="312"
+                         height="231"
+                         src="https://spoonacular.com/recipeImages/664312-312x231.jpg"
+                         alt="Card image cap" />
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h2 class="card-title store-item-title h5">
+                        Vanilla Cupcakes + Sour Cream Chocolate Ganache Frosting
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col recipe-item" onClick="showRecipe(640148)">
+            <div class="card border-0 h-100 align-items-top">
+                <div class="recipe-card-img-top-wrapper rounded-4 d-inline-block overflow-hidden">
+                    <img class="card-img-top rounded-4 store-item-image h-100 w-100"
+                         width="312"
+                         height="231"
+                         aria-label="Product Image"
+                         src="https://spoonacular.com/recipeImages/640148-312x231.jpg"
+                         alt="Card image cap" />
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h5 card-title store-item-title">
+                        Cornflake Cupcakes
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col recipe-item" onClick="showRecipe(657850)">
+            <div class="card border-0 h-100 align-items-top">
+                <div class="recipe-card-img-top-wrapper rounded-4 d-inline-block overflow-hidden">
+                    <img class="card-img-top rounded-4 store-item-image h-100 w-100"
+                         aria-label="Product Image"
+                         src="https://spoonacular.com/recipeImages/657850-312x231.jpg"
+                         alt="Card image cap" />
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h5 card-title store-item-title">
+                        Raspberry Cupcakes With Raspberry Icing
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-container">
+    <div class="modal fade recipe-modal"
+         id="recipe-modal"
+         tabindex="-1"
+         aria-labelledby="recipe-title"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-md-down modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="recipe-title font-gt-alpina"></h5>
+                    <button type="button"
+                            class="btn-close shop-item-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <img src="https://spoonacular.com/recipeImages/636331-556x370.jpg"
+                     alt=""
+                     class="recipe-image" />
+                <div class="modal-body">
+                    <h5 class="m-3 font-gt-alpina">Ingredienser:</h5>
+                    <ul class="list-group ingredient-list px-3 font-ambit"></ul>
+                    <h5 class="m-3 font-gt-alpina">Gör så här:</h5>
+                    <ul class="list-group list-group-numbered instruction-list px-3 font-ambit"></ul>
+                </div>
+
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+
+}

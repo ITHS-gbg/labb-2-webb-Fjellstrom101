@@ -1,0 +1,142 @@
+﻿@page "/admin/categories"
+@attribute [Authorize(Roles = "Admin")]
+@inject ICategoryService CategoryService
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components
+@using BagarBasse.Client.Services.CategoryService
+@using BagarBasse.Shared.Models
+@implements IDisposable
+
+@attribute [Authorize(Roles = "Admin")]
+
+<div class="d-flex flex-grow-1">
+    <div class="me-3">
+        <AdminMenu ActiveItem="1"/>
+    </div>
+
+    <div class="flex-grow-1 p-3 font-ambit">
+        <h2 class="display-5 mt-3  mb-5 text-center font-gatefold-demi">
+            Kategorier
+        </h2>
+
+        <div class="header">
+            <div class="col">Namn</div>
+            <div class="col">Url</div>
+            <div class="col">CSS Class</div>
+            <div class="col">Synlig</div>
+            <div class="col"></div>
+        </div>
+
+        @foreach (var category in CategoryService.AdminCategories)
+        {
+            @if (category.Editing)
+            {
+                <EditForm Model="_editingCategory" OnSubmit="UpdateCategory">
+                    <div class="row">
+                        <div class="col">
+                            <InputText @bind-Value="_editingCategory.Name" class="form-control"/>
+                        </div>
+                        <div class="col">
+                            <InputText @bind-Value="_editingCategory.Url" class="form-control"/>
+                        </div>
+                        <div class="col">
+                            <InputText @bind-Value="_editingCategory.BackgroundCssClass" class="form-control"/>
+                        </div>
+                        <div class="col">
+                            <InputCheckbox @bind-Value="_editingCategory.Visible" class="big-checkbox"/>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-pastel-pink">
+                                <i class="bi bi-save"></i>
+                            </button>
+                            <button class="btn btn-pastel-pink" @onclick="CancelEditing">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </EditForm>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col">
+                        @category.Name
+                    </div>
+                    <div class="col">
+                        @category.Url
+                    </div>
+                    <div class="col">
+                        @category.BackgroundCssClass
+                    </div>
+                    <div class="col col-visible">
+                        <span>@(category.Visible ? "✔️" : "")</span>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-pastel-pink" @onclick="() => EditCategory(category)">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-pastel-pink" @onclick="() => DeleteCategory(category.Id)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+        }
+        <hr/>
+        <button class="btn btn-pastel-pink" @onclick="CreateNewCategory">
+            <i class="bi bi-plus"></i> Lägg till ny kategori
+        </button>
+
+    </div>
+</div>
+
+@code {
+    Category _editingCategory = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CategoryService.GetAdminCategories();
+        CategoryService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        CategoryService.OnChange -= StateHasChanged;
+    }
+
+    private void CreateNewCategory()
+    {
+        _editingCategory = CategoryService.CreateNewCategory();
+    }
+
+    private void EditCategory(Category category)
+    {
+        category.Editing = true;
+        _editingCategory = category;
+    }
+
+    private async Task UpdateCategory()
+    {
+        if (_editingCategory.IsNew)
+        {
+            await CategoryService.AddCategory(_editingCategory);
+        }
+        else
+        {
+            await CategoryService.UpdateCategory(_editingCategory);
+        }
+        _editingCategory = new Category();
+    }
+
+    private async Task CancelEditing()
+    {
+        _editingCategory = new Category();
+        await CategoryService.GetAdminCategories();
+    }
+
+    private async Task DeleteCategory(int id)
+    {
+        await CategoryService.DeleteCategory(id);
+    }
+
+}

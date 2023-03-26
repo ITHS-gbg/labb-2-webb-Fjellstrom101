@@ -1,0 +1,250 @@
+@font-face {
+  font-family: "Gatefold-Demibold";
+  src: url("../fonts/Gatefold-Demibold.woff") format("woff");
+  font-display: swap;
+}
+@font-face {
+  font-family: "GT Alpina";
+  src: url("../fonts/GT-Alpina-Standard-Regular.woff") format("woff");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ambit";
+  src: url("../fonts/Ambit-Light.woff") format("woff");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ambit Regular";
+  src: url("../fonts/Ambit-Regular.woff") format("woff");
+  font-display: swap;
+}
+@font-face {
+  font-display: swap;
+  font-family: "bootstrap-icons";
+  src: url("../fonts/bootstrap-icons.woff2") format("woff2");
+}
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.store-item-modal .img-size {
+  height: 450px;
+  width: 700px;
+  background-size: cover;
+  overflow: hidden;
+}
+.store-item-modal .modal-content {
+  width: 700px;
+  border: none;
+}
+.store-item-modal .modal-body {
+  padding: 0;
+}
+
+.store-item-modal .carousel-control-prev-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23009be1' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+  width: 30px;
+  height: 48px;
+}
+.store-item-modal .carousel-control-next-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23009be1' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+  width: 30px;
+  height: 48px;
+}
+.store-item-quantity-input {
+  width: 70px;
+}
+.cart {
+  position: relative;
+  color: #000;
+  font-size: 26px;
+  padding-right: 5px;
+}
+.user-icon {
+    padding-top: 2px;
+    position: relative;
+    color: #000;
+    font-size: 30px;
+}
+.cart-amount-div {
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  font-size: 12px;
+}
+.bg-pastel-green {
+  background-color: #bae8d4;
+}
+.bg-pastel-purple {
+  background-color: #cdb4db;
+}
+.bg-pastel-light-pink {
+  background-color: #ffc8dd;
+}
+.bg-pastel-pink {
+  background-color: #fde5dd;
+}
+.bg-pastel-yellow {
+  background-color: #ffffcc;
+}
+.bg-pastel-blue {
+  background-color: #a2d2ff;
+}
+.bg-pastel-turquoise {
+  background-color: #bde0fe;
+}
+.bg-pastel-red {
+  background-color: #d39c7d;
+}
+.font-gatefold-demi {
+  font-family: "Gatefold Demibold", serif;
+}
+.font-gt-alpina {
+  font-family: "GT Alpina", serif;
+}
+.font-ambit {
+  font-family: "Ambit", serif;
+}
+.font-ambit-regular {
+  font-family: "Ambit Regular", serif;
+}
+.bg-pastel-purple2 {
+  background-color: #e7cbef;
+}
+
+.bg-pastel-red {
+  background-color: #d39c7d;
+}
+.flex-even {
+  flex: 1;
+}
+.map-container {
+  overflow: hidden;
+  padding-bottom: 40%;
+  position: relative;
+  height: 0;
+  min-height: 400px;
+}
+.map-container iframe {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+.recipe-item:hover {
+  cursor: pointer;
+}
+.recipe-item:hover img {
+  transform: scale(1.02);
+  transition: transform 100ms linear;
+}
+
+.carousel-frontpage {
+  margin-bottom: 4rem;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel-frontpage .carousel-item {
+  height: 32rem;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.carousel-item-1 {
+  background-image: url(../images/carousel-1.webp);
+}
+.carousel-item-2 {
+  background-image: url(../images/carousel-2.webp);
+}
+.carousel-item-3 {
+  background-image: url(../images/carousel-3.webp);
+}
+
+.marketing .col-lg-4 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+/* rtl:begin:ignore */
+.marketing .col-lg-4 p {
+  margin-right: 0.75rem;
+  margin-left: 0.75rem;
+}
+
+.featurette-divider {
+  margin: 5rem 0;
+}
+
+.featurette-heading {
+  letter-spacing: -0.05rem;
+}
+
+@media (min-width: 40em) {
+  .featurette-heading {
+    font-size: 50px;
+  }
+}
+
+@media (min-width: 62em) {
+  .featurette-heading {
+    margin-top: 7rem;
+  }
+}
+.btn-pastel-pink {
+  background-color: #fde5dd !important;
+}
+.btn-pastel-pink:hover {
+  background-color: #d39c7d !important;
+}
+.btn-pastel-yellow {
+  background-color: #ffffcc !important;
+}
+.btn-pastel-yellow:hover {
+  background-color: #ffff99 !important;
+}
+.store-item:hover {
+  cursor: pointer;
+}
+.store-item:hover img {
+  transform: scale(1.04);
+  transition: transform 100ms linear;
+}
+
+.card-img-top-wrapper {
+  aspect-ratio: 597 / 400;
+}
+.recipe-card-img-top-wrapper {
+  aspect-ratio: 312 / 231;
+}
+.featurette-image {
+  aspect-ratio: 1 / 1;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.featurette-image-1 {
+  background-image: url(../images/featurette-1.webp);
+}
+.featurette-image-2 {
+  background-image: url(../images/featurette-2.webp);
+}
+.checkout-cupcake {
+  background-image: url(../images/checkout.png);
+  height: 128px;
+  width: 128px;
+  filter: invert(79%) sepia(4%) saturate(1021%) hue-rotate(324deg)
+    brightness(117%) contrast(98%);
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.search-button {
+
+    position: relative;
+    color: #000;
+    font-size: 22px;
+}

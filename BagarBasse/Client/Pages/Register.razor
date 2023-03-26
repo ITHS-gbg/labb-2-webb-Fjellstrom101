@@ -1,0 +1,100 @@
+﻿@page "/register"
+@using Microsoft.AspNetCore.Components
+@using BagarBasse.Shared.Models
+@using BagarBasse.Client.Services.AuthService
+@using Blazored.LocalStorage
+@inject IAuthService AuthService
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+<PageTitle> Registration</PageTitle>
+
+<div class="d-flex justify-content-center align-items-center register-form-wrapper my-5 flex-column font-ambit">
+    <h3 class="fs-1 font-gatefold-demi text-center pb-5">Registrera dig</h3>
+    <div class="register-form">
+        <EditForm Model="user" OnValidSubmit="HandleRegistration">
+            <DataAnnotationsValidator/>
+            <div class="mb-3">
+                <div class="form-floating">
+                    <InputText id="email" @bind-Value="user.Email" class="form-control" placeholder="name@example.com"></InputText>
+                    <label for="email">Email</label>
+                </div>
+                <ValidationMessage For="@(() => user.Email)"/>
+            </div>
+            <div class="mb-4">
+                <div class="form-floating">
+                    <InputText id="password" @bind-Value="user.Password" type="password" class="form-control" placeholder="Password"></InputText>
+                    <label for="email">Password</label>
+                </div>
+                <ValidationMessage For="@(() => user.Password)"/>
+            </div>
+            <div class="mb-4">
+                <div class="form-floating">
+                    <InputText id="confirmPassword" @bind-Value="user.ConfirmPassword" class="form-control" type="password" placeholder="Password"></InputText>
+                    <label for="confirmPassword">Repeat Password</label>
+                </div>
+                <ValidationMessage For="@(() => user.ConfirmPassword)"/>
+            </div>
+            <button class="btn btn-pastel-pink w-100 fw-bold fs-5 p-2">Registrera Konto</button>
+            <div class="p-3 text-center @_messageCss">
+                <span>@_message</span>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    UserRegister user = new UserRegister();
+
+    string _message = string.Empty;
+    string _messageCss = string.Empty;
+
+
+    private async Task HandleRegistration()
+    {
+        var result = await AuthService.Register(user);
+
+        if (result.IsSuccessStatusCode)
+        {
+            _message = "Registreringen lyckades! \n Du loggas in...";
+            _messageCss = "text-success";
+
+            StateHasChanged();
+
+            await Task.Delay(1200);
+
+            await Login();
+        }
+        else
+        {
+            _message = "Det finns redan ett konto kopplat till den angivna epost adressen";
+            _messageCss = "text-danger";
+        }
+    }
+
+    private async Task Login()
+    {
+        var login = new UserLogin
+        {
+            Email = user.Email,
+            Password = user.Password
+        };
+
+        var result = await AuthService.Login(login);
+        if (result.IsSuccessStatusCode)
+        {
+            _message = string.Empty;
+            await LocalStorage.SetItemAsync("authToken", await result.Content.ReadFromJsonAsync<string>());
+            await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            NavigationManager.NavigateTo("profile");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("login");
+        }
+    }
+
+
+}

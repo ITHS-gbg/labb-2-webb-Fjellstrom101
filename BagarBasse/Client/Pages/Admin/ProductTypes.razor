@@ -1,0 +1,105 @@
+﻿@page "/admin/product-types"
+@inject IProductTypeService ProductTypeService
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components
+@using BagarBasse.Shared.Models
+@using BagarBasse.Client.Services.ProductTypeService
+@implements IDisposable
+@attribute [Authorize(Roles = "Admin")]
+
+<div class="d-flex flex-grow-1">
+    <div class="me-3">
+        <AdminMenu ActiveItem="3"/>
+    </div>
+
+    <div class="flex-grow-1 p-3 font-ambit">
+
+        <h2 class="display-5 mt-3  mb-5 text-center font-gatefold-demi">
+            Produkttyper
+        </h2>
+        
+        <div class="header">
+            <div class="col">Namn</div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+        </div>
+
+        @foreach (var productType in ProductTypeService.ProductTypes)
+        {
+            @if (productType.Editing)
+            {
+                <EditForm Model="_editingProductType" OnSubmit="UpdateProductType">
+                    <div class="row">
+                        <div class="col">
+                            <InputText @bind-Value="_editingProductType.Name" class="form-control"/>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-pastel-pink" type="submit">
+                                <i class="bi bi-save"></i>
+                            </button>
+                        </div>
+                    </div>
+                </EditForm>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col">
+                        @productType.Name
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-pastel-pink float-end" @onclick="() => EditProductType(productType)">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+        }
+        <hr />
+        <button class="btn btn-pastel-pink" @onclick="CreateNewProductType">
+            <i class="bi bi-plus"></i> Lägg till ny produkttyp
+        </button>
+    </div>
+</div>
+
+@code {
+    ProductType _editingProductType = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ProductTypeService.GetProductTypes();
+        ProductTypeService.OnChange += StateHasChanged;
+    }
+
+    private void EditProductType(ProductType productType)
+    {
+        productType.Editing = true;
+        _editingProductType = productType;
+    }
+
+    private void CreateNewProductType()
+    {
+        _editingProductType = ProductTypeService.CreateNewProductType();
+    }
+
+    private async Task UpdateProductType()
+    {
+        if (_editingProductType.IsNew)
+        {
+            await ProductTypeService.AddProductType(_editingProductType);
+        }
+        else
+        {
+            await ProductTypeService.UpdateProductType(_editingProductType);
+        }
+        _editingProductType = new ProductType();
+    }
+
+    public void Dispose()
+    {
+        ProductTypeService.OnChange -= StateHasChanged;
+    }
+
+}

@@ -1,0 +1,9 @@
+﻿.search-bar-wrapper {
+    max-width: 300px;
+}
+.search-bar-invisible {
+    width: 560px;
+}
+#searchNavbar {
+    box-shadow: 6px 1px 10px rgba(69, 65, 78, 0.1) inset;
+}

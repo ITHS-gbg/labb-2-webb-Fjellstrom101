@@ -1,0 +1,39 @@
+﻿@using BagarBasse.Shared.Models
+@using BagarBasse.Client.Services.CartService
+@using Blazored.LocalStorage
+@inject ICartService CartService
+@inject ISyncLocalStorageService LocalStorage
+@implements IDisposable
+
+
+<a href="/cart" class="nav-link">
+    <div class="cart nav-item">
+        <i class="bi bi-cart2"></i>
+        <div id="cart-amount"
+             class="cart-amount cart-amount-div rounded-circle d-flex justify-content-center align-items-center bg-pastel-red text-light top-0 end-0 fs-7 fw-semibold">
+            @GetCartItemsCount()
+        </div>
+    </div>
+</a>
+
+
+@code {
+
+    private int GetCartItemsCount()
+    {
+        var cart = LocalStorage.GetItem<List<CartItem>>("cart");
+
+        return cart?.Sum(ci => ci.Quantity) ?? 0;
+    }
+
+    protected override void OnInitialized()
+    {
+        CartService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        CartService.OnChange -= StateHasChanged;
+    }
+
+}

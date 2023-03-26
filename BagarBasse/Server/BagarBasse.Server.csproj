@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>BagarBasse.Server-4a53378b-2253-418e-8a26-c015727ac790</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BagarBasse.DataAccess\BagarBasse.DataAccess.csproj" />
+    <ProjectReference Include="..\BagarBasse.OrderDataAccess\BagarBasse.OrderDataAccess.csproj" />
+    <ProjectReference Include="..\Client\BagarBasse.Client.csproj" />
+    <ProjectReference Include="..\Shared\BagarBasse.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Handlers\AuthHandlers\" />
+    <Folder Include="Handlers\UserHandlers\" />
+    <Folder Include="Handlers\ProductTypeHandlers\" />
+    <Folder Include="Handlers\OrderHandlers\" />
+    <Folder Include="Requests\AuthRequests\" />
+    <Folder Include="Requests\UserInfoRequests\" />
+    <Folder Include="Requests\UserRequests\" />
+    <Folder Include="Requests\ProductTypeRequests\" />
+    <Folder Include="Requests\ProductRequests\" />
+    <Folder Include="Requests\OrderRequests\" />
+    <Folder Include="Services\CategoryService\" />
+    <Folder Include="Services\CartService\" />
+    <Folder Include="Services\AuthService\" />
+    <Folder Include="Services\UserInfoService\" />
+    <Folder Include="Services\UserService\" />
+    <Folder Include="Services\ProductTypeService\" />
+    <Folder Include="Services\OrderService\" />
+    <Folder Include="Services\ProductService\" />
+  </ItemGroup>
+
+</Project>

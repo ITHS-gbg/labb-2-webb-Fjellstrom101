@@ -1,0 +1,77 @@
+﻿<header class="sticky-top">
+    <nav class="navbar font-ambit d-flex navbar-expand-md bg-white flex-wrap justify-content-between border-bottom">
+        <a class="nav-brand mx-3 d-md-none mx-3" href="index.html">
+            <img src="./images/logo2.webp"
+                 alt="Brand Logo"
+                 width="150"
+                 height="80" />
+        </a>
+        <button class="navbar-toggler mx-3"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbar"
+                aria-controls="navbar"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbar"
+             class="collapse navbar-collapse justify-content-center">
+            <ul class="navbar-nav fw-semibold align-items-center">
+                <li class="nav-item ms-5">
+                    <a href="" class="nav-link active" aria-current="page">Hem</a>
+                </li>
+                <li class="nav-item">
+                    <a href="products" class="nav-link">Produkter</a>
+                </li>
+                <li class="navbar-brand mx-3 d-none d-md-block">
+                    <a class="nav-brand" href="">
+                        <img src="./images/logo2.webp"
+                             alt="Brand Logo"
+                             width="151"
+                             height="80"/>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="about" class="nav-link">Om oss</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recipes" class="nav-link">Recept</a>
+                </li>
+                <li class="nav-item">
+                    <UserButton />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" @onclick="ToggleSearchBar" @onfocusout="HideSearchBar">
+                        <div class="search-button nav-item" >
+                            <i class="bi bi-search"></i>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <CartButton/>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="@SearchBarCssClass">
+        <SearchBar />
+    </div>
+</header>
+
+@code
+{
+    private bool _showSearchBar = false;
+
+    private string SearchBarCssClass => _showSearchBar ? "" : "collapse navbar-collapse";
+
+    private void ToggleSearchBar()
+    {
+        _showSearchBar = !_showSearchBar ;
+    }
+    private async Task HideSearchBar()
+    {
+        await Task.Delay(200);
+        _showSearchBar = false;
+    }
+}

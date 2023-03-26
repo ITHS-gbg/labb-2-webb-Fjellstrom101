@@ -1,0 +1,209 @@
+﻿@page "/admin/product"
+@page "/admin/product/{id:int}"
+@using BagarBasse.Client.Services.ProductService
+@using BagarBasse.Client.Services.ProductTypeService
+@using BagarBasse.Client.Services.CategoryService
+@using Microsoft.AspNetCore.Components
+@using BagarBasse.Shared.Models
+@inject IProductService ProductService
+@inject IProductTypeService ProductTypeService
+@inject ICategoryService CategoryService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+
+
+<div class="d-flex flex-grow-1">
+    <div class="me-3">
+        <AdminMenu ActiveItem="2"/>
+    </div>
+
+    <div class="flex-grow-1 p-3 font-ambit">
+
+        <h2 class="display-5 mt-3  mb-5 text-center font-gatefold-demi">
+            Produkter
+        </h2>
+
+        @if (loading)
+        {
+            <spam>@message</spam>
+        }
+        else
+        {
+            if (product.Editing)
+            {
+                <h3>Redigera "@product.Title"</h3>
+            }
+            else if (product.IsNew)
+            {
+                <h3>Lägg till produkt</h3>
+            }
+
+            <EditForm Model="product" OnValidSubmit="AddOrUpdateProduct">
+                <DataAnnotationsValidator></DataAnnotationsValidator>
+                <div class="mb-2">
+                    <label for="title">Titel</label>
+                    <InputText id="title" @bind-Value="product.Title" class="form-control"></InputText>
+                </div>
+                <div class="mb-2">
+                    <label for="imageUrl">Bild URL</label>
+                    <InputText id="imageUrl" @bind-Value="product.Image" class="form-control"></InputText>
+                </div>
+                <div class="mb-2">
+                    <img src="@product.Image" alt=""/>
+                </div>
+                <div class="mb-2">
+                    <label for="description">Beskrivning</label>
+                    <InputTextArea id="description" @bind-Value="product.Description" class="form-control"></InputTextArea>
+                </div>
+                <div class="mb-2">
+                    <label for="ingredients">Ingredienser</label>
+                    <InputTextArea id="ingredients" @bind-Value="product.Ingredients" class="form-control"></InputTextArea>
+                </div>
+                <hr/>
+                <div class="header">
+                    <div class="col">Produkttyp/ Variant</div>
+                    <div class="col">Pris</div>
+                    <div class="col">Ursprungligt pris</div>
+                    <div class="col">Synlig</div>
+                    <div class="col"></div>
+                </div>
+                @foreach (var variant in product.Variants)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <InputSelect @bind-Value="variant.ProductTypeId" class="form-control">
+                                @foreach (var productType in ProductTypeService.ProductTypes)
+                                {
+                                    <option value="@productType.Id.ToString()">@productType.Name</option>
+                                }
+                            </InputSelect>
+                        </div>
+
+                        <div class="col">
+                            <InputNumber @bind-Value="variant.Price" class="form-control"></InputNumber>
+                        </div>
+                        <div class="col">
+                            <InputNumber @bind-Value="variant.OriginalPrice" class="form-control"></InputNumber>
+                        </div>
+                        <div class="col d-flex justify-content-center">
+                            <InputCheckbox @bind-Value="variant.Visible" style="transform: scale(1.5, 1.5)"></InputCheckbox>
+                        </div>
+                        <div class="col d-flex justify-content-center">
+                            <button class="btn btn-pastel-pink " @onclick="(() => RemoveVariant(variant))" type="button">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+                <button class="btn btn-pastel-pink m-1" @onclick="AddVariant" type="button">
+                    <i class="bi bi-plus"></i>Lägg till produkttyp/variant
+                </button>
+                <hr/>
+                <div class="mb-2">
+                    <label for="category"></label>
+                    <InputSelect id="category" @bind-Value="product.CategoryId" class="form-control">
+                        @foreach (var category in CategoryService.AdminCategories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </InputSelect>
+                </div>
+                <hr/>
+
+                <div class="form-check">
+                    <InputCheckbox id="visible" @bind-Value="product.Visible" class="form-check-input"></InputCheckbox>
+                    <label for="visible" class="form-check-label">Synlig</label>
+                </div>
+                <hr/>
+                <button type="submit" class="btn btn-pastel-pink float-end">
+                    @btnText
+                </button>
+                <ValidationSummary></ValidationSummary>
+            </EditForm>
+            @if (!product.IsNew)
+            {
+                <button type="button" class="btn btn-pastel-yellow float-start" @onclick="DeleteProduct">
+                    Ta Bort Produkt
+                </button>
+            }
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    Product product = new Product();
+    bool loading = true;
+    string btnText = "";
+    string message = "Loading...";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ProductTypeService.GetProductTypes();
+        await CategoryService.GetAdminCategories();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id == 0)
+        {
+            product = new Product { IsNew = true, CategoryId = 1};
+            btnText = "Skapa Produkt";
+        }
+        else
+        {
+            Product dbProduct = await ProductService.GetAdminProductAsync(Id);
+            if (dbProduct == null)
+            {
+                message = $"Product with id '{Id}' does not exist";
+                return;
+            }
+            product = dbProduct;
+            product.Editing = true;
+            btnText = "Redigera Produkt";
+        }
+        loading = false;
+    }
+
+    private void RemoveVariant(ProductVariant variant)
+    {
+        product.Variants.Remove(variant);
+    }
+
+    private void AddVariant()
+    {
+        product.Variants
+            .Add(new ProductVariant() { IsNew = true, ProductId = product.Id, ProductTypeId = 1});
+    }
+
+    private async Task AddOrUpdateProduct()
+    {
+        if (product.IsNew)
+        {
+            var result = await ProductService.CreateProductAsync(product);
+            NavigationManager.NavigateTo($"admin/products");
+        }
+        else
+        {
+            product = await ProductService.UpdateProductAsync(product);
+            NavigationManager.NavigateTo($"admin/products");
+        }
+    }
+
+    async Task DeleteProduct()
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", $"Vill du ta bort '{product.Title}'?");
+
+        if (!confirmed)
+            return;
+
+        await ProductService.DeleteProductAsync(product);
+        NavigationManager.NavigateTo("admin/products");
+    }
+
+}

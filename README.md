@@ -1,4 +1,14 @@
-# LABB 2 APIer
+# Installation
+1. Ändra StoreConnection och OrderConnection i appsettings.json. StoreConnection är en connectionstring till SQL Server, och OrderConnection är en connectionstring till en MongoDB Atlas Databas.
+2. Kör en update-database i BagarBasse.DataAccess projektet för att skapa alla tabeller och data i SQL databasen.
+
+Första kontot som registreras blir automatiskt administratör, och har tillgång till alla delar på hemsidan. Alla konton som skapas efter det blir automatiskt kunder.
+
+API-Specifikation finns i mappen API-Specifikation
+
+Ha så roligt!
+
+# Uppgift: LABB 2 APIer
 
     I denna uppgift skall vi implementera databashantering och REST API för en e-handel.
 ## Steg 3

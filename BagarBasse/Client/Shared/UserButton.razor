@@ -1,0 +1,63 @@
+﻿@using BagarBasse.Client.Services.CartService
+@using Blazored.LocalStorage
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+<div class="dropdown">
+    <a @onclick="ToggleUserMenu" @onfocusout="HideUserMenu" class="user-icon">
+        <i class="bi bi-person"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right font-ambit @UserMenuCssClass">
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <a href="admin/overview" class="dropdown-item user-button-link" @onclick="HideUserMenu">Adminpanel</a>
+                <hr/>
+            </Authorized>
+        </AuthorizeView>
+        <AuthorizeView>
+            <Authorized>
+                <a href="orders" class="dropdown-item user-button-link" @onclick="HideUserMenu">
+                    Mina Ordrar
+                </a>
+                <a href="profile" class="dropdown-item user-button-link" @onclick="HideUserMenu">
+                    Ändra Kontouppgifter
+                </a>
+                <hr/>
+                <a class="dropdown-item user-button-link" @onclick="Logout">Logga ut</a>
+            </Authorized>
+            <NotAuthorized>
+                <a href="login?returnUrl=@NavigationManager.ToBaseRelativePath(NavigationManager.Uri)" class="dropdown-item user-button-link" @onclick="HideUserMenu">
+                    Logga in
+                </a>
+                <a href="register?returnUrl=@NavigationManager.ToBaseRelativePath(NavigationManager.Uri)" class="dropdown-item user-button-link" @onclick="HideUserMenu">Registrera</a>
+            </NotAuthorized>
+        </AuthorizeView>
+
+    </div>
+</div>
+
+@code {
+    private bool _showUserMenu = false;
+
+    private string UserMenuCssClass => _showUserMenu ? "show-user-menu" : "";
+
+    private void ToggleUserMenu()
+    {
+        _showUserMenu = !_showUserMenu;
+    }
+
+    private async Task HideUserMenu()
+    {
+        await Task.Delay(200);
+        _showUserMenu = false;
+    }
+    private async Task Logout()
+    {
+        await LocalStorage.RemoveItemAsync("authToken");
+        await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        NavigationManager.NavigateTo("");
+    }
+}

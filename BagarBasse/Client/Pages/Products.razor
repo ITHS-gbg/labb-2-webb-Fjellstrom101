@@ -1,0 +1,60 @@
+﻿@page "/products"
+@page "/products/{CategoryUrl}"
+@page "/search"
+@page "/search/{SearchText}"
+
+@using BagarBasse.Client.Services.CategoryService
+@inject ICategoryService CategoryService
+@implements IDisposable
+
+
+<div class="container-fluid store-container p-0">
+    @if (!string.IsNullOrEmpty(CategoryUrl))
+    {
+        <ProductList CategoryUrl="kakor" CategoryName="Kakor" />
+    }
+    else if (!string.IsNullOrEmpty(SearchText))
+    {
+        <ProductList SearchText="@SearchText" />
+    }
+    else
+    {
+        if (CategoryService.Categories.Count > 0)
+        {
+            foreach (var category in CategoryService.Categories)
+            {
+                <ProductList CategoryUrl="@category.Url" CategoryName="@category.Name"  CategoryCss="@category.BackgroundCssClass"/>
+            }
+        }
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public string? CategoryUrl { get; set; } = null;
+    [Parameter]
+    public string? SearchText { get; set; } = null;
+
+    [Parameter]
+    public int Page { get; set; } = 1;
+
+
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.IsNullOrEmpty(CategoryUrl) && string.IsNullOrEmpty(SearchText))
+        {
+            CategoryService.OnChange += StateHasChanged;
+            await CategoryService.GetCategories();
+        }
+    }
+
+    public void Dispose()
+    {
+        if (string.IsNullOrEmpty(CategoryUrl) && string.IsNullOrEmpty(SearchText))
+            CategoryService.OnChange -= StateHasChanged;
+    }
+
+}
